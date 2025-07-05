@@ -3,11 +3,12 @@ using Autoparts.Api.Infraestructure.Persistence;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Z.PagedList;
 
 
 namespace Autoparts.Api.Features.Products.Infraestructure;
 
-public class ProductRepository
+public class ProductRepository : IProductRepository
 {
     private readonly AutopartsDbContext _context;
 
@@ -19,43 +20,66 @@ public class ProductRepository
         _validator = validator;
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IPagedList<Product>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Products.AsNoTracking().ToListAsync();
+        return await _context.Products.AsNoTracking().ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
-    public async Task<Product?> GetByIdAsync(int id)
+    public async Task<IEnumerable<Product>> GetAllByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
     {
-        return await _context.Products.FindAsync(id);
+        return  await _context.Products.Where(p => ids.Contains(p.ProductId)).ToListAsync(cancellationToken);
     }
 
-    public async Task<ValidationResult> AddAsync(Product product)
+    public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _context.Products.FindAsync(id, cancellationToken);
+    }
+
+    public async Task<ValidationResult> AddAsync(Product product, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(product);
 
-        if (!result.IsValid)
+        if (result.IsValid is false)
             return result;
 
-        await _context.Products.AddAsync(product);
-        await _context.SaveChangesAsync();
+        await _context.Products.AddAsync(product, cancellationToken);;
         return result;
     }
 
-    public async Task UpdateAsync(Product product)
+    public async Task<ValidationResult> UpdateAsync(Product product, CancellationToken cancellationToken)
     {
-        var existingProduct = await _context.Products.FindAsync(product.ProductId) ??
-            throw new KeyNotFoundException($"Product with ID {product.ProductId} not found.");
+        var result = _validator.Validate(product);
 
-        _context.Products.Update(existingProduct);
-        await _context.SaveChangesAsync();
+        if (result.IsValid is false)
+            return result;
+
+        _context.Products.Update(product);
+        return result;
     }
 
-    public async Task DeleteAsync(Product product)
+    public async Task<bool> DeleteAsync(Product product, CancellationToken cancellationToken)
     {
-        var existingProduct = await _context.Products.FindAsync(product.ProductId) ??
-            throw new KeyNotFoundException($"Product with ID {product.ProductId} not found.");
+        var result = _context.Products.Remove(product);
 
-        _context.Products.Remove(existingProduct);
-        await _context.SaveChangesAsync();
+        if (result is null)
+            return false;
+
+        return true;
     }
+
+    public async Task<bool> Commit(CancellationToken cancellationToken)
+    {
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+
+        if (commitResult <= 0)
+            return false;
+
+        return true;
+    }
+
+    public void Dispose()
+    {
+        _context.Dispose();
+    }
+
 }

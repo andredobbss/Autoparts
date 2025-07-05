@@ -1,11 +1,15 @@
+using Autoparts.Api.Features.Clients.Domain;
+using Autoparts.Api.Features.Clients.Infraestructure;
 using MediatR;
 
 namespace Autoparts.Api.Features.Clients.GetByIdQuery;
 
-public sealed record GetClientByIdQueryHandler():IRequestHandler<GetClientByIdQuery,GetClientByIdQueryResponse>
+public sealed record GetClientByIdQueryHandler(IClientRepository clientRepository) : IRequestHandler<GetClientByIdQuery, Client>
 {
-    public async Task<GetClientByIdQueryResponse> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
+    readonly IClientRepository _clientRepository = clientRepository;
+    public async Task<Client> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
     {
-         throw new NotImplementedException();
+        return await _clientRepository.GetByIdAsync(request.ClientId, cancellationToken);
+
     }
 }

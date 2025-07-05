@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Autoparts.Api.Shared.Resources;
+using FluentValidation;
 
 namespace Autoparts.Api.Features.Clients.Domain
 {
@@ -7,11 +8,12 @@ namespace Autoparts.Api.Features.Clients.Domain
         public ClientValidator()
         {
             RuleFor(c => c.ClientName)
-                .NotEmpty().NotNull().WithMessage("Name cannot be null or empty.")
-                .MaximumLength(50).WithMessage("Name must not exceed 50 characters.");
-            RuleFor(c => c.TaxId).IsValidCPF()
-                .NotEmpty().NotNull().WithMessage("Tax ID cannot be null or empty.")
-                .MaximumLength(20).WithMessage("Tax ID must not exceed 20 characters.");
+                .NotEmpty()
+                .NotNull()
+                .WithMessage(Resource.NOT_NULL_OR_EMPTY)
+                .MaximumLength(50)
+                .WithMessage(Resource.MAX_LENGTH_100);
+           
         }
     }
 

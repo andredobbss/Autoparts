@@ -1,49 +1,62 @@
 ﻿using Autoparts.Api.Features.Manufacturers.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using FluentValidation.Results;
+using Z.PagedList;
 
 namespace Autoparts.Api.Features.Manufacturers.Infraestructure;
 
-public class ManufacturerRepository
+public class ManufacturerRepository : IManufacturerRepository
 {
     private readonly AutopartsDbContext _context;
+    private readonly IValidator<Manufacturer> _validator;
 
-    public ManufacturerRepository(AutopartsDbContext context)
+    public ManufacturerRepository(AutopartsDbContext context, IValidator<Manufacturer> validator)
     {
         _context = context;
+        _validator = validator;
     }
 
-    public async Task<IEnumerable<Manufacturer>> GetAllAsync()
+    public async Task<IPagedList<Manufacturer>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Manufacturers.ToListAsync();
+        return await _context.Manufacturers.ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
-    public async Task<Manufacturer?> GetByIdAsync(int id)
+    public async Task<Manufacturer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Manufacturers.FindAsync(id);
+        return await _context.Manufacturers.FindAsync(id, cancellationToken);
     }
 
-    public async Task AddAsync(Manufacturer manufacturer)
+    public async Task<ValidationResult> AddAsync(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-        await _context.Manufacturers.AddAsync(manufacturer);
-        await _context.SaveChangesAsync();
+        var result = _validator.Validate(manufacturer);
+        if (result.IsValid is false)
+            return result;
+
+        await _context.Manufacturers.AddAsync(manufacturer, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task UpdateAsync(Manufacturer manufacturer)
+    public async Task<ValidationResult> UpdateAsync(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-        var existingManufacturer = await _context.Manufacturers.FindAsync(manufacturer.ManufacturerId) ??
-            throw new KeyNotFoundException($"Manufacturer with ID {manufacturer.ManufacturerId} not found.");
+        var result = _validator.Validate(manufacturer);
+        if (result.IsValid is false)
+            return result;
 
-        _context.Manufacturers.Update(existingManufacturer);
-        await _context.SaveChangesAsync();
+        _context.Manufacturers.Update(manufacturer);
+        await _context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task DeleteAsync(Manufacturer manufacturer)
+    public async Task<bool> DeleteAsync(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-        var existingManufacturer = await _context.Manufacturers.FindAsync(manufacturer.ManufacturerId) ??
-            throw new KeyNotFoundException($"Manufacturer with ID {manufacturer.ManufacturerId} not found.");
+       var result = _context.Manufacturers.Remove(manufacturer);
 
-        _context.Manufacturers.Remove(existingManufacturer);
-        await _context.SaveChangesAsync();
+        if (result is null)
+            return false;
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }

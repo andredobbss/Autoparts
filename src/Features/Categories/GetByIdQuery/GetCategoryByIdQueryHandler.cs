@@ -1,11 +1,14 @@
+using Autoparts.Api.Features.Categories.Domain;
+using Autoparts.Api.Features.Categories.Infraestructure;
 using MediatR;
 
 namespace Autoparts.Api.Features.Categories.GetByIdQuery;
 
-public sealed record GetCategoryByIdQueryHandler():IRequestHandler<GetCategoryByIdQuery,GetCategoryByIdQueryResponse>
+public sealed record GetCategoryByIdQueryHandler(ICategoryRepository categoryRepository) : IRequestHandler<GetCategoryByIdQuery, Category>
 {
-    public async Task<GetCategoryByIdQueryResponse> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
+    private readonly ICategoryRepository _categoryRepository = categoryRepository;
+    public async Task<Category> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-         throw new NotImplementedException();
+        return await _categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
     }
 }

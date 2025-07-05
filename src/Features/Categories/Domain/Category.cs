@@ -8,7 +8,7 @@ namespace Autoparts.Api.Features.Categories.Domain;
 public sealed class Category
 {
     private readonly CategoryValidator _categoryValidation = new();
-    public Category() { }
+    private Category() { }
 
     public Guid CategoryId { get; private set; }
     public string Description { get; private set; } = null!;
@@ -16,7 +16,7 @@ public sealed class Category
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
 
-    public IReadOnlyCollection<Product> Products { get; private set; } = [];
+    public ICollection<Product> Products { get; private set; } = [];
 
     public Category(string description)
     {
@@ -24,19 +24,22 @@ public sealed class Category
         Description = description;
         CreatedAt = DateTime.UtcNow;
 
-        if (!CategpryResult().IsValid)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, CategpryResult().Errors);
+        if (CategoryResult().IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, CategoryResult().Errors);
     }
 
     public void Update(string description)
     {
         Description = description;
         UpdatedAt = DateTime.UtcNow;
+
+        if (CategoryResult().IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, CategoryResult().Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;
 
-    public ValidationResult CategpryResult()
+    private ValidationResult CategoryResult()
     {
         return _categoryValidation.Validate(this);
     }

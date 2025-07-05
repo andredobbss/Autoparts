@@ -1,35 +1,71 @@
+#region Using Directives
+
+using Autoparts.Api.Features.Categories.Apis;
 using Autoparts.Api.Features.Categories.Domain;
 using Autoparts.Api.Features.Categories.Infraestructure;
+using Autoparts.Api.Features.Clients.Apis;
 using Autoparts.Api.Features.Clients.Domain;
 using Autoparts.Api.Features.Clients.Infraestructure;
+using Autoparts.Api.Features.Manufacturers.Apis;
+using Autoparts.Api.Features.Manufacturers.Domain;
 using Autoparts.Api.Features.Manufacturers.Infraestructure;
+using Autoparts.Api.Features.Products.Apis;
 using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Features.Products.Infraestructure;
+using Autoparts.Api.Features.Purchases.Apis;
+using Autoparts.Api.Features.Purchases.Domain;
 using Autoparts.Api.Features.Purchases.Infraestructure;
+using Autoparts.Api.Features.Returns.Apis;
+using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Features.Returns.Infraestructure;
+using Autoparts.Api.Features.Sales.Apis;
+using Autoparts.Api.Features.Sales.Domain;
 using Autoparts.Api.Features.Sales.Infraestructure;
+using Autoparts.Api.Features.Suppliers.Apis;
 using Autoparts.Api.Features.Suppliers.Domain;
 using Autoparts.Api.Features.Suppliers.Infraestructure;
+using Autoparts.Api.Features.Users.Apis;
 using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Features.Users.Infraestructure;
 using Autoparts.Api.Infraestructure.Persistence;
+using Autoparts.Api.Shared.Email;
 using Autoparts.Api.Shared.Middleware;
-using Autoparts.Api.Shared.ValueObjects;
+using Autoparts.Api.Shared.Products.Repository;
+using Autoparts.Api.Shared.Products.Stock;
+using Autoparts.Api.Shared.ValueObejct;
 using FluentValidation;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+
+#endregion
 
 #region Initials Configurations
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-    });
+// minimal API
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;// opcional
+});
 
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddApplicationCookie();
+builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
+
+#endregion
+
+#region Register Swagger
+
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Autoparts.Api", Version = "v1" });
+});
+
 
 #endregion
 
@@ -39,6 +75,7 @@ builder.Services.AddDbContext<AutopartsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         sql => sql.MigrationsAssembly(typeof(AutopartsDbContext).Assembly.FullName)
     )
+    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 );
 
 #endregion
@@ -46,13 +83,10 @@ builder.Services.AddDbContext<AutopartsDbContext>(options =>
 #region Configure Identity
 
 builder.Services
-    .AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<AutopartsDbContext>()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddIdentityCore<User>(options =>
+    .AddIdentityCore<User>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedEmail = true;
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = true;
@@ -60,23 +94,38 @@ builder.Services.AddIdentityCore<User>(options =>
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
     options.User.RequireUniqueEmail = true;
-});
+})
+    .AddRoles<IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AutopartsDbContext>()
+    .AddDefaultTokenProviders()
+    .AddSignInManager();
+
+
+//builder.Services
+//    .AddIdentityCore<User>()
+//    .AddRoles<IdentityRole<Guid>>()
+//    .AddEntityFrameworkStores<AutopartsDbContext>()
+//    .AddSignInManager();
 
 #endregion
 
 # region Register Repositories
 
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<ClientRepository>();
-builder.Services.AddScoped<ManufacturerRepository>();
-builder.Services.AddScoped<ProductRepository>();
-builder.Services.AddScoped<SkuGenerator>();
-builder.Services.AddScoped<PurchaseRepository>();
-builder.Services.AddScoped<ReturnRepository>();
-builder.Services.AddScoped<SaleRepository>();
-builder.Services.AddScoped<SupplierRepository>();
-builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ISkuGenerator, SkuGenerator>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+builder.Services.AddScoped<IReturnRepository, ReturnRepository>();
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IStockCalculator, StockCalculator>();
+
+builder.Services.AddScoped<IProductList, ProductList>();
+
+builder.Services.AddSingleton<IEmailSender<User>, NoOpEmailSender>();
 
 # endregion
 
@@ -93,24 +142,24 @@ builder.Services.AddMediatR(cfg =>
 
 #region Register Validators
 
+builder.Services.AddScoped<IValidator<Address>, AddressValidator>();
 builder.Services.AddScoped<IValidator<Category>, CategoryValidator>();
 builder.Services.AddScoped<IValidator<Client>, ClientValidator>();
+builder.Services.AddScoped<IValidator<Manufacturer>, ManufacturerValidator>();
 builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
+builder.Services.AddScoped<IValidator<Purchase>, PurchaseValidator>();
+builder.Services.AddScoped<IValidator<Return>, ReturnValidator>();
+builder.Services.AddScoped<IValidator<Sale>, SaleValidator>();
 builder.Services.AddScoped<IValidator<Supplier>, SupplierValidator>();
-builder.Services.AddScoped<IValidator<Address>, AddressValidator>();
+builder.Services.AddScoped<IValidator<User>, UserValidator>();
 
 #endregion
 
-#region Register Swagger
-
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "Autoparts.Api", Version = "v1" });
-});
-
-#endregion
+# region Build the application
 
 var app = builder.Build();
+
+#endregion
 
 #region Configure Swagger
 
@@ -141,12 +190,32 @@ app.UseExceptionHandling();
 
 #endregion
 
+#region Configure HTTP request pipeline
+
 app.UseHttpsRedirection();
+
+#endregion
+
+app.UseStaticFiles();
+
+app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+#region Configure Minimal APIs
+
+app.MapCategoryApi();
+app.MapClientApi();
+app.MapManufactureApi();
+app.MapProductApi();
+app.MapPurchaseApi();
+app.MapReturnApi();
+app.MapSaleApi();
+app.MapSupplierApi();
+app.MapUserApi();
+
+#endregion
 
 app.Run();

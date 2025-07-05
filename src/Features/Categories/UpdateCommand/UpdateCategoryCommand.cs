@@ -1,5 +1,5 @@
-using Autoparts.Api.Features.Categories.Domain;
+using FluentValidation.Results;
 using MediatR;
 namespace Autoparts.Api.Features.Categories.UpdateCommand;
 
-public sealed record UpdateCategoryCommand(Guid id, string description) :IRequest<Category>;
+public sealed record UpdateCategoryCommand(Guid CategoryId, string Description) :IRequest<ValidationResult>;

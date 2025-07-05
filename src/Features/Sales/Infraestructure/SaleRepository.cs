@@ -1,49 +1,61 @@
 ﻿using Autoparts.Api.Features.Sales.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Sales.Infraestructure;
 
-public class SaleRepository
+public class SaleRepository : ISaleRepository
 {
     private readonly AutopartsDbContext _context;
+    private readonly IValidator<Sale> _alidator;
 
-    public SaleRepository(AutopartsDbContext context)
+    public SaleRepository(AutopartsDbContext context, IValidator<Sale> alidator)
     {
         _context = context;
+        _alidator = alidator;
     }
 
-    public async Task<IEnumerable<Sale>> GetAllAsync()
+    public async Task<IEnumerable<Sale>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _context.Sales.ToListAsync();
+        return await _context.Sales.ToListAsync(cancellationToken);
     }
 
-    public async Task<Sale?> GetByIdAsync(int id)
+    public async Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Sales.FindAsync(id);
+        return await _context.Sales.FindAsync(id, cancellationToken);
     }
 
-    public async Task AddAsync(Sale sale)
+    public async Task<ValidationResult> AddAsync(Sale sale, CancellationToken cancellationToken)
     {
-        await _context.Sales.AddAsync(sale);
-        await _context.SaveChangesAsync();
+        var validationResult = await _alidator.ValidateAsync(sale, cancellationToken);
+        if (validationResult.IsValid is false)
+            return validationResult;
+
+        await _context.Sales.AddAsync(sale, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        return validationResult;
     }
 
-    public async Task UpdateAsync(Sale sale)
+    public async Task<ValidationResult> UpdateAsync(Sale sale, CancellationToken cancellationToken)
     {
-        var existingSale = await _context.Sales.FindAsync(sale.SaleId) ??
-            throw new KeyNotFoundException($"Sale with ID {sale.SaleId} not found.");
+        var validationResult = await _alidator.ValidateAsync(sale, cancellationToken);
+        if (validationResult.IsValid is false)
+            return validationResult;
 
-        _context.Sales.Update(existingSale);
-        await _context.SaveChangesAsync();
+        _context.Sales.Update(sale);
+        await _context.SaveChangesAsync(cancellationToken);
+        return validationResult;
     }
 
-    public async Task DeleteAsync(Sale sale)
+    public async Task<bool> DeleteAsync(Sale sale, CancellationToken cancellationToken)
     {
-        var existingSale = await _context.Sales.FindAsync(sale.SaleId) ??
-            throw new KeyNotFoundException($"Sale with ID {sale.SaleId} not found.");
-
-        _context.Sales.Remove(existingSale);
-        await _context.SaveChangesAsync();
+        var existingSale = _context.Sales.Remove(sale);
+        if (existingSale is null)
+            return false;
+ 
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }

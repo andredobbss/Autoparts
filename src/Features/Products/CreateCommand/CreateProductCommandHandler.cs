@@ -1,26 +1,22 @@
 using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Features.Products.Infraestructure;
+using FluentValidation.Results;
 using MediatR;
 namespace Autoparts.Api.Features.Products.CreateCommand;
-public sealed class CreateProductCommandHandler(ProductRepository productRepository, SkuGenerator skuGenerator) : IRequestHandler<CreateProductCommand, Product>
+public sealed class CreateProductCommandHandler(IProductRepository productRepository, ISkuGenerator skuGenerator) : IRequestHandler<CreateProductCommand, ValidationResult>
 {
-    private readonly ProductRepository _productRepository = productRepository;
+    private readonly IProductRepository _productRepository = productRepository;
 
-    private readonly SkuGenerator _skuGenerator = skuGenerator;
+    private readonly ISkuGenerator _skuGenerator = skuGenerator;
 
-    public async Task<Product> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<ValidationResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-       var product = new Product(request.TechnicalDescription, request.Compatibility, request.AcquisitionCost, request.CategoryId, request.ManufacturerId);
+        var sku = await _skuGenerator.GenerateSKUAsync(request.ManufacturerId, request.CategoryId, cancellationToken);
 
-        var sku = await _skuGenerator.GenerateSKUAsync(request.ManufacturerId, request.CategoryId);
+        var product = new Product(request.Name, request.TechnicalDescription, request.Compatibility, request.AcquisitionCost, sku, request.CategoryId, request.ManufacturerId);
 
-        product.SetSku(sku);
+        var result = await _productRepository.AddAsync(product, cancellationToken);
 
-        var result = await _productRepository.AddAsync(product);
-
-        if (result.IsValid is true)
-            return product;
-
-        throw new ArgumentException($"Invalid product data: {result.ToDictionary()}");
+        return result;
     }
 }

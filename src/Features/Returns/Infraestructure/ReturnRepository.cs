@@ -1,49 +1,64 @@
 ﻿using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using FluentValidation.Results;
+using Z.PagedList;
 
 namespace Autoparts.Api.Features.Returns.Infraestructure;
 
-public class ReturnRepository
+public class ReturnRepository : IReturnRepository
 {
     private readonly AutopartsDbContext _context;
 
-    public ReturnRepository(AutopartsDbContext context)
+    private readonly IValidator<Return> _validator;
+
+    public ReturnRepository(AutopartsDbContext context, IValidator<Return> validator)
     {
         _context = context;
+        _validator = validator;
     }
 
-    public async Task<IEnumerable<Return>> GetAllAsync()
+    public async Task<IPagedList<Return>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Returns.ToListAsync();
+        return await _context.Returns.ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
-    public async Task<Return?> GetByIdAsync(int id)
+    public async Task<Return?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Returns.FindAsync(id);
+        return await _context.Returns.FindAsync(id, cancellationToken);
     }
 
-    public async Task AddAsync(Return returnItem)
+    public async Task<ValidationResult> AddAsync(Return returnItem, CancellationToken cancellationToken)
     {
-        await _context.Returns.AddAsync(returnItem);
-        await _context.SaveChangesAsync();
+        var result = await _validator.ValidateAsync(returnItem, cancellationToken);
+
+        if (result.IsValid is false)
+            return result;
+
+        await _context.Returns.AddAsync(returnItem, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task UpdateAsync(Return returnItem)
+    public async Task<ValidationResult> UpdateAsync(Return returnItem, CancellationToken cancellationToken)
     {
-        var existingReturn = await _context.Returns.FindAsync(returnItem.ReturnId) ??
-            throw new KeyNotFoundException($"Return with ID {returnItem.ReturnId} not found.");
+        var result = await _validator.ValidateAsync(returnItem, cancellationToken);
 
-        _context.Returns.Update(existingReturn);
-        await _context.SaveChangesAsync();
+        if (result.IsValid is false)
+            return result;
+
+        _context.Returns.Update(returnItem);
+        await _context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task DeleteAsync(Return returnItem)
+    public async Task<bool> DeleteAsync(Return returnItem, CancellationToken cancellationToken)
     {
-        var existingReturn = await _context.Returns.FindAsync(returnItem.ReturnId) ??
-            throw new KeyNotFoundException($"Return with ID {returnItem.ReturnId} not found.");
+        var result = _context.Returns.Remove(returnItem);
+        if (result is null)
+            return false;
 
-        _context.Returns.Remove(existingReturn);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }

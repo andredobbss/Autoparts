@@ -1,5 +1,5 @@
 ﻿using Autoparts.Api.Features.Purchases.Domain;
-using Autoparts.Api.Shared.ValueObjects;
+using Autoparts.Api.Shared.ValueObejct;
 
 namespace Autoparts.Api.Features.Suppliers.Domain;
 
@@ -9,26 +9,25 @@ public sealed class Supplier
 
     public Guid SupplierId { get; private set; }
     public string CompanyName { get; private set; } = null!;
-    public string TaxId { get; private set; } = null!;
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
 
-    public IReadOnlyCollection<Purchase> Purchases { get; private set; } = [];
+    public ICollection<Purchase> Purchases { get; private set; } = [];
     public Address Address { get; private set; } = null!;
 
-    public Supplier(string companyName, DateTime createdAt, Address address)
+    public Supplier(string companyName, Address address)
     {
         SupplierId = Guid.NewGuid();
         CompanyName = companyName;
-        CreatedAt = createdAt;
+        CreatedAt = DateTime.UtcNow;
         Address = address;
     }
 
-    public void Update(string companyName, DateTime updatedAt, Address address)
+    public void Update(string companyName, Address address)
     {
         CompanyName = companyName;
-        UpdatedAt = updatedAt;
+        UpdatedAt = DateTime.UtcNow;
         Address = address;
     }
 

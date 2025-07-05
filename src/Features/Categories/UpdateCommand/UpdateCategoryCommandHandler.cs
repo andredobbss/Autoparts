@@ -1,36 +1,24 @@
-using Autoparts.Api.Features.Categories.Domain;
 using Autoparts.Api.Features.Categories.Infraestructure;
 using Autoparts.Api.Shared.Resources;
+using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Categories.UpdateCommand;
-public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Category>
+public sealed class UpdateCategoryCommandHandler(ICategoryRepository categoryRepository) : IRequestHandler<UpdateCategoryCommand, ValidationResult>
 {
-    private readonly CategoryRepository _categoryRepository;
+    private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
-    public UpdateCategoryCommandHandler(CategoryRepository categoryRepository)
+    public async Task<ValidationResult> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
-        _categoryRepository = categoryRepository;
-    }
+        var category = await _categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
 
-    public async Task<Category> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
-    {
-        var category = await _categoryRepository.GetByIdAsync(request.id, cancellationToken) ?? 
-            throw new KeyNotFoundException($"{Resource.ID_NOT_FOUND} {request.id}");
+        if (category is null)
+            return new ValidationResult { Errors = { new ValidationFailure("Category", $"{Resource.ID_NOT_FOUND} : {request.CategoryId}") } };
 
-        category.Update(request.description);
+        category.Update(request.Description);
 
         var result = await _categoryRepository.UpdateAsync(category, cancellationToken);
 
-        if (result.IsValid is true)
-            return category;
-
-        throw new ArgumentException($"Invalid description: {result.ToDictionary()}");
-
-        //return result.Errors.FirstOrDefault() switch
-        //{
-        //    var error when error.ErrorMessage.Contains("Description") => throw new ArgumentException($"Invalid description: {error.ErrorMessage}"),
-        //    _ => throw new Exception("An error occurred while updating the category.")
-        //};
+        return result;
     }
 }

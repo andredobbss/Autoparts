@@ -1,9 +1,18 @@
+using Autoparts.Api.Features.Suppliers.Infraestructure;
 using MediatR;
 namespace Autoparts.Api.Features.Suppliers.DeleteCommand;
-public sealed class DeleteSupplierCommandHandler():IRequestHandler<DeleteSupplierCommand>
+public sealed class DeleteSupplierCommandHandler(ISupplierRepository supplierRepository) : IRequestHandler<DeleteSupplierCommand, bool>
 {
-    public async Task Handle(DeleteSupplierCommand request, CancellationToken cancellationToken)
+    private readonly ISupplierRepository _supplierRepository = supplierRepository;
+    public async Task<bool> Handle(DeleteSupplierCommand request, CancellationToken cancellationToken)
     {
-         throw new NotImplementedException();
+        var supplier = await _supplierRepository.GetByIdAsync(request.SupplierId, cancellationToken);
+        if (supplier is null)
+            return false;
+
+        supplier.Delete();
+
+        await _supplierRepository.DeleteAsync(supplier, cancellationToken);
+        return true;
     }
 }

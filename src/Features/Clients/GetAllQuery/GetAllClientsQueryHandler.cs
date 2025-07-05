@@ -1,11 +1,16 @@
+using Autoparts.Api.Features.Clients.Domain;
+using Autoparts.Api.Features.Clients.Infraestructure;
+using Autoparts.Api.Shared.Paginate;
 using MediatR;
 
 namespace Autoparts.Api.Features.Clients.GetAllQuery;
 
-public sealed record GetAllClientsQueryHandler():IRequestHandler<GetAllClientsQuery,GetAllClientsQueryResponse>
+public sealed record GetAllClientsQueryHandler(IClientRepository clientRepository) : IRequestHandler<GetAllClientsQuery, PagedResponse<Client>>
 {
-    public async Task<GetAllClientsQueryResponse> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
+    private readonly IClientRepository _clientRepository = clientRepository;
+    public async Task<PagedResponse<Client>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
     {
-         throw new NotImplementedException();
+       var clients = await _clientRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
+       return new PagedResponse<Client>(clients);
     }
 }

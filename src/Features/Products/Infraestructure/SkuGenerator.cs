@@ -1,9 +1,8 @@
 ﻿using Autoparts.Api.Infraestructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Products.Infraestructure;
 
-public class SkuGenerator
+public class SkuGenerator : ISkuGenerator
 {
     private readonly AutopartsDbContext _context;
 
@@ -12,18 +11,12 @@ public class SkuGenerator
         _context = context;
     }
 
-    public async Task<string> GenerateSKUAsync(Guid manufacturerId, Guid categoryId)
+    public async Task<string> GenerateSKUAsync(Guid manufacturerId, Guid categoryId, CancellationToken cancellationToken)
     {
-        //var manufacturer = await _context.Manufacturers.FindAsync(manufacturerId) ??
-        //    throw new KeyNotFoundException("Manufacturer not found.");
+        var manufacturer = await _context.Manufacturers.FindAsync(manufacturerId, cancellationToken) ??
+            throw new KeyNotFoundException("Manufacturer not found.");       
 
-        var manufacturer = await _context.Manufacturers.AsNoTracking().SingleOrDefaultAsync(m => m.ManufacturerId == manufacturerId) ??
-            throw new KeyNotFoundException("Manufacturer not found.");
-
-        //var category = await _context.Categories.FindAsync(categoryId) ??
-        //    throw new KeyNotFoundException("Category not found.");
-
-        var category = await _context.Categories.AsNoTracking().SingleOrDefaultAsync(c => c.CategoryId == categoryId) ??
+        var category = await _context.Categories.FindAsync(categoryId, cancellationToken) ??
             throw new KeyNotFoundException("Category not found.");
 
         var random = new Random();

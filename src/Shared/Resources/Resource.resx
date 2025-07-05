@@ -117,16 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="COMMIT" xml:space="preserve">
+    <value>Commit</value>
+  </data>
+  <data name="COMMIT_FAILED_MESSAGE" xml:space="preserve">
+    <value>Commit failed</value>
+  </data>
   <data name="ERROR_DOMAIN" xml:space="preserve">
     <value>Domain validation error</value>
+  </data>
+  <data name="GREATER_THAN_ZERO" xml:space="preserve">
+    <value>The value entered must be greater than zero</value>
   </data>
   <data name="ID_NOT_FOUND" xml:space="preserve">
     <value>ID Not Found:</value>
   </data>
+  <data name="INVALID_CALCULATION_TYPE" xml:space="preserve">
+    <value>Invalid Calculation Type</value>
+  </data>
+  <data name="INVALID_CNPJ" xml:space="preserve">
+    <value>CNPJ Number Proivided is Invalid</value>
+  </data>
+  <data name="INVALID_CPF" xml:space="preserve">
+    <value>CPF Number Proivided is Invalid</value>
+  </data>
   <data name="MAX_LENGTH_100" xml:space="preserve">
     <value>The text exceeded the 100 character limit</value>
   </data>
+  <data name="MAX_LENGTH_14" xml:space="preserve">
+    <value>The text exceeded the 14 character limit</value>
+  </data>
+  <data name="MAX_LENGTH_255" xml:space="preserve">
+    <value>The text exceeded the 255 character limit</value>
+  </data>
+  <data name="MAX_LENGTH_50" xml:space="preserve">
+    <value>The text exceeded the 50 character limit</value>
+  </data>
   <data name="NOT_NULL_OR_EMPTY" xml:space="preserve">
     <value>This information is required</value>
+  </data>
+  <data name="RETURN_NULL" xml:space="preserve">
+    <value>No data found</value>
+  </data>
+  <data name="STOCK_INSUFFICIENT" xml:space="preserve">
+    <value>Insufficient Stock</value>
   </data>
 </root>

@@ -61,11 +61,38 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Commit.
+        /// </summary>
+        public static string COMMIT {
+            get {
+                return ResourceManager.GetString("COMMIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Commit failed.
+        /// </summary>
+        public static string COMMIT_FAILED_MESSAGE {
+            get {
+                return ResourceManager.GetString("COMMIT_FAILED_MESSAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Domain validation error.
         /// </summary>
         public static string ERROR_DOMAIN {
             get {
                 return ResourceManager.GetString("ERROR_DOMAIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The value entered must be greater than zero.
+        /// </summary>
+        public static string GREATER_THAN_ZERO {
+            get {
+                return ResourceManager.GetString("GREATER_THAN_ZERO", resourceCulture);
             }
         }
         
@@ -79,6 +106,33 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Invalid Calculation Type.
+        /// </summary>
+        public static string INVALID_CALCULATION_TYPE {
+            get {
+                return ResourceManager.GetString("INVALID_CALCULATION_TYPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a CNPJ Number Proivided is Invalid.
+        /// </summary>
+        public static string INVALID_CNPJ {
+            get {
+                return ResourceManager.GetString("INVALID_CNPJ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a CPF Number Proivided is Invalid.
+        /// </summary>
+        public static string INVALID_CPF {
+            get {
+                return ResourceManager.GetString("INVALID_CPF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 100 character limit.
         /// </summary>
         public static string MAX_LENGTH_100 {
@@ -88,11 +142,56 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 14 character limit.
+        /// </summary>
+        public static string MAX_LENGTH_14 {
+            get {
+                return ResourceManager.GetString("MAX_LENGTH_14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 255 character limit.
+        /// </summary>
+        public static string MAX_LENGTH_255 {
+            get {
+                return ResourceManager.GetString("MAX_LENGTH_255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 50 character limit.
+        /// </summary>
+        public static string MAX_LENGTH_50 {
+            get {
+                return ResourceManager.GetString("MAX_LENGTH_50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a This information is required.
         /// </summary>
         public static string NOT_NULL_OR_EMPTY {
             get {
                 return ResourceManager.GetString("NOT_NULL_OR_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a No data found.
+        /// </summary>
+        public static string RETURN_NULL {
+            get {
+                return ResourceManager.GetString("RETURN_NULL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Insufficient Stock.
+        /// </summary>
+        public static string STOCK_INSUFFICIENT {
+            get {
+                return ResourceManager.GetString("STOCK_INSUFFICIENT", resourceCulture);
             }
         }
     }

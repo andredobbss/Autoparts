@@ -1,9 +1,19 @@
+using Autoparts.Api.Features.Products.Infraestructure;
 using MediatR;
 namespace Autoparts.Api.Features.Products.DeleteCommand;
-public sealed class DeleteProductCommandHandler():IRequestHandler<DeleteProductCommand>
+public sealed class DeleteProductCommandHandler(IProductRepository productRepository) :IRequestHandler<DeleteProductCommand, bool>
 {
-    public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+    private readonly IProductRepository _productRepository = productRepository;
+    public async Task<bool> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-         throw new NotImplementedException();
+       var product = await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
+
+       if (product is null) 
+            return false;
+       
+       product.Delete();
+
+       await _productRepository.DeleteAsync(product, cancellationToken);
+       return true;
     }
 }

@@ -1,49 +1,60 @@
 ﻿using Autoparts.Api.Features.Suppliers.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using FluentValidation.Results;
+using Z.PagedList;
 
 namespace Autoparts.Api.Features.Suppliers.Infraestructure;
 
-public class SupplierRepository
+public class SupplierRepository : ISupplierRepository
 {
     private readonly AutopartsDbContext _context;
-
-    public SupplierRepository(AutopartsDbContext context)
+    private readonly IValidator<Supplier> _validator;
+    public SupplierRepository(AutopartsDbContext context, IValidator<Supplier> validator)
     {
         _context = context;
+        _validator = validator;
     }
 
-    public async Task<IEnumerable<Supplier>> GetAllAsync()
+    public async Task<IPagedList<Supplier>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Suppliers.ToListAsync();
+        return await _context.Suppliers.ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
-    public async Task<Supplier?> GetByIdAsync(int id)
+    public async Task<Supplier?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Suppliers.FindAsync(id);
+        return await _context.Suppliers.FindAsync(id, cancellationToken);
     }
 
-    public async Task AddAsync(Supplier supplier)
+    public async Task<ValidationResult> AddAsync(Supplier supplier, CancellationToken cancellationToken)
     {
-        await _context.Suppliers.AddAsync(supplier);
-        await _context.SaveChangesAsync();
+        var result = _validator.Validate(supplier);
+        if (result.IsValid is false)
+            return result;
+
+        await _context.Suppliers.AddAsync(supplier, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task UpdateAsync(Supplier supplier)
+    public async Task<ValidationResult> UpdateAsync(Supplier supplier, CancellationToken cancellationToken)
     {
-        var existingSupplier = await _context.Suppliers.FindAsync(supplier.SupplierId) ??
-            throw new KeyNotFoundException($"Supplier with ID {supplier.SupplierId} not found.");
+        var result = _validator.Validate(supplier);
+        if (result.IsValid is false)
+            return result;
 
-        _context.Suppliers.Update(existingSupplier);
-        await _context.SaveChangesAsync();
+        _context.Suppliers.Update(supplier);
+        await _context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task DeleteAsync(Supplier supplier)
+    public async Task<bool> DeleteAsync(Supplier supplier, CancellationToken cancellationToken)
     {
-        var existingSupplier = await _context.Suppliers.FindAsync(supplier.SupplierId) ??
-            throw new KeyNotFoundException($"Supplier with ID {supplier.SupplierId} not found.");
+       var result = _context.Suppliers.Remove(supplier);
+        if (result is null)
+            return false;
 
-        _context.Suppliers.Remove(existingSupplier);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }
