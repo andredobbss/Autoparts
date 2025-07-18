@@ -11,7 +11,7 @@ public sealed class Return
 {
     private readonly ReturnValidator _returnValidator = new();
     private Return() { }
- 
+
     public Guid ReturnId { get; private set; }
     public string Justification { get; private set; } = string.Empty;
     public string InvoiceNumber { get; private set; } = string.Empty;
@@ -35,7 +35,8 @@ public sealed class Return
         CreatedAt = DateTime.UtcNow;
         UserId = userId;
         ClientId = clientId;
-        ReturnProducts = returnProducts;
+        if (loss is false)
+            ReturnProducts = returnProducts;
 
         var validationResult = ReturnResult();
         if (validationResult.IsValid is false)
@@ -50,7 +51,8 @@ public sealed class Return
         UpdatedAt = DateTime.UtcNow;
         UserId = userId;
         ClientId = clientId;
-        ReturnProducts = returnProducts;
+        if (loss is false)
+            ReturnProducts = returnProducts;
 
         var validationResult = ReturnResult();
         if (validationResult.IsValid is false)

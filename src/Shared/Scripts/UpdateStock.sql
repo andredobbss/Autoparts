@@ -13,4 +13,4 @@ FROM (
     ) AS Movements
     GROUP BY ProductId
 ) AS StockMovements
-WHERE Products.ProductId = StockMovements.ProductId AND StockMovements.ProductId IN (SELECT ProductId FROM ReturnProducts WHERE loss = true);
+WHERE Products.ProductId = StockMovements.ProductId
