@@ -27,26 +27,22 @@ public sealed class CreatePurchaseCommandHandler(IPurchaseRepository purchaseRep
             purchaseProducts.Add(purchaseProduct);
         }
 
-        var purchase = new Purchase(purchaseId, request.InvoiceNumber, 0m, request.PaymentMethod, request.UserId, request.SupplierId, purchaseProducts);
+        var totalPurchase = productsList.Sum(p => p.AcquisitionCost * p.Quantity);
+
+        var purchase = new Purchase(purchaseId, request.InvoiceNumber, totalPurchase, request.PaymentMethod, request.UserId, request.SupplierId, purchaseProducts);
 
         await _purchaseRepository.AddAsync(purchase, cancellationToken);
-
-        var resultCalculation = await _stockCalculator.AddCalculateStockAsync(productsList, cancellationToken);
-        if (resultCalculation.IsValid is false)
-            return resultCalculation;
-
-        var totalPurchase = await _purchaseRepository.GetTotalPurchase(purchaseId, cancellationToken);
-
-        purchase.UpdateTotalPurchase(totalPurchase);
-
-        var result = await _purchaseRepository.UpdateAsync(purchase, cancellationToken);
-        if (result.IsValid is false)
-            return result;
 
         var commitResult = await _purchaseRepository.Commit(cancellationToken);
         if (commitResult is false)
             return new ValidationResult([new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)]);
 
-        return result;
+        var result = await _stockCalculator.StockCalculateAsync(cancellationToken);
+        if (result.IsValid is false)
+            return result; 
+
+        return result; 
     }
+
 }
+

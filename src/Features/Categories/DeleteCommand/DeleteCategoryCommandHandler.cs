@@ -15,7 +15,9 @@ public sealed class DeleteCategoryCommandHandler(ICategoryRepository categoryRep
 
         category.Delete();
 
-        var result = await _categoryRepository.DeleteAsync(category, cancellationToken);
+        await _categoryRepository.DeleteAsync(category, cancellationToken);
+
+        var result = await _categoryRepository.Commit(cancellationToken);
 
         return result;
     }

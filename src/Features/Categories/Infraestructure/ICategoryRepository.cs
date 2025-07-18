@@ -11,4 +11,5 @@ public interface ICategoryRepository
     Task<ValidationResult> AddAsync(Category category, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Category category, CancellationToken cancellationToken);
     Task<bool> DeleteAsync(Category category, CancellationToken cancellationToken);
+    Task<bool> Commit(CancellationToken cancellationToken);
 }

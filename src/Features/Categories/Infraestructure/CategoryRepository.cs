@@ -8,7 +8,7 @@ using Z.PagedList;
 
 namespace Autoparts.Api.Features.Categories.Infraestructure;
 
-public sealed class CategoryRepository : ICategoryRepository
+public sealed class CategoryRepository : ICategoryRepository, IDisposable
 {
     private readonly AutopartsDbContext _context;
 
@@ -38,7 +38,6 @@ public sealed class CategoryRepository : ICategoryRepository
             return result;
 
         await _context.Categories.AddAsync(category, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
         return result;
     }
 
@@ -50,7 +49,6 @@ public sealed class CategoryRepository : ICategoryRepository
             return result;
 
         _context.Categories.Update(category);
-        await _context.SaveChangesAsync(cancellationToken);
         return result;
     }
 
@@ -62,7 +60,21 @@ public sealed class CategoryRepository : ICategoryRepository
         if (result is null)     
             return false;
         
-        await _context.SaveChangesAsync(cancellationToken);
         return true;
+    }
+
+    public async Task<bool> Commit(CancellationToken cancellationToken)
+    {
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+
+        if (commitResult <= 0)
+            return false;
+
+        return true;
+    }
+
+    public void Dispose()
+    {
+        _context.Dispose();
     }
 }

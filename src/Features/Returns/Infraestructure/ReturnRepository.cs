@@ -6,7 +6,7 @@ using Z.PagedList;
 
 namespace Autoparts.Api.Features.Returns.Infraestructure;
 
-public class ReturnRepository : IReturnRepository
+public class ReturnRepository : IReturnRepository, IDisposable
 {
     private readonly AutopartsDbContext _context;
 
@@ -36,7 +36,6 @@ public class ReturnRepository : IReturnRepository
             return result;
 
         await _context.Returns.AddAsync(returnItem, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
         return result;
     }
 
@@ -48,7 +47,6 @@ public class ReturnRepository : IReturnRepository
             return result;
 
         _context.Returns.Update(returnItem);
-        await _context.SaveChangesAsync(cancellationToken);
         return result;
     }
 
@@ -58,7 +56,21 @@ public class ReturnRepository : IReturnRepository
         if (result is null)
             return false;
 
-        await _context.SaveChangesAsync(cancellationToken);
         return true;
+    }
+
+    public async Task<bool> Commit(CancellationToken cancellationToken)
+    {
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+
+        if (commitResult <= 0)
+            return false;
+
+        return true;
+    }
+
+    public void Dispose()
+    {
+        _context.Dispose();
     }
 }

@@ -13,9 +13,6 @@ public interface IPurchaseRepository
     Task<ValidationResult> AddAsync(Purchase purchase, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Purchase purchase, CancellationToken cancellationToken);
     Task<bool> DeleteAsync(Purchase purchase, CancellationToken cancellationToken);   
-    Task<decimal> GetTotalPurchase(Guid purchaseId, CancellationToken cancellationToken);
-    Task AddPurchaseProductAsync(PurchaseProduct purchaseProduct, CancellationToken cancellationToken);
-    Task AddRangePurchaseProductAsync(IEnumerable<PurchaseProduct> purchaseProducts, CancellationToken cancellationToken);
     Task<bool> Commit(CancellationToken cancellationToken);
 
 }

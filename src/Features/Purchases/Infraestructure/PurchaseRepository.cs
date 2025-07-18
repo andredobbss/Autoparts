@@ -9,7 +9,7 @@ using Z.PagedList;
 
 namespace Autoparts.Api.Features.Purchases.Infraestructure;
 
-public class PurchaseRepository : IPurchaseRepository
+public class PurchaseRepository : IPurchaseRepository, IDisposable
 {
     private readonly AutopartsDbContext _context;
 
@@ -112,34 +112,19 @@ public class PurchaseRepository : IPurchaseRepository
 
         if (result.IsValid is false)
             return result;
-
-        _context.Purchases.Update(purchase);
+      
+        _context.Purchases.Update(purchase).State = EntityState.Modified;
         return result;
     }
 
     public async Task<bool> DeleteAsync(Purchase purchase, CancellationToken cancellationToken)
     {
-        var result = _context.Purchases.Remove(purchase);
+        var result = _context.Purchases.Remove(purchase).State = EntityState.Deleted;
 
-        if (result is null)
+        if (result is not EntityState.Deleted)
             return false;
 
         return true;
-    }
-
-    public async Task<decimal> GetTotalPurchase(Guid purchaseId, CancellationToken cancellationToken)
-    {
-        return await _context.PurchaseProducts.AsNoTracking().Where(pp => pp.PurchaseId == purchaseId).SumAsync(pp => pp.TotalItem, cancellationToken);
-    }
-
-    public async Task AddPurchaseProductAsync(PurchaseProduct purchaseProduct, CancellationToken cancellationToken)
-    {
-        await _context.PurchaseProducts.AddAsync(purchaseProduct, cancellationToken);
-    }
-
-    public async Task AddRangePurchaseProductAsync(IEnumerable<PurchaseProduct> purchaseProducts, CancellationToken cancellationToken)
-    {
-        await _context.PurchaseProducts.AddRangeAsync(purchaseProducts, cancellationToken);
     }
 
     public async Task<bool> Commit(CancellationToken cancellationToken)

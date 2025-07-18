@@ -24,8 +24,9 @@ public sealed class Category
         Description = description;
         CreatedAt = DateTime.UtcNow;
 
-        if (CategoryResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, CategoryResult().Errors);
+        var validationResult = CategoryResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string description)
@@ -33,8 +34,9 @@ public sealed class Category
         Description = description;
         UpdatedAt = DateTime.UtcNow;
 
-        if (CategoryResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, CategoryResult().Errors);
+        var validationResult = CategoryResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

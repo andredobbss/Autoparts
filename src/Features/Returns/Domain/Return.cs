@@ -26,21 +26,23 @@ public sealed class Return
     public Client Client { get; private set; } = null!; // ok
     public ICollection<Product> Products { get; private set; } = [];
     public ICollection<ReturnProduct> ReturnProducts { get; private set; } = [];
-    public Return(string justification, string invoiceNumber, bool loss, Guid userId, Guid clientId)
+    public Return(Guid returnId, string justification, string invoiceNumber, bool loss, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
     {
-        ReturnId = Guid.NewGuid();
+        ReturnId = returnId;
         Justification = justification;
         InvoiceNumber = invoiceNumber;
         Loss = loss;
         CreatedAt = DateTime.UtcNow;
         UserId = userId;
         ClientId = clientId;
+        ReturnProducts = returnProducts;
 
-        if (ReturnResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ReturnResult().Errors);
+        var validationResult = ReturnResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
-    public void Update(string justification, string invoiceNumber, bool loss, Guid userId, Guid clientId)
+    public void Update(string justification, string invoiceNumber, bool loss, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
     {
         Justification = justification;
         InvoiceNumber = invoiceNumber;
@@ -48,9 +50,11 @@ public sealed class Return
         UpdatedAt = DateTime.UtcNow;
         UserId = userId;
         ClientId = clientId;
+        ReturnProducts = returnProducts;
 
-        if (ReturnResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ReturnResult().Errors);
+        var validationResult = ReturnResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

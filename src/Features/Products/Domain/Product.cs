@@ -63,8 +63,9 @@ public sealed class Product
         CategoryId = categoryId;
         ManufacturerId = manufacturerId;
 
-        if (ProductDomainResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ProductDomainResult().Errors);
+        var validationResult = ProductDomainResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public Product(
@@ -115,8 +116,9 @@ public sealed class Product
         CategoryId = categoryId;
         ManufacturerId = manufacturerId;
 
-        if (ProductDomainResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ProductDomainResult().Errors);
+        var validationResult = ProductDomainResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

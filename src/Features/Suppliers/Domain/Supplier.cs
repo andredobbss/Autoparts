@@ -1,10 +1,14 @@
 ﻿using Autoparts.Api.Features.Purchases.Domain;
+using Autoparts.Api.Shared.Exceptions;
+using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.ValueObejct;
+using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Suppliers.Domain;
 
 public sealed class Supplier
 {
+    private readonly SupplierValidator _supplierValidator = new();
     private Supplier() { }
 
     public Guid SupplierId { get; private set; }
@@ -22,6 +26,10 @@ public sealed class Supplier
         CompanyName = companyName;
         CreatedAt = DateTime.UtcNow;
         Address = address;
+
+        var validationResult = SupplierResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string companyName, Address address)
@@ -29,9 +37,18 @@ public sealed class Supplier
         CompanyName = companyName;
         UpdatedAt = DateTime.UtcNow;
         Address = address;
+
+        var validationResult = SupplierResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;
+
+    private ValidationResult SupplierResult()
+    {
+        return _supplierValidator.Validate(this);
+    }
 
 }
 

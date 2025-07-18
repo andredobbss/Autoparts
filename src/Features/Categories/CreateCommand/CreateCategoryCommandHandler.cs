@@ -13,6 +13,8 @@ public sealed class CreateCategoryCommandHandler(ICategoryRepository categoryRep
 
         var result = await _categoryRepository.AddAsync(category, cancellationToken);
 
+        await _categoryRepository.Commit(cancellationToken);
+
         return result;
     }
 

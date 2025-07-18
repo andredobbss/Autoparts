@@ -1,5 +1,4 @@
 using Autoparts.Api.Features.Purchases.Infraestructure;
-using Autoparts.Api.Shared.Enums;
 using Autoparts.Api.Shared.Products.Stock;
 using MediatR;
 namespace Autoparts.Api.Features.Purchases.DeleteCommand;
@@ -13,33 +12,14 @@ public sealed class DeletePurchaseCommandHandler(IPurchaseRepository purchaseRep
         if (purchase is null)
             return false;
 
-        var products = purchase.Products
-            .GroupBy(p => p.ProductId)
-            .Select(g => new
-            {
-                ProductId = g.Key,
-                TotalStock = g.Sum(p => p.Stock)
-            })
-            .ToList();
+        purchase.Delete();
 
-        if (products.Count == 0)
-            return false;
+        await _purchaseRepository.DeleteAsync(purchase, cancellationToken);
 
-        //try
-        //{
-        //    foreach (var product in products)
-        //        await _stockCalculator.CalculateStockAsync(product.ProductId, (uint)product.TotalStock, ECalculationType.Subtraction, cancellationToken);
+        await _purchaseRepository.Commit(cancellationToken);
 
-        //    purchase.Delete();
+        await _stockCalculator.StockCalculateAsync(cancellationToken);
 
-        //    await _purchaseRepository.DeleteAsync(purchase, cancellationToken);
-
-        //    return true;
-        //}
-        //catch
-        //{
-        //    return false;
-        //}
         return true;
     }
 }

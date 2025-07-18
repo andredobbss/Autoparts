@@ -24,8 +24,9 @@ public sealed class Manufacturer
         Description = description;
         CreatedAt = DateTime.UtcNow;
 
-        if (ManufacturerResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ManufacturerResult().Errors);
+        var validationResult = ManufacturerResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string description)
@@ -33,8 +34,9 @@ public sealed class Manufacturer
         Description = description;
         UpdatedAt = DateTime.UtcNow;
 
-        if (ManufacturerResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ManufacturerResult().Errors);
+        var validationResult = ManufacturerResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

@@ -29,8 +29,9 @@ public sealed class Client
         CreatedAt = DateTime.UtcNow;
         Address = address;
 
-        if (ClientResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ClientResult().Errors);
+        var validationResult = ClientResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
 
     }
 
@@ -40,8 +41,10 @@ public sealed class Client
         UpdatedAt = DateTime.UtcNow;
         Address = address;
 
-        if (ClientResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ClientResult().Errors);
+       
+        var validationResult = ClientResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

@@ -1,98 +1,151 @@
 ﻿using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
+using Autoparts.Api.Shared.Products.Dto;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Shared.Products.Stock;
 
 public sealed class StockCalculator(AutopartsDbContext context) : IStockCalculator
 {
     private readonly AutopartsDbContext _context = context;
-    public async Task<ValidationResult> AddCalculateStockAsync(IEnumerable<Product> products, CancellationToken cancellationToken)
+
+    public async Task<ValidationResult> StockCalculateAsync(CancellationToken cancellationToken)
     {
         ValidationResult productResult = new();
 
-        List<Product> updatedProducts = [];
+        #region old commented code
 
-        var totalStockDictionary = await StockDictionary.GetStockDictionary(_context, cancellationToken);
+        //List<Product> updatedProducts = [];
 
-        foreach (var product in products)
-        {
-            int stock = totalStockDictionary.Where(key => key.Key == product.ProductId).Sum(key => key.Value);
+        //var products = _context.Products.AsNoTracking();
 
-            stock += product.Quantity;
+        //var stockPurchase = await _context.PurchaseProducts
+        //    .GroupBy(pp => pp.ProductId)
+        //    .Select(g => new { ProductId = g.Key, Quantity = g.Sum(pp => pp.Quantity) })
+        //    .ToDictionaryAsync(pp => pp.ProductId, pp => pp.Quantity, cancellationToken);
 
-            product.SetStock(stock);
+        //var stockReturn = await _context.ReturnProducts
+        //    .GroupBy(pp => pp.ProductId)
+        //    .Select(g => new { ProductId = g.Key, Quantity = g.Sum(pp => pp.Quantity) })
+        //    .ToDictionaryAsync(pp => pp.ProductId, pp => pp.Quantity, cancellationToken);
 
-            updatedProducts.Add(product);
-        }
+        //var stockSale = await _context.SaleProducts
+        //    .GroupBy(pp => pp.ProductId)
+        //    .Select(g => new { ProductId = g.Key, Quantity = g.Sum(pp => pp.Quantity) })
+        //    .ToDictionaryAsync(pp => pp.ProductId, pp => pp.Quantity, cancellationToken);
 
-        _context.Products.UpdateRange(updatedProducts);
+        //foreach (var product in products)
+        //{
+        //    stockPurchaseValue = stockPurchase.TryGetValue(product.ProductId, out int purchaseValue) ? purchaseValue : 0;
+        //    stockReturnValue = stockReturn.TryGetValue(product.ProductId, out int returnValue) ? returnValue : 0;
+        //    stockSaleValue = stockSale.TryGetValue(product.ProductId, out int saleValue) ? saleValue : 0;
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
-        if (commitResult <= 0)
-            return productResult = new ValidationResult { Errors = { new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE) } };
+        //    stock = stockPurchaseValue + stockReturnValue - stockSaleValue;
 
-        return productResult;
-    }
+        //    product.SetStock(stock);
+
+        //    updatedProducts.Add(product);
+        //}
+
+        //_context.Products.UpdateRange(updatedProducts);
+
+        //var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        //if (commitResult <= 0)
+        //    return productResult = new ValidationResult { Errors = { new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE) } };
+
+        #endregion
+
+        #region new code
+
+        //List<Product> updatedProducts = [];
+
+        //var products = _context.Products.AsNoTracking();
+
+        //var stockMovements = await (from pp in _context.PurchaseProducts
+        //                            select new { pp.ProductId, pp.Quantity, Type = "Purchase" })
+        //                                   .Union(
+        //                                       from rp in _context.ReturnProducts
+        //                                       select new { rp.ProductId, rp.Quantity, Type = "Return" })
+        //                                   .Union(
+        //                                       from sp in _context.SaleProducts
+        //                                       select new { sp.ProductId, sp.Quantity, Type = "Sale" })
+        //                                   .ToListAsync(cancellationToken);
+
+        //var stockByProduct = stockMovements
+        //                    .GroupBy(m => m.ProductId)
+        //                    .ToDictionary(
+        //                        g => g.Key,
+        //                        g =>
+        //                        {
+        //                            int purchaseTotal = g.Where(x => x.Type == "Purchase").Sum(x => x.Quantity);
+        //                            int returnTotal = g.Where(x => x.Type == "Return").Sum(x => x.Quantity);
+        //                            int saleTotal = g.Where(x => x.Type == "Sale").Sum(x => x.Quantity);
+
+        //                            return purchaseTotal + returnTotal - saleTotal;
+        //                        });
 
 
-    public async Task<ValidationResult> UpdateCalculateStockAsync(IEnumerable<Product> products, IDictionary<Guid, int> idAndQuantityDictionary, Guid id, CancellationToken cancellationToken)
-    {
-        ValidationResult productResult = new();
+        //foreach (var product in products)
+        //{
+        //    int stock = stockByProduct.TryGetValue(product.ProductId, out int stockValue) ? stockValue : 0;
+        //    product.SetStock(stock);
+        //    updatedProducts.Add(product);
+        //}
 
-        List<Product> updatedProducts = [];
+        //_context.Products.UpdateRange(updatedProducts);
 
-        var totalStockDictionary = await StockDictionary.GetStockDictionary(_context, cancellationToken);
+        //var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        //if (commitResult <= 0)
+        //    return productResult = new ValidationResult { Errors = { new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE) } };
 
-        foreach (var product in products)
-        {
-            int stock = totalStockDictionary.Where(key => key.Key == product.ProductId).Sum(key => key.Value);
+        #endregion
 
-            int sumQuantity = idAndQuantityDictionary.Where(key => key.Key == product.ProductId).Sum(key => key.Value);
+        #region commented code
 
-            stock = stock - sumQuantity + product.Quantity;
+        //List<Product> updatedProducts = [];
 
-            product.SetStock(stock);
+        //var products = _context.Products.AsNoTracking();
 
-            updatedProducts.Add(product);
-        }
+        //var stockList = await _context.Database
+        //    .SqlQuery<StockProjectionDto>($@"SELECT ProductId, SUM(Quantity) AS Stock
+        //                                     FROM (
+        //                                         SELECT ProductId, Quantity FROM PurchaseProducts
+        //                                         UNION ALL
+        //                                         SELECT ProductId, Quantity FROM ReturnProducts
+        //                                         UNION ALL
+        //                                         SELECT ProductId, -Quantity AS Quantity FROM SaleProducts
+        //                                     ) AS StockMovements
+        //                                     GROUP BY ProductId;").ToListAsync(cancellationToken); 
 
-        _context.Products.UpdateRange(updatedProducts);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
-        if (commitResult <= 0)
-            return productResult = new ValidationResult { Errors = { new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE) } };
 
-        return productResult;
-    }
+        //foreach (var product in products)
+        //{
+        //    var stock = stockList.FirstOrDefault(s => s.ProductId == product.ProductId)?.Stock ?? 0;
+        //    product.SetStock(stock);
+        //    updatedProducts.Add(product);
+        //}
 
-    public async Task<ValidationResult> DeleteCalculateStockAsync(IEnumerable<Product> products, Guid id, CancellationToken cancellationToken)
-    {
-        ValidationResult productResult = new();
+        //_context.Products.UpdateRange(updatedProducts);
 
-        List<Product> updatedProducts = [];
+        //var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        //if (commitResult <= 0)
+        //    return productResult = new ValidationResult { Errors = { new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE) } };
 
-        var totalStockDictionary = await StockDictionary.GetStockDictionary(_context, cancellationToken);
+        #endregion
 
-        foreach (var product in products)
-        {
-            int stock = totalStockDictionary.Where(key => key.Key == product.ProductId).Sum(key => key.Value);
-         
-            stock -= product.Quantity;
-          
-            product.SetStock(stock);
+        var sql = Resource.UpdateStock;
 
-            updatedProducts.Add(product);
-        }
+        int result = await _context.Database.ExecuteSqlRawAsync(sql, cancellationToken);
 
-        _context.Products.UpdateRange(updatedProducts);
-
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
-        if (commitResult <= 0)
+        if (result == 0)
             return productResult = new ValidationResult { Errors = { new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE) } };
 
         return productResult;
     }
 }
+
+
 

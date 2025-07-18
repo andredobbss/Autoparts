@@ -194,5 +194,33 @@ namespace Autoparts.Api.Shared.Resources {
                 return ResourceManager.GetString("STOCK_INSUFFICIENT", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a UPDATE Products
+        ///SET Stock = StockMovements.Stock
+        ///FROM (
+        ///    SELECT 
+        ///        ProductId,
+        ///        SUM(Quantity) AS Stock
+        ///    FROM (
+        ///        SELECT ProductId, Quantity FROM PurchaseProducts
+        ///        UNION ALL
+        ///        SELECT ProductId, Quantity FROM ReturnProducts
+        ///        UNION ALL
+        ///        SELECT ProductId, -Quantity AS Quantity FROM SaleProducts
+        ///    ) AS Movements
+        ///    GROUP BY ProductId
+        ///) AS StockMovements
+        ///WHERE Products.ProductId = StockMovements.ProductId;
+        ///
+        ///
+        ///
+        ///.
+        /// </summary>
+        public static string UpdateStock {
+            get {
+                return ResourceManager.GetString("UpdateStock", resourceCulture);
+            }
+        }
     }
 }

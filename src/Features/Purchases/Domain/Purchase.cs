@@ -41,8 +41,9 @@ public sealed class Purchase
         SupplierId = supplierId;
         PurchaseProducts = purchaseProducts;
 
-        if (PurchaseResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, PurchaseResult().Errors);
+        var validationResult = PurchaseResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string invoiceNumber, EPaymentMethod paymentMethod, Guid userId, Guid supplierId, ICollection<PurchaseProduct> purchaseProducts)
@@ -54,15 +55,18 @@ public sealed class Purchase
         SupplierId = supplierId;
         PurchaseProducts = purchaseProducts;
 
-        if (PurchaseResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, PurchaseResult().Errors);
+        var validationResult = PurchaseResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void UpdateTotalPurchase(decimal totalPurchase)
     {
         TotalPurchase = totalPurchase;
-        if (PurchaseResult().IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, PurchaseResult().Errors);
+
+        var validationResult = PurchaseResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

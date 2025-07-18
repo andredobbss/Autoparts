@@ -20,24 +20,8 @@ public sealed class UpdatePurchaseCommandHandler(IPurchaseRepository purchaseRep
 
         List<PurchaseProduct> purchaseProducts = [];
 
-        var purchaseProductList = purchase.PurchaseProducts
-            .Where(pp => pp.PurchaseId == request.PurchaseId)
-            .Select(pp => new { pp.ProductId, pp.Quantity })
-            .ToList();
-
-        IDictionary<Guid, int> idAndQuantityDictionary = new Dictionary<Guid, int>();
-
-        foreach (var purchaseProduct in purchaseProductList)
-        {
-            idAndQuantityDictionary.Add(purchaseProduct.ProductId, purchaseProduct.Quantity);
-        }
-
         var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
-
-        var resultCalculationSubtraction = await _stockCalculator.UpdateCalculateStockAsync(productsList, idAndQuantityDictionary, request.PurchaseId, cancellationToken);
-        if (resultCalculationSubtraction.IsValid is false)
-            return resultCalculationSubtraction;
-
+    
         foreach (var product in productsList)
         {
             var purchaseProduct = new PurchaseProduct(request.PurchaseId, product.ProductId, product.Quantity, product.AcquisitionCost);
@@ -45,15 +29,15 @@ public sealed class UpdatePurchaseCommandHandler(IPurchaseRepository purchaseRep
             purchaseProducts.Add(purchaseProduct);
         }
 
-        var totalPurchase = purchaseProducts.Sum(p => p.TotalItem);
-
-        purchase.UpdateTotalPurchase(totalPurchase);
-
         purchase.Update(request.InvoiceNumber,
                         request.PaymentMethod,
                         request.UserId,
                         request.SupplierId,
                         purchaseProducts);
+
+        var totalPurchase = purchaseProducts.Sum(p => p.TotalItem);
+
+        purchase.UpdateTotalPurchase(totalPurchase);
 
         var result = await _purchaseRepository.UpdateAsync(purchase, cancellationToken);
         if (result.IsValid is false)
@@ -62,6 +46,8 @@ public sealed class UpdatePurchaseCommandHandler(IPurchaseRepository purchaseRep
         var commitResult = await _purchaseRepository.Commit(cancellationToken);
         if (commitResult is false)
             return new ValidationResult([new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)]);
+
+        await _stockCalculator.StockCalculateAsync(cancellationToken);
 
         return result;
     }

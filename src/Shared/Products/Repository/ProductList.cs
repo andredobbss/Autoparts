@@ -12,10 +12,10 @@ public class ProductList(AutopartsDbContext context) : IProductList
 
     public async Task<IEnumerable<Product>> GetProductsListAsync(IEnumerable<SharedProductsDto> products, CancellationToken cancellationToken)
     {
-        var productIds = products.Select(p => p.ProductId).ToList();
+        var productIds = products.Select(p => p.ProductId);
 
         // Consulta em lote para evitar múltiplos FindAsync (N chamadas no banco)
-        var productsFromDb = await _context.Products.AsNoTracking().Where(p => productIds.Contains(p.ProductId) && (p.StockStatus != EStockStatus.Backordered || p.StockStatus != EStockStatus.None)).ToListAsync(cancellationToken);
+        var productsFromDb = _context.Products.AsNoTracking().Where(p => productIds.Contains(p.ProductId) && (p.StockStatus != EStockStatus.Backordered || p.StockStatus != EStockStatus.None));
 
         // Monta a lista final
         var productsResponse = products.Select(productDto =>
@@ -23,7 +23,7 @@ public class ProductList(AutopartsDbContext context) : IProductList
             var productEntity = productsFromDb.FirstOrDefault(p => p.ProductId == productDto.ProductId);
 
             return new Product(
-                productDto.ProductId,
+                productDto.ProductId == Guid.Empty ? productEntity.ProductId : productDto.ProductId,
                 productEntity.Name,
                 productEntity.TechnicalDescription,
                 productEntity.Compatibility,
@@ -36,7 +36,7 @@ public class ProductList(AutopartsDbContext context) : IProductList
                 productEntity?.SellingPrice ?? 0m,
                 productEntity.CategoryId,
                 productEntity.ManufacturerId);
-        }).ToList();
+        });
 
         return productsResponse;
     }
