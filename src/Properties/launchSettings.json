@@ -43,7 +43,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5088",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DEFAULT_CONNECTION_AUTOPARTS": "Server=DESKTOP-SQ9UAB9\\MSSQL_DEV;Database=Autoparts;User ID=sa;Password=Dobbss149283; Trusted_Connection=False;TrustServerCertificate=True;"
       }
     },
     "https": {

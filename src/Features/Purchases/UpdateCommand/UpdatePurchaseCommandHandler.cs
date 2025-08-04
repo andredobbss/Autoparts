@@ -18,17 +18,19 @@ public sealed class UpdatePurchaseCommandHandler(IPurchaseRepository purchaseRep
         if (purchase is null)
             return new ValidationResult { Errors = { new ValidationFailure("Purchase", $"{Resource.ID_NOT_FOUND} : {request.PurchaseId}") } };
 
-        List<PurchaseProduct> purchaseProducts = [];
+        //List<PurchaseProduct> purchaseProducts = [];
 
         var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
     
-        foreach (var product in productsList)
-        {
-            var purchaseProduct = new PurchaseProduct(request.PurchaseId, product.ProductId, product.Quantity, product.AcquisitionCost);
+        //foreach (var product in productsList)
+        //{
+        //    var purchaseProduct = new PurchaseProduct(request.PurchaseId, product.ProductId, product.Quantity, product.AcquisitionCost);
 
-            purchaseProducts.Add(purchaseProduct);
-        }
+        //    purchaseProducts.Add(purchaseProduct);
+        //}
 
+        var purchaseProducts = productsList.Select(product => new PurchaseProduct(request.PurchaseId, product.ProductId, product.Quantity, product.AcquisitionCost)).ToList();
+       
         purchase.Update(request.InvoiceNumber,
                         request.PaymentMethod,
                         request.UserId,

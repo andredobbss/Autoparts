@@ -1,5 +1,6 @@
 using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Features.Returns.Infraestructure;
+using Autoparts.Api.Shared.Products.Dto;
 using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Products.Stock;
 using FluentValidation.Results;
@@ -14,18 +15,12 @@ public sealed class CreateReturnCommandHandler(IReturnRepository returnRepositor
     {
         Guid returnId = Guid.NewGuid();
 
-        List<ReturnProduct> returnProducts = [];
+        var productsList = await _productList.GetProductsListAsync(request.Products.Select(r => new SharedProductsDto(request.Products.Select(r => r.ProductId).First(), request.Products.Select(r => r.Quantity).First())), cancellationToken);
 
-        var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
+        var returnProducts = productsList.Select(p => new ReturnProduct(returnId, p.ProductId, p.Quantity, p.SellingPrice, request.Products.Select(r => r.Loss).FirstOrDefault())).ToList();
 
-        foreach (var product in productsList)
-        {
-            var returnProduct = new ReturnProduct(returnId, product.ProductId, product.Quantity, product.SellingPrice);
-            returnProducts.Add(returnProduct);
-        }
+        var returnEntity = new Return(returnId, request.Justification, request.InvoiceNumber, request.UserId, request.ClientId, returnProducts);
 
-        var returnEntity = new Return(returnId, request.Justification, request.InvoiceNumber, request.Loss, request.UserId, request.ClientId, returnProducts);
-       
         await _returnRepository.AddAsync(returnEntity, cancellationToken);
 
         var commitResult = await _returnRepository.Commit(cancellationToken);

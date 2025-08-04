@@ -5,18 +5,20 @@ namespace Autoparts.Api.Features.Returns.Domain;
 public class ReturnProduct
 {
     private ReturnProduct() { }
-    public ReturnProduct(Guid returnId, Guid productId, int quantity, decimal sellingPrice)
+    public ReturnProduct(Guid returnId, Guid productId, int quantity, decimal sellingPrice, bool loss)
     {
         ReturnId = returnId;
         ProductId = productId;
         Quantity = quantity;
         SellingPrice = sellingPrice;
+        Loss = loss;
         TotalItem = TotalItemCalculate(quantity, sellingPrice);
     }
 
     public Guid ReturnId { get; private set; }
     public Guid ProductId { get; private set; }
     public int Quantity { get; private set; }
+    public bool Loss { get; private set; } = false;
     public decimal SellingPrice { get; private set; } = 0m;
     public decimal TotalItem { get; private set; } = 0m;
 

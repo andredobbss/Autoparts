@@ -16,27 +16,27 @@ public class AddressValidator : AbstractValidator<Address>
         RuleFor(a => a.State)
             .NotEmpty().NotNull().WithMessage("State cannot be null or empty.")
             .MaximumLength(50).WithMessage("State must not exceed 50 characters.");
-        RuleFor(a => a.ZipCode)
-            .NotEmpty().NotNull().WithMessage("ZipCode cannot be null or empty.")
-            .Matches(@"^\d{5}(-\d{4})?$").WithMessage("ZipCode must be in the format '12345' or '12345-6789'.");
+    //    RuleFor(a => a.ZipCode)
+    //        .NotEmpty().NotNull().WithMessage("ZipCode cannot be null or empty.")
+    //        .Matches(@"^\d{5}(-\d{4})?$").WithMessage("ZipCode must be in the format '12345' or '12345-6789'.");
 
-        RuleFor(c => c.TaxId)
-    .NotEmpty()
-    .NotNull()
-    .WithMessage(Resource.NOT_NULL_OR_EMPTY);
+    //    RuleFor(c => c.TaxId)
+    //.NotEmpty()
+    //.NotNull()
+    //.WithMessage(Resource.NOT_NULL_OR_EMPTY);
 
-        RuleFor(c => c.TaxId)
-            .Must(taxId => taxId.Length == 11)
-            .When(c => c.TaxId?.Length == 11, ApplyConditionTo.CurrentValidator)
-            .WithMessage(Resource.INVALID_CPF)
-            .IsValidCPF()
-            .When(c => c.TaxId?.Length == 11, ApplyConditionTo.CurrentValidator);
+    //    RuleFor(c => c.TaxId)
+    //        .Must(taxId => taxId.Length == 11)
+    //        .When(c => c.TaxId?.Length == 11, ApplyConditionTo.CurrentValidator)
+    //        .WithMessage(Resource.INVALID_CPF)
+    //        .IsValidCPF()
+    //        .When(c => c.TaxId?.Length == 11, ApplyConditionTo.CurrentValidator);
 
-        RuleFor(c => c.TaxId)
-            .Must(taxId => taxId.Length == 14)
-            .When(c => c.TaxId?.Length == 14, ApplyConditionTo.CurrentValidator)
-            .WithMessage(Resource.INVALID_CNPJ)
-            .IsValidCNPJ()
-            .When(c => c.TaxId?.Length == 14, ApplyConditionTo.CurrentValidator);
+    //    RuleFor(c => c.TaxId)
+    //        .Must(taxId => taxId.Length == 14)
+    //        .When(c => c.TaxId?.Length == 14, ApplyConditionTo.CurrentValidator)
+    //        .WithMessage(Resource.INVALID_CNPJ)
+    //        .IsValidCNPJ()
+    //        .When(c => c.TaxId?.Length == 14, ApplyConditionTo.CurrentValidator);
     }
 }

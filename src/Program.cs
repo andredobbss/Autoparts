@@ -37,6 +37,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 
 #endregion
@@ -71,11 +72,21 @@ builder.Services.AddSwaggerGen(c =>
 
 #region Configure DbContext
 
+//builder.Services.AddDbContext<AutopartsDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+//        sql => sql.MigrationsAssembly(typeof(AutopartsDbContext).Assembly.FullName)
+//    )
+//    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+//);
+
+string connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION_AUTOPARTS") ??
+                          builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AutopartsDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    options.UseSqlServer(connectionString,
         sql => sql.MigrationsAssembly(typeof(AutopartsDbContext).Assembly.FullName)
     )
-    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+//.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 );
 
 #endregion

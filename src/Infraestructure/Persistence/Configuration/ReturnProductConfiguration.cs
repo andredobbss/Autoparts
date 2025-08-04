@@ -23,5 +23,20 @@ public class ReturnProductConfiguration : IEntityTypeConfiguration<ReturnProduct
             .IsRequired(true)
             .HasColumnType("INT")
             .HasDefaultValue(0);
+        builder.Property(rp => rp.Loss)
+            .HasColumnName("Loss")
+            .IsRequired(true)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false);
+        builder.Property(rp => rp.SellingPrice)
+            .HasColumnName("SellingPrice")
+            .IsRequired(true)
+            .HasColumnType("DECIMAL(18,2)")
+            .HasDefaultValue(0m);
+        builder.Property(rp => rp.TotalItem)
+            .HasColumnName("TotalItem")
+            .IsRequired(true)
+            .HasColumnType("DECIMAL(18,2)")
+            .HasDefaultValue(0m);
     }
 }

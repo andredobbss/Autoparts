@@ -7,7 +7,7 @@ FROM (
     FROM (
         SELECT ProductId, Quantity FROM PurchaseProducts
         UNION ALL
-        SELECT ProductId, Quantity FROM ReturnProducts
+        SELECT ProductId, Quantity FROM ReturnProducts WHERE Loss = 0
         UNION ALL
         SELECT ProductId, -Quantity AS Quantity FROM SaleProducts
     ) AS Movements

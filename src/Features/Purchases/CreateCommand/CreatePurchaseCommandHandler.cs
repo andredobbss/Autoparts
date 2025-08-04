@@ -16,16 +16,18 @@ public sealed class CreatePurchaseCommandHandler(IPurchaseRepository purchaseRep
     {
         Guid purchaseId = Guid.NewGuid();
 
-        List<PurchaseProduct> purchaseProducts = [];
+        //List<PurchaseProduct> purchaseProducts = [];
 
         var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
 
-        foreach (var product in productsList)
-        {
-            var purchaseProduct = new PurchaseProduct(purchaseId, product.ProductId, product.Quantity, product.AcquisitionCost);
+        //foreach (var product in productsList)
+        //{
+        //    var purchaseProduct = new PurchaseProduct(purchaseId, product.ProductId, product.Quantity, product.AcquisitionCost);
 
-            purchaseProducts.Add(purchaseProduct);
-        }
+        //    purchaseProducts.Add(purchaseProduct);
+        //}
+
+        var purchaseProducts = productsList.Select(product => new PurchaseProduct(purchaseId, product.ProductId, product.Quantity, product.AcquisitionCost)).ToList();
 
         var totalPurchase = productsList.Sum(p => p.AcquisitionCost * p.Quantity);
 

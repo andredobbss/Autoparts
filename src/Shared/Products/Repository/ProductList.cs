@@ -18,9 +18,9 @@ public class ProductList(AutopartsDbContext context) : IProductList
         var productsFromDb = _context.Products.AsNoTracking().Where(p => productIds.Contains(p.ProductId) && (p.StockStatus != EStockStatus.Backordered || p.StockStatus != EStockStatus.None));
 
         // Monta a lista final
-        var productsResponse = products.Select(productDto =>
+        var productsResponse = products.Select(async productDto =>
         {
-            var productEntity = productsFromDb.FirstOrDefault(p => p.ProductId == productDto.ProductId);
+            var productEntity = await productsFromDb.FirstOrDefaultAsync(p => p.ProductId == productDto.ProductId, cancellationToken);
 
             return new Product(
                 productDto.ProductId == Guid.Empty ? productEntity.ProductId : productDto.ProductId,
@@ -38,6 +38,6 @@ public class ProductList(AutopartsDbContext context) : IProductList
                 productEntity.ManufacturerId);
         });
 
-        return productsResponse;
+        return await Task.WhenAll(productsResponse);
     }
 }

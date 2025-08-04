@@ -15,7 +15,6 @@ public sealed class Return
     public Guid ReturnId { get; private set; }
     public string Justification { get; private set; } = string.Empty;
     public string InvoiceNumber { get; private set; } = string.Empty;
-    public bool Loss { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
@@ -26,33 +25,29 @@ public sealed class Return
     public Client Client { get; private set; } = null!; // ok
     public ICollection<Product> Products { get; private set; } = [];
     public ICollection<ReturnProduct> ReturnProducts { get; private set; } = [];
-    public Return(Guid returnId, string justification, string invoiceNumber, bool loss, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
+    public Return(Guid returnId, string justification, string invoiceNumber, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
     {
         ReturnId = returnId;
         Justification = justification;
         InvoiceNumber = invoiceNumber;
-        Loss = loss;
         CreatedAt = DateTime.UtcNow;
         UserId = userId;
         ClientId = clientId;
-        if (loss is false)
-            ReturnProducts = returnProducts;
+        ReturnProducts = returnProducts;
 
         var validationResult = ReturnResult();
         if (validationResult.IsValid is false)
             throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
-    public void Update(string justification, string invoiceNumber, bool loss, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
+    public void Update(string justification, string invoiceNumber, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
     {
         Justification = justification;
         InvoiceNumber = invoiceNumber;
-        Loss = loss;
         UpdatedAt = DateTime.UtcNow;
         UserId = userId;
         ClientId = clientId;
-        if (loss is false)
-            ReturnProducts = returnProducts;
+        ReturnProducts = returnProducts;
 
         var validationResult = ReturnResult();
         if (validationResult.IsValid is false)

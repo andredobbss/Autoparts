@@ -12,8 +12,7 @@ public class ReturnConfiguration : IEntityTypeConfiguration<Return>
         builder.HasKey(r => r.ReturnId);
         builder.Property(r => r.ReturnId).HasColumnName("ReturnId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
         builder.Property(r => r.Justification).HasColumnName("Justification").IsRequired(true).HasColumnType("NVARCHAR").HasMaxLength(255);
-        builder.Property(r => r.InvoiceNumber).HasColumnName("InvoiceNumber").IsRequired(false).HasColumnType("NVARCHAR").HasMaxLength(50);
-        builder.Property(r => r.Loss).HasColumnName("Loss").IsRequired(true).HasColumnType("BIT").HasDefaultValue(false);
+        builder.Property(r => r.InvoiceNumber).HasColumnName("InvoiceNumber").IsRequired(false).HasColumnType("NVARCHAR").HasMaxLength(50);        
         builder.Property(r => r.CreatedAt).HasColumnName("CreatedAt").IsRequired(true).HasColumnType("DATETIME2");
         builder.Property(r => r.UpdatedAt).HasColumnName("UpdatedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(r => r.DeletedAt).HasColumnName("DeletedAt").IsRequired(false).HasColumnType("DATETIME2");

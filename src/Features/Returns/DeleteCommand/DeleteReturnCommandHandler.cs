@@ -1,5 +1,4 @@
 using Autoparts.Api.Features.Returns.Infraestructure;
-using Autoparts.Api.Shared.Enums;
 using Autoparts.Api.Shared.Products.Stock;
 using MediatR;
 namespace Autoparts.Api.Features.Returns.DeleteCommand;
@@ -13,33 +12,14 @@ public sealed class DeleteReturnCommandHandler(IReturnRepository returnRepositor
         if (returnItem is null)
             return false;
 
-        var products = returnItem.Products
-            .GroupBy(p => p.ProductId)
-            .Select(g => new
-            {
-                ProductId = g.Key,
-                TotalStock = g.Sum(p => p.Stock)
-            })
-            .ToList();
+        returnItem.Delete();
 
-        if (products.Count == 0)
-            return false;
+        await _returnRepository.DeleteAsync(returnItem, cancellationToken);
 
-        //try
-        //{
-        //    foreach (var product in products)
-        //        await _stockCalculator.CalculateStockAsync(product.ProductId, (uint)product.TotalStock, ECalculationType.Subtraction, cancellationToken);
+        await _returnRepository.Commit(cancellationToken);
 
-        //    returnItem.Delete();
+        await _stockCalculator.StockCalculateAsync(cancellationToken);
 
-        //    await _returnRepository.DeleteAsync(returnItem, cancellationToken);
-
-        //    return true;
-        //}
-        //catch
-        //{
-        //    return false;
-        //}
         return true;
     }
 }
