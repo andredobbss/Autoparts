@@ -9,16 +9,16 @@ public sealed class DeleteCategoryCommandHandler(ICategoryRepository categoryRep
     public async Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = await _categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
-
         if (category is null)
             return false;
 
         category.Delete();
 
-        await _categoryRepository.DeleteAsync(category, cancellationToken);
+        var deleted = await _categoryRepository.DeleteAsync(category, cancellationToken);
+        if (!deleted)
+            return false;
 
-        var result = await _categoryRepository.Commit(cancellationToken);
-
-        return result;
+        var committed = await _categoryRepository.CommitAsync(cancellationToken);
+        return committed;
     }
 }

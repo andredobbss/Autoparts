@@ -15,9 +15,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Autoparts.Api.Infraestructure.Persistence;
 
 public sealed class AutopartsDbContext : IdentityDbContext<User, 
-                                                           IdentityRole<Guid>, 
-                                                           Guid, 
-                                                           IdentityUserClaim<Guid>, 
+                                                           IdentityRole<Guid>,
+                                                           Guid,
+                                                           IdentityUserClaim<Guid>,
                                                            IdentityUserRole<Guid>,
                                                            IdentityUserLogin<Guid>,
                                                            IdentityRoleClaim<Guid>,
@@ -66,6 +66,16 @@ public sealed class AutopartsDbContext : IdentityDbContext<User,
         modelBuilder.ApplyConfiguration(new PurchaseProductConfiguration());
         modelBuilder.ApplyConfiguration(new ReturnProductConfiguration());
         modelBuilder.ApplyConfiguration(new SaleProductConfiguration());
+
+        // filters for soft delete
+        modelBuilder.Entity<Category>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<Client>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<Manufacturer>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<Product>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<Purchase>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<Return>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<Sale>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<Supplier>().HasQueryFilter(c => c.DeletedAt == null);
     }
 
 }

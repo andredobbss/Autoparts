@@ -6,8 +6,8 @@ namespace Autoparts.Api.Features.Purchases.CreateCommand;
 
 public sealed record CreatePurchaseCommand(string InvoiceNumber, 
                                            EPaymentMethod PaymentMethod,
-                                           Guid UserId, 
-                                           Guid SupplierId, 
+                                           Guid UserId,
+                                           Guid SupplierId,
                                            IEnumerable<SharedProductsDto> Products) : IRequest<ValidationResult>;
 
 

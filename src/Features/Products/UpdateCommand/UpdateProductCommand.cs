@@ -1,4 +1,3 @@
-using Autoparts.Api.Features.Products.Domain;
 using FluentValidation.Results;
 using MediatR;
 namespace Autoparts.Api.Features.Products.UpdateCommand;

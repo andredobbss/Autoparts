@@ -166,4 +166,19 @@
   <data name="UpdateStock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scripts\UpdateStock.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="STOCK" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+  <data name="STOCK_FAILED_MESSAGE" xml:space="preserve">
+    <value>Failed to calculate stock</value>
+  </data>
+  <data name="PRODUCTS_REQUIRED" xml:space="preserve">
+    <value>Enter the product</value>
+  </data>
+  <data name="PRODUCTS_NOT_FOUND" xml:space="preserve">
+    <value>Product not found</value>
+  </data>
+  <data name="PURCHASE_NOT_FOUND" xml:space="preserve">
+    <value>Purchase not found</value>
+  </data>
 </root>

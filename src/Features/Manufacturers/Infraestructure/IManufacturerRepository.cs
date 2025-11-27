@@ -10,5 +10,6 @@ public interface IManufacturerRepository
     Task<Manufacturer?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<ValidationResult> AddAsync(Manufacturer manufacturer, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Manufacturer manufacturer, CancellationToken cancellationToken);
-    Task<bool> DeleteAsync(Manufacturer manufacturer, CancellationToken cancellationToken);  
+    Task<bool> DeleteAsync(Manufacturer manufacturer, CancellationToken cancellationToken);
+    Task<bool> CommitAsync(CancellationToken cancellationToken);
 }

@@ -11,6 +11,6 @@ public interface IProductRepository
     Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<ValidationResult> AddAsync(Product product, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Product product, CancellationToken cancellationToken);
-    Task<bool> DeleteAsync(Product product, CancellationToken cancellationToken);  
-    Task<bool> Commit(CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(Product product, CancellationToken cancellationToken);
+    Task<bool> CommitAsync(CancellationToken cancellationToken);
 }

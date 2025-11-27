@@ -41,7 +41,6 @@ public sealed class Client
         UpdatedAt = DateTime.UtcNow;
         Address = address;
 
-       
         var validationResult = ClientResult();
         if (validationResult.IsValid is false)
             throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);

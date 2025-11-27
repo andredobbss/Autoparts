@@ -38,6 +38,7 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
         builder.HasIndex(p => p.PurchaseId).HasDatabaseName("IX_Purchases_PurchaseId");
         builder.HasIndex(p => p.InvoiceNumber).HasDatabaseName("IX_Purchases_InvoiceNumber");
         builder.HasIndex(p => p.CreatedAt).HasDatabaseName("IX_Purchases_CreatedAt");
+        builder.HasIndex(p => p.DeletedAt).HasDatabaseName("IX_Purchases_DeletedAt");
 
     }
 }

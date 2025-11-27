@@ -1,11 +1,11 @@
 using Autoparts.Api.Features.Purchases.Infraestructure;
-using Autoparts.Api.Shared.Products.Stock;
 using MediatR;
+
 namespace Autoparts.Api.Features.Purchases.DeleteCommand;
-public sealed class DeletePurchaseCommandHandler(IPurchaseRepository purchaseRepository, IStockCalculator stockCalculator) : IRequestHandler<DeletePurchaseCommand, bool>
+
+public sealed class DeletePurchaseCommandHandler(IPurchaseRepository purchaseRepository) : IRequestHandler<DeletePurchaseCommand, bool>
 {
     private readonly IPurchaseRepository _purchaseRepository = purchaseRepository;
-    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<bool> Handle(DeletePurchaseCommand request, CancellationToken cancellationToken)
     {
         var purchase = await _purchaseRepository.GetByIdAsync(request.PurchaseId, cancellationToken);
@@ -14,12 +14,11 @@ public sealed class DeletePurchaseCommandHandler(IPurchaseRepository purchaseRep
 
         purchase.Delete();
 
-        await _purchaseRepository.DeleteAsync(purchase, cancellationToken);
+        var deleted = await _purchaseRepository.DeleteAsync(purchase, cancellationToken);
+        if (!deleted)
+            return false;
 
-        await _purchaseRepository.Commit(cancellationToken);
-
-        await _stockCalculator.StockCalculateAsync(cancellationToken);
-
-        return true;
+        var committed = await _purchaseRepository.CommitAsync(cancellationToken);
+        return committed;
     }
 }

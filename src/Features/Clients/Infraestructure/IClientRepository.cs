@@ -11,4 +11,5 @@ public interface IClientRepository
     Task<ValidationResult> AddAsync(Client client, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Client client, CancellationToken cancellationToken);
     Task<bool> DeleteAsync(Client client, CancellationToken cancellationToken);
+    Task<bool> CommitAsync(CancellationToken cancellationToken);
 }

@@ -29,6 +29,7 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
            
         builder.HasIndex(s => s.SaleId).HasDatabaseName("IX_Sales_SaleId");
         builder.HasIndex(s => s.CreatedAt).HasDatabaseName("IX_Sales_CreatedAt");
+        builder.HasIndex(s => s.DeletedAt).HasDatabaseName("IX_Sales_DeletedAt");
     }
 
 }

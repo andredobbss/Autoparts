@@ -27,8 +27,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasIndex(p => p.ProductId).HasDatabaseName("IX_Products_ProductId");
         builder.HasIndex(p => p.CreatedAt).HasDatabaseName("IX_Products_CreatedAt");
+        builder.HasIndex(p => p.DeletedAt).HasDatabaseName("IX_Products_DeletedAt");
         builder.HasIndex(p => p.SKU).HasDatabaseName("IX_Products_SKU").IsUnique(true);
-
+       
         builder.Ignore(p => p.Quantity);
     }
 }

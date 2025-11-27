@@ -32,6 +32,7 @@ public class ReturnConfiguration : IEntityTypeConfiguration<Return>
 
         builder.HasIndex(r => r.ReturnId).HasDatabaseName("IX_Returns_ReturnId");
         builder.HasIndex(r => r.CreatedAt).HasDatabaseName("IX_Returns_CreatedAt");
+        builder.HasIndex(r => r.DeletedAt).HasDatabaseName("IX_Returns_DeletedAt");
 
     }
 }

@@ -4,16 +4,19 @@ using Autoparts.Api.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Autoparts.Api.Infraestructure.Migrations
+namespace Autoparts.Api.Migrations
 {
     [DbContext(typeof(AutopartsDbContext))]
-    partial class AutopartsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251126201309_version06")]
+    partial class version06
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

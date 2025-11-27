@@ -1,3 +1,3 @@
 namespace Autoparts.Api.Features.Categories.GetAllQuery;
 
-public sealed record GetAllCategoriesQueryResponse(int Id, string Name);
+public sealed record GetAllCategoriesQueryResponse(Guid CategoryId, string Description, DateTime CreatedAt, DateTime UpdatedAt);

@@ -22,6 +22,7 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
 
         builder.HasIndex(s => s.SupplierId).HasDatabaseName("IX_Suppliers_SupplierId");
         builder.HasIndex(s => s.CreatedAt).HasDatabaseName("IX_Suppliers_CreatedAt");
+        builder.HasIndex(s => s.DeletedAt).HasDatabaseName("IX_Suppliers_DeletedAt");
     }
 
 

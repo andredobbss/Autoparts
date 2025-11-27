@@ -2,6 +2,7 @@ using Autoparts.Api.Features.Products.Infraestructure;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
+
 namespace Autoparts.Api.Features.Products.UpdateCommand;
 public sealed class UpdateProductCommandHandler(IProductRepository productRepository) : IRequestHandler<UpdateProductCommand, ValidationResult>
 {
@@ -21,6 +22,19 @@ public sealed class UpdateProductCommandHandler(IProductRepository productReposi
                         request.ManufacturerId);
 
         var result = await _productRepository.UpdateAsync(product, cancellationToken);
+
+        if (!result.IsValid)
+            return result;
+
+        var commitResult = await _productRepository.CommitAsync(cancellationToken);
+
+        if (!commitResult)
+        {
+            var failures = result.Errors.ToList();
+            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
+            return new ValidationResult(failures);
+        }
+
         return result;
 
     }

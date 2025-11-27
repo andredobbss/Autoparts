@@ -1,14 +1,17 @@
-using Autoparts.Api.Features.Manufacturers.Domain;
+using AutoMapper;
 using Autoparts.Api.Features.Manufacturers.Infraestructure;
 using MediatR;
 
 namespace Autoparts.Api.Features.Manufacturers.GetByIdQuery;
 
-public sealed record GetManufacturerByIdQueryHandler(IManufacturerRepository manufacturerRepository) : IRequestHandler<GetManufacturerByIdQuery, Manufacturer>
+public sealed record GetManufacturerByIdQueryHandler(IManufacturerRepository manufacturerRepository, IMapper mapper) : IRequestHandler<GetManufacturerByIdQuery, GetManufacturerByIdQueryResponse>
 {
     private readonly IManufacturerRepository _manufacturerRepository = manufacturerRepository;
-    public async Task<Manufacturer> Handle(GetManufacturerByIdQuery request, CancellationToken cancellationToken)
+    private readonly IMapper _mapper = mapper;
+    public async Task<GetManufacturerByIdQueryResponse> Handle(GetManufacturerByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _manufacturerRepository.GetByIdAsync(request.ManufacturerId, cancellationToken);
+        var manufacturer = await _manufacturerRepository.GetByIdAsync(request.ManufacturerId, cancellationToken);
+
+        return _mapper.Map<GetManufacturerByIdQueryResponse>(manufacturer);
     }
 }

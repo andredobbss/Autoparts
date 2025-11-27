@@ -12,32 +12,44 @@ public class ProductList(AutopartsDbContext context) : IProductList
 
     public async Task<IEnumerable<Product>> GetProductsListAsync(IEnumerable<SharedProductsDto> products, CancellationToken cancellationToken)
     {
-        var productIds = products.Select(p => p.ProductId);
+        var productIds = products.Select(p => p.ProductId).ToList();
 
-        // Consulta em lote para evitar múltiplos FindAsync (N chamadas no banco)
-        var productsFromDb = _context.Products.AsNoTracking().Where(p => productIds.Contains(p.ProductId) && (p.StockStatus != EStockStatus.Backordered || p.StockStatus != EStockStatus.None));
+        // 1) Uma única consulta ao banco
+        var productsFromDb = await _context.Products!
+            .AsNoTracking()
+            .Where(p => productIds.Contains(p.ProductId)
+                && (p.StockStatus != EStockStatus.Backordered &&
+                    p.StockStatus != EStockStatus.None))
+            .ToListAsync(cancellationToken);
 
-        // Monta a lista final
-        var productsResponse = products.Select(async productDto =>
+        // 2) Índice para lookup em memória
+        var dict = productsFromDb.ToDictionary(p => p.ProductId);
+
+        // 3) Construção final SEM async dentro do foreach
+        var response = new List<Product>();
+
+        foreach (var dto in products)
         {
-            var productEntity = await productsFromDb.FirstOrDefaultAsync(p => p.ProductId == productDto.ProductId, cancellationToken);
+            if (!dict.TryGetValue(dto.ProductId, out var productEntity))
+                continue;
 
-            return new Product(
-                productDto.ProductId == Guid.Empty ? productEntity.ProductId : productDto.ProductId,
+            response.Add(new Product(
+                dto.ProductId == Guid.Empty ? productEntity.ProductId : dto.ProductId,
                 productEntity.Name,
                 productEntity.TechnicalDescription,
                 productEntity.Compatibility,
                 productEntity.SKU,
-                productDto.Quantity,
+                dto.Quantity,
                 productEntity.Stock,
-                productEntity?.StockStatus ?? EStockStatus.None,
+                productEntity.StockStatus,
                 productEntity.CreatedAt,
-                productEntity?.AcquisitionCost ?? 0m,
-                productEntity?.SellingPrice ?? 0m,
+                productEntity.AcquisitionCost,
+                productEntity.SellingPrice,
                 productEntity.CategoryId,
-                productEntity.ManufacturerId);
-        });
+                productEntity.ManufacturerId
+            ));
+        }
 
-        return await Task.WhenAll(productsResponse);
+        return response;
     }
 }

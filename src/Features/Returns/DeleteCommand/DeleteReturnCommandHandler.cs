@@ -1,11 +1,10 @@
 using Autoparts.Api.Features.Returns.Infraestructure;
-using Autoparts.Api.Shared.Products.Stock;
 using MediatR;
+
 namespace Autoparts.Api.Features.Returns.DeleteCommand;
-public sealed class DeleteReturnCommandHandler(IReturnRepository returnRepository, IStockCalculator stockCalculator) : IRequestHandler<DeleteReturnCommand, bool>
+public sealed class DeleteReturnCommandHandler(IReturnRepository returnRepository) : IRequestHandler<DeleteReturnCommand, bool>
 {
     private readonly IReturnRepository _returnRepository = returnRepository;
-    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<bool> Handle(DeleteReturnCommand request, CancellationToken cancellationToken)
     {
         var returnItem = await _returnRepository.GetByIdAsync(request.ReturnId, cancellationToken);
@@ -14,12 +13,11 @@ public sealed class DeleteReturnCommandHandler(IReturnRepository returnRepositor
 
         returnItem.Delete();
 
-        await _returnRepository.DeleteAsync(returnItem, cancellationToken);
+        var deleted = await _returnRepository.DeleteAsync(returnItem, cancellationToken);
+        if (!deleted)
+            return false;
 
-        await _returnRepository.Commit(cancellationToken);
-
-        await _stockCalculator.StockCalculateAsync(cancellationToken);
-
-        return true;
+        var committed = await _returnRepository.CommitAsync(cancellationToken);
+        return committed;
     }
 }

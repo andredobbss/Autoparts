@@ -13,10 +13,10 @@ public class SkuGenerator : ISkuGenerator
 
     public async Task<string> GenerateSKUAsync(Guid manufacturerId, Guid categoryId, CancellationToken cancellationToken)
     {
-        var manufacturer = await _context.Manufacturers.FindAsync(manufacturerId, cancellationToken) ??
+        var manufacturer = await _context.Manufacturers!.FindAsync(manufacturerId, cancellationToken) ??
             throw new KeyNotFoundException("Manufacturer not found.");       
 
-        var category = await _context.Categories.FindAsync(categoryId, cancellationToken) ??
+        var category = await _context.Categories!.FindAsync(categoryId, cancellationToken) ??
             throw new KeyNotFoundException("Category not found.");
 
         var random = new Random();

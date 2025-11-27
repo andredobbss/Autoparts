@@ -12,7 +12,7 @@ public interface IPurchaseRepository
     Task<Purchase?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<ValidationResult> AddAsync(Purchase purchase, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Purchase purchase, CancellationToken cancellationToken);
-    Task<bool> DeleteAsync(Purchase purchase, CancellationToken cancellationToken);   
-    Task<bool> Commit(CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(Purchase purchase, CancellationToken cancellationToken);
+    Task<bool> CommitAsync(CancellationToken cancellationToken);
 
 }

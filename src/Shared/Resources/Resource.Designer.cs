@@ -19,7 +19,7 @@ namespace Autoparts.Api.Shared.Resources {
     // através de uma ferramenta como ResGen ou Visual Studio.
     // Para adicionar ou remover um associado, edite o arquivo .ResX e execute ResGen novamente
     // com a opção /str, ou recrie o projeto do VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -178,11 +178,56 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Product not found.
+        /// </summary>
+        public static string PRODUCTS_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("PRODUCTS_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Enter the product.
+        /// </summary>
+        public static string PRODUCTS_REQUIRED {
+            get {
+                return ResourceManager.GetString("PRODUCTS_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Purchase not found.
+        /// </summary>
+        public static string PURCHASE_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("PURCHASE_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a No data found.
         /// </summary>
         public static string RETURN_NULL {
             get {
                 return ResourceManager.GetString("RETURN_NULL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Stock.
+        /// </summary>
+        public static string STOCK {
+            get {
+                return ResourceManager.GetString("STOCK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to calculate stock.
+        /// </summary>
+        public static string STOCK_FAILED_MESSAGE {
+            get {
+                return ResourceManager.GetString("STOCK_FAILED_MESSAGE", resourceCulture);
             }
         }
         
@@ -205,16 +250,13 @@ namespace Autoparts.Api.Shared.Resources {
         ///    FROM (
         ///        SELECT ProductId, Quantity FROM PurchaseProducts
         ///        UNION ALL
-        ///        SELECT ProductId, Quantity FROM ReturnProducts
+        ///        SELECT ProductId, Quantity FROM ReturnProducts WHERE Loss = 0
         ///        UNION ALL
         ///        SELECT ProductId, -Quantity AS Quantity FROM SaleProducts
         ///    ) AS Movements
         ///    GROUP BY ProductId
         ///) AS StockMovements
-        ///WHERE Products.ProductId = StockMovements.ProductId;
-        ///
-        ///
-        ///
+        ///WHERE Products.ProductId = StockMovements.ProductId
         ///.
         /// </summary>
         public static string UpdateStock {

@@ -47,7 +47,7 @@ public sealed class Product
         string name,
         string technicalDescription,
         string compatibility,
-        decimal acquisitionCost,     
+        decimal acquisitionCost,
         string sku,
         Guid categoryId,
         Guid manufacturerId)
@@ -70,15 +70,15 @@ public sealed class Product
 
     public Product(
         Guid productId,
-         string name,
+        string name,
         string technicalDescription,
         string compatibility,
         string sku,
-        int quantity, 
+        int quantity,
         int stock,
-        EStockStatus stockStatus, 
+        EStockStatus stockStatus,
         DateTime createdAt,
-        decimal acquisitionCost, 
+        decimal acquisitionCost,
         decimal sellingPrice,
         Guid categoryId,
         Guid manufacturerId)
@@ -96,16 +96,20 @@ public sealed class Product
         SellingPrice = sellingPrice;
         CategoryId = categoryId;
         ManufacturerId = manufacturerId;
+
+        var validationResult = ProductDomainResult();
+        if (validationResult.IsValid is false)
+            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
 
     public void Update(
-                       string name,
-                       string technicalDescription,
-                       string compatibility,
-                       decimal acquisitionCost,
-                       Guid categoryId,
-                       Guid manufacturerId)
+        string name,
+        string technicalDescription,
+        string compatibility,
+        decimal acquisitionCost,
+        Guid categoryId,
+        Guid manufacturerId)
     {
         Name = name;
         TechnicalDescription = technicalDescription;
@@ -123,7 +127,6 @@ public sealed class Product
 
     public void Delete() => DeletedAt = DateTime.UtcNow;
 
-   
     public void SetStock(int stock = 0)
     {
         if (stock < 0)
@@ -133,7 +136,6 @@ public sealed class Product
 
         StockStatus = Stock switch
         {
-
             0 => EStockStatus.None,
             < 3 => EStockStatus.Backordered,
             _ => EStockStatus.Available
@@ -145,7 +147,7 @@ public sealed class Product
         if (acquisitionCost <= 0)
             throw new DomainValidationException(Resource.ERROR_DOMAIN, ProductDomainResult().Errors);
 
-        return acquisitionCost * Constants.ProfitMargin; 
+        return acquisitionCost * Constants.ProfitMargin;
     }
 
     private ValidationResult ProductDomainResult()

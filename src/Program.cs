@@ -37,7 +37,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 
 #endregion
@@ -50,7 +49,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;// opcional
+    options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddApplicationCookie();
@@ -61,32 +60,22 @@ builder.Services.AddEndpointsApiExplorer();
 
 #region Register Swagger
 
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Autoparts.Api", Version = "v1" });
 });
 
-
 #endregion
 
 #region Configure DbContext
 
-//builder.Services.AddDbContext<AutopartsDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-//        sql => sql.MigrationsAssembly(typeof(AutopartsDbContext).Assembly.FullName)
-//    )
-//    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-//);
-
 string connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION_AUTOPARTS") ??
-                          builder.Configuration.GetConnectionString("DefaultConnection");
+                          builder.Configuration.GetConnectionString("DefaultConnection")!;
 
 builder.Services.AddDbContext<AutopartsDbContext>(options =>
     options.UseSqlServer(connectionString,
         sql => sql.MigrationsAssembly(typeof(AutopartsDbContext).Assembly.FullName)
     )
-//.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 );
 
 #endregion
@@ -110,13 +99,6 @@ builder.Services
     .AddEntityFrameworkStores<AutopartsDbContext>()
     .AddDefaultTokenProviders()
     .AddSignInManager();
-
-
-//builder.Services
-//    .AddIdentityCore<User>()
-//    .AddRoles<IdentityRole<Guid>>()
-//    .AddEntityFrameworkStores<AutopartsDbContext>()
-//    .AddSignInManager();
 
 #endregion
 
@@ -146,8 +128,13 @@ var myHandlers = AppDomain.CurrentDomain.Load("Autoparts.Api");
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssemblies(myHandlers);
-    //cfg.AddOpenBehavior(typeof(ValidationBehaviour<,>));
 });
+
+#endregion
+
+#region Register AutoMapper
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 #endregion
 

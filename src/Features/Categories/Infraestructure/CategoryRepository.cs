@@ -22,51 +22,46 @@ public sealed class CategoryRepository : ICategoryRepository, IDisposable
 
     public async Task<IPagedList<Category>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Categories.AsNoTracking().ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        return await _context.Categories!.AsNoTracking().ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Categories.FindAsync(id, cancellationToken);
+        return await _context.Categories!.FindAsync(id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Category category, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(category);
-
-        if (result.IsValid is false)
+        if (!result.IsValid)
             return result;
 
-        await _context.Categories.AddAsync(category, cancellationToken);
+        await _context.Categories!.AddAsync(category, cancellationToken);
         return result;
     }
 
     public async Task<ValidationResult> UpdateAsync(Category category, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(category);
-
-        if (result.IsValid is false)
+        if (!result.IsValid)
             return result;
 
-        _context.Categories.Update(category);
+        _context.Categories!.Update(category);
         return result;
     }
 
     public async Task<bool> DeleteAsync(Category category, CancellationToken cancellationToken)
     {
-      
-        var result = _context.Categories.Remove(category);
-
-        if (result is null)     
+        var result = _context.Categories!.Update(category);
+        if (result is null)
             return false;
-        
+
         return true;
     }
 
-    public async Task<bool> Commit(CancellationToken cancellationToken)
+    public async Task<bool> CommitAsync(CancellationToken cancellationToken)
     {
         var commitResult = await _context.SaveChangesAsync(cancellationToken);
-
         if (commitResult <= 0)
             return false;
 

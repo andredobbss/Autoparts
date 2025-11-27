@@ -24,6 +24,7 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
         builder.HasIndex(c => c.ClientId).HasDatabaseName("IX_Clients_ClientId");
         builder.HasIndex(c => c.ClientName).HasDatabaseName("IX_Clients_ClientName");
         builder.HasIndex(c => c.CreatedAt).HasDatabaseName("IX_Clients_CreatedAt");
+        builder.HasIndex(c => c.DeletedAt).HasDatabaseName("IX_Clients_DeletedAt");
 
     }
 }

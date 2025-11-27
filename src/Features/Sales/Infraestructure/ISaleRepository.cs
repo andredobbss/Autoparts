@@ -10,4 +10,5 @@ public interface ISaleRepository
     Task<ValidationResult> AddAsync(Sale sale, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Sale sale, CancellationToken cancellationToken);
     Task<bool> DeleteAsync(Sale sale, CancellationToken cancellationToken);
+    Task<bool> CommitAsync(CancellationToken cancellationToken);
 }

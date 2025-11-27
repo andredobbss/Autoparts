@@ -11,5 +11,5 @@ public interface IReturnRepository
     Task<ValidationResult> AddAsync(Return returnItem, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Return returnItem, CancellationToken cancellationToken);
     Task<bool> DeleteAsync(Return returnItem, CancellationToken cancellationToken);
-    Task<bool> Commit(CancellationToken cancellationToken);
+    Task<bool> CommitAsync(CancellationToken cancellationToken);
 }

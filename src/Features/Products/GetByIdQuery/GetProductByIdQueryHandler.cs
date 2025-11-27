@@ -1,14 +1,17 @@
-using Autoparts.Api.Features.Products.Domain;
+using AutoMapper;
 using Autoparts.Api.Features.Products.Infraestructure;
 using MediatR;
 
 namespace Autoparts.Api.Features.Products.GetByIdQuery;
 
-public sealed record GetProductByIdQueryHandler(IProductRepository productRepository) : IRequestHandler<GetProductByIdQuery, Product>
+public sealed record GetProductByIdQueryHandler(IProductRepository productRepository, IMapper mapper) : IRequestHandler<GetProductByIdQuery, GetProductByIdQueryResponse>
 {
     private readonly IProductRepository _productRepository = productRepository;
-    public async Task<Product> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+    private readonly IMapper _mapper = mapper;
+    public async Task<GetProductByIdQueryResponse> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
+        var product = await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
+
+        return _mapper.Map<GetProductByIdQueryResponse>(product);
     }
 }
