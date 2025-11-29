@@ -3,7 +3,6 @@
 public enum EStockStatus
 {
     None,
-    Available,
-    OutOfStock,
-    Backordered
+    LowStock,
+    Available
 }

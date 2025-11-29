@@ -3,6 +3,6 @@ using MediatR;
 
 namespace Autoparts.Api.Features.Purchases.GetAllQuery;
 
-public class GetPurchaseProductCategoryManufaturerQuery : IRequest<IEnumerable<PurchaseProductCategoryManufaturerDto>>
+public sealed class GetPurchaseProductCategoryManufaturerQuery : IRequest<IEnumerable<PurchaseProductCategoryManufaturerDto>>
 {
 }

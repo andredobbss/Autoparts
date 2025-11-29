@@ -25,7 +25,7 @@ public static class ClientApi
     private static async Task<IResult> GetAll(ISender mediator, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllClientsQuery(pageNumber, pageSize), cancellationToken);
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = Resource.RETURN_NULL });
+        return Results.Ok(result);
     }
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)
     {

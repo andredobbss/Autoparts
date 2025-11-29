@@ -181,4 +181,16 @@
   <data name="PURCHASE_NOT_FOUND" xml:space="preserve">
     <value>Purchase not found</value>
   </data>
+  <data name="SKU" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="SKU_FAILED" xml:space="preserve">
+    <value>Failed to generate SKU</value>
+  </data>
+  <data name="SALES_NOT_FOUND" xml:space="preserve">
+    <value>Sale not found</value>
+  </data>
+  <data name="STOCK_ZERO" xml:space="preserve">
+    <value>Out of Stock</value>
+  </data>
 </root>

@@ -12,11 +12,15 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
         builder.HasKey(s => s.SaleId);
         builder.Property(s => s.SaleId).HasColumnName("SaleId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
         builder.Property(s => s.InvoiceNumber).HasColumnName("InvoiceNumber").IsRequired(false).HasColumnType("NVARCHAR").HasMaxLength(50);
+        builder.Property(s => s.TotalSale).HasColumnName("TotalSale").IsRequired(true).HasColumnType("DECIMAL(18,2)");
+        builder.Property(s => s.PaymentMethod).HasColumnName("PaymentMethod").IsRequired(true).HasColumnType("INT");
         builder.Property(s => s.CreatedAt).HasColumnName("CreatedAt").IsRequired(true).HasColumnType("DATETIME2");
         builder.Property(s => s.UpdatedAt).HasColumnName("UpdatedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(s => s.DeletedAt).HasColumnName("DeletedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(s => s.UserId).HasColumnName("UserId").IsRequired(true);
         builder.Property(s => s.ClientId).HasColumnName("ClientId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
+
+        builder .Ignore(s => s.DaysLastSale);
 
         builder.HasMany(s => s.Products).WithMany(p => p.Sales)
             .UsingEntity<SaleProduct>(

@@ -2,7 +2,7 @@
 
 namespace Autoparts.Api.Features.Purchases.Domain;
 
-public class PurchaseProduct
+public sealed class PurchaseProduct
 {
     private PurchaseProduct() { }
     public PurchaseProduct(Guid purchaseId, Guid productId, int quantity, decimal acquisitionCost)

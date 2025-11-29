@@ -1,6 +1,5 @@
 ﻿using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
-using Autoparts.Api.Shared.Enums;
 using Autoparts.Api.Shared.Products.Dto;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +16,7 @@ public class ProductList(AutopartsDbContext context) : IProductList
         // 1) Uma única consulta ao banco
         var productsFromDb = await _context.Products!
             .AsNoTracking()
-            .Where(p => productIds.Contains(p.ProductId)
-                && (p.StockStatus != EStockStatus.Backordered &&
-                    p.StockStatus != EStockStatus.None))
+            .Where(p => productIds.Contains(p.ProductId))
             .ToListAsync(cancellationToken);
 
         // 2) Índice para lookup em memória
@@ -41,7 +38,6 @@ public class ProductList(AutopartsDbContext context) : IProductList
                 productEntity.SKU,
                 dto.Quantity,
                 productEntity.Stock,
-                productEntity.StockStatus,
                 productEntity.CreatedAt,
                 productEntity.AcquisitionCost,
                 productEntity.SellingPrice,

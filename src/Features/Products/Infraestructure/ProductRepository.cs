@@ -22,12 +22,40 @@ public class ProductRepository : IProductRepository
 
     public async Task<IPagedList<Product>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Products!.AsNoTracking().ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        const string sql = @"SELECT 
+                                 p.[ProductId],
+                                 p.[Name],
+                                 p.[TechnicalDescription],
+                                 p.[SKU],
+                                 p.[Compatibility],
+                                 p.[AcquisitionCost],
+                                 p.[SellingPrice],
+                                 p.[Stock],
+                                 p.[CreatedAt],
+                                 p.[UpdatedAt],
+                                 p.[DeletedAt],
+                                 p.[CategoryId],
+                                 p.[ManufacturerId],
+                             CASE 
+                             WHEN DATEDIFF(DAY, x.DaysLastSale, GETDATE()) > 90 THEN 1
+                             ELSE 0
+                             END AS StockStatusOverTime
+                             FROM Products p
+                             OUTER APPLY (
+                                 SELECT MAX(s.CreatedAt) AS DaysLastSale
+                                 FROM SaleProducts sp
+                                 LEFT JOIN Sales s ON s.SaleId = sp.SaleId
+                                 WHERE sp.ProductId = p.ProductId
+                             ) AS x";
+
+        var products = await _context.Products!.FromSqlRaw(sql).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+
+        return products;
     }
 
     public async Task<IEnumerable<Product>> GetAllByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
     {
-        return  await _context.Products!.Where(p => ids.Contains(p.ProductId)).ToListAsync(cancellationToken);
+        return await _context.Products!.Where(p => ids.Contains(p.ProductId)).ToListAsync(cancellationToken);
     }
 
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

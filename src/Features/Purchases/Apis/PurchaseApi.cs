@@ -26,13 +26,13 @@ public static class PurchaseApi
     private static async Task<IResult> GetAll(ISender mediator, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllPurchasesQuery(pageNumber, pageSize), cancellationToken);
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = Resource.RETURN_NULL });
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> GetAllIPurchaseProductCategoryManufaturer(ISender mediator, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetPurchaseProductCategoryManufaturerQuery(),cancellationToken);
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = Resource.RETURN_NULL });
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)

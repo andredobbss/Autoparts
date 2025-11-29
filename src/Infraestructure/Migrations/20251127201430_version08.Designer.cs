@@ -4,6 +4,7 @@ using Autoparts.Api.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autoparts.Api.Infraestructure.Migrations
 {
     [DbContext(typeof(AutopartsDbContext))]
-    partial class AutopartsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251127201430_version08")]
+    partial class version08
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,6 +203,10 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .HasColumnType("INT")
                         .HasDefaultValue(0)
                         .HasColumnName("Stock");
+
+                    b.Property<int>("StockStatus")
+                        .HasColumnType("INT")
+                        .HasColumnName("StockStatus");
 
                     b.Property<string>("TechnicalDescription")
                         .IsRequired()

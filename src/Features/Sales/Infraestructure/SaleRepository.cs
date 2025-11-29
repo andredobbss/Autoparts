@@ -24,7 +24,7 @@ public class SaleRepository : ISaleRepository, IDisposable
 
     public async Task<IEnumerable<Sale>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _context.Sales!.ToListAsync(cancellationToken);
+        return await _context.Sales!.AsNoTracking().ToListAsync(cancellationToken);
     }
 
     public async Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -47,7 +47,7 @@ public class SaleRepository : ISaleRepository, IDisposable
     public async Task<ValidationResult> UpdateAsync(Sale sale, CancellationToken cancellationToken)
     {
         var result = await _alidator.ValidateAsync(sale, cancellationToken);
-        
+
         if (!result.IsValid)
             return result;
 

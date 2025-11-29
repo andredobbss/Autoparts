@@ -4,6 +4,7 @@ using Autoparts.Api.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autoparts.Api.Infraestructure.Migrations
 {
     [DbContext(typeof(AutopartsDbContext))]
-    partial class AutopartsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251128150125_version11")]
+    partial class version11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,6 +203,12 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .HasColumnType("INT")
                         .HasDefaultValue(0)
                         .HasColumnName("Stock");
+
+                    b.Property<int>("StockStatus")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("INT")
+                        .HasColumnName("StockStatus")
+                        .HasComputedColumnSql("CASE\r\n                                               WHEN Stock = 0 THEN 0\r\n                                               WHEN Stock BETWEEN 0 AND 3 THEN 1\r\n                                               WHEN Stock >= 3 THEN 2\r\n                                               ELSE 0\r\n                                             END;");
 
                     b.Property<string>("TechnicalDescription")
                         .IsRequired()

@@ -19,12 +19,13 @@ public sealed class Return
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
     public Guid UserId { get; private set; }
-    public Guid ClientId { get; private set; } // ok
+    public Guid ClientId { get; private set; }
 
-    public User User { get; private set; } = null!; //ok
-    public Client Client { get; private set; } = null!; // ok
+    public User User { get; private set; } = null!;
+    public Client Client { get; private set; } = null!;
     public ICollection<Product> Products { get; private set; } = [];
     public ICollection<ReturnProduct> ReturnProducts { get; private set; } = [];
+
     public Return(Guid returnId, string justification, string invoiceNumber, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
     {
         ReturnId = returnId;

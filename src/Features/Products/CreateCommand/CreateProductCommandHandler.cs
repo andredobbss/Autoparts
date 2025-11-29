@@ -18,7 +18,7 @@ public sealed class CreateProductCommandHandler(IProductRepository productReposi
 
         if (string.IsNullOrWhiteSpace(sku))
         {
-            return new ValidationResult([new ValidationFailure("SKU", "Failed to generate SKU.")]);
+            return new ValidationResult([new ValidationFailure(Resource.SKU, Resource.SKU_FAILED)]);
         }
 
         var product = new Product(

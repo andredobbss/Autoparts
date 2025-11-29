@@ -25,7 +25,14 @@ public sealed class Product
     public decimal SellingPrice { get; private set; } = 0m;
     public int Quantity { get; private set; } =0;
     public int Stock { get; private set; } = 0;
-    public EStockStatus StockStatus { get; private set; }
+    public EStockStatus StockStatus =>
+    Stock switch
+    {
+        0 => EStockStatus.None,
+        < 3 => EStockStatus.LowStock,
+        _ => EStockStatus.Available
+    };
+    public EStockStatusOverTime StockStatusOverTime { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
@@ -76,7 +83,6 @@ public sealed class Product
         string sku,
         int quantity,
         int stock,
-        EStockStatus stockStatus,
         DateTime createdAt,
         decimal acquisitionCost,
         decimal sellingPrice,
@@ -90,7 +96,6 @@ public sealed class Product
         SKU = sku;
         Quantity = quantity;
         Stock =stock;
-        StockStatus = stockStatus;
         CreatedAt = createdAt;
         AcquisitionCost = acquisitionCost;
         SellingPrice = sellingPrice;
@@ -126,21 +131,6 @@ public sealed class Product
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;
-
-    public void SetStock(int stock = 0)
-    {
-        if (stock < 0)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ProductDomainResult().Errors);
-
-        Stock = stock;
-
-        StockStatus = Stock switch
-        {
-            0 => EStockStatus.None,
-            < 3 => EStockStatus.Backordered,
-            _ => EStockStatus.Available
-        };
-    }
 
     private decimal CalculateSellingPrice(decimal acquisitionCost)
     {

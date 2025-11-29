@@ -4,6 +4,7 @@ using Autoparts.Api.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autoparts.Api.Infraestructure.Migrations
 {
     [DbContext(typeof(AutopartsDbContext))]
-    partial class AutopartsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251127200854_version07")]
+    partial class version07
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,6 +203,10 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .HasColumnType("INT")
                         .HasDefaultValue(0)
                         .HasColumnName("Stock");
+
+                    b.Property<int>("StockStatus")
+                        .HasColumnType("INT")
+                        .HasColumnName("StockStatus");
 
                     b.Property<string>("TechnicalDescription")
                         .IsRequired()
@@ -451,12 +458,10 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .HasColumnName("InvoiceNumber");
 
                     b.Property<int>("PaymentMethod")
-                        .HasColumnType("INT")
-                        .HasColumnName("PaymentMethod");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalSale")
-                        .HasColumnType("DECIMAL(18,2)")
-                        .HasColumnName("TotalSale");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("DATETIME2")

@@ -4,7 +4,7 @@ using FluentValidation.Results;
 using MediatR;
 namespace Autoparts.Api.Features.Purchases.CreateCommand;
 
-public sealed record CreatePurchaseCommand(string InvoiceNumber, 
+public sealed record CreatePurchaseCommand(string InvoiceNumber,
                                            EPaymentMethod PaymentMethod,
                                            Guid UserId,
                                            Guid SupplierId,

@@ -20,7 +20,7 @@ public sealed class UpdatePurchaseCommandHandler(IPurchaseRepository purchaseRep
         if (productsList is null || !productsList.Any())
             return new ValidationResult([new ValidationFailure(nameof(productsList), Resource.PRODUCTS_NOT_FOUND)]);
 
-        var purchase = await _purchaseRepository.GetByIdAsync(request.PurchaseId, cancellationToken);    
+        var purchase = await _purchaseRepository.GetByIdAsync(request.PurchaseId, cancellationToken);
         if (purchase is null)
             return new ValidationResult { Errors = { new ValidationFailure("Purchase", $"{Resource.ID_NOT_FOUND} : {request.PurchaseId}") } };
 

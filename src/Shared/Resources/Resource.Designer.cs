@@ -214,6 +214,33 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Sale not found.
+        /// </summary>
+        public static string SALES_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("SALES_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a SKU.
+        /// </summary>
+        public static string SKU {
+            get {
+                return ResourceManager.GetString("SKU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to generate SKU.
+        /// </summary>
+        public static string SKU_FAILED {
+            get {
+                return ResourceManager.GetString("SKU_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Stock.
         /// </summary>
         public static string STOCK {
@@ -237,6 +264,15 @@ namespace Autoparts.Api.Shared.Resources {
         public static string STOCK_INSUFFICIENT {
             get {
                 return ResourceManager.GetString("STOCK_INSUFFICIENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Out of Stock.
+        /// </summary>
+        public static string STOCK_ZERO {
+            get {
+                return ResourceManager.GetString("STOCK_ZERO", resourceCulture);
             }
         }
         

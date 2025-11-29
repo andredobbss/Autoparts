@@ -29,7 +29,7 @@ public static class CategoryApi
     private static async Task<IResult> GetAll(ISender mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllCategoriesQuery(pageNumber, pageSize));
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = Resource.RETURN_NULL});
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
