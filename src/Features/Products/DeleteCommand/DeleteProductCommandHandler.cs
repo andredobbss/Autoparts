@@ -9,14 +9,12 @@ public sealed class DeleteProductCommandHandler(IProductRepository productReposi
     public async Task<bool> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
-
         if (product is null)
             return false;
 
         product.Delete();
 
         var deleted = await _productRepository.DeleteAsync(product, cancellationToken);
-
         if (!deleted)
             return false;
 

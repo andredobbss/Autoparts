@@ -22,9 +22,9 @@ public sealed class Purchase
     public DateTime? DeletedAt { get; private set; } = null;
 
     public Guid UserId { get; private set; } = Guid.Empty;
-    public Guid SupplierId { get; private set; } //ok
+    public Guid SupplierId { get; private set; }
     public User User { get; private set; } = null!;
-    public Supplier Supplier { get; private set; } = null!; //ok
+    public Supplier Supplier { get; private set; } = null!;
 
     public ICollection<PurchaseProduct> PurchaseProducts { get; private set; } = [];
     public ICollection<Product> Products { get; private set; } = [];

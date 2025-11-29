@@ -41,6 +41,8 @@ public sealed class CreateSaleCommandHandler(ISaleRepository saleRepository, IPr
         var saleProducts = productsList
             .Select(product => new SaleProduct(saleId, product.ProductId, product.Quantity, product.SellingPrice))
             .ToList();
+        if (saleProducts is null || !saleProducts.Any())
+            return new ValidationResult([new ValidationFailure(nameof(saleProducts), Resource.PRODUCTS_NOT_FOUND)]);
 
         var totalSale = saleProducts.Sum(sp => sp.TotalItem);
 
