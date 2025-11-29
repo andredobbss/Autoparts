@@ -2,8 +2,8 @@
 using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Shared.Enums;
-using Autoparts.Api.Shared.Exceptions;
 using Autoparts.Api.Shared.Resources;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Sales.Domain;
@@ -43,7 +43,7 @@ public sealed class Sale
 
         var validationResult = SaleResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string invoiceNumber, EPaymentMethod paymentMethod, Guid userId, Guid clientId, ICollection<SaleProduct> saleProducts)
@@ -57,7 +57,7 @@ public sealed class Sale
 
         var validationResult = SaleResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void UpdateTotalSale(decimal totalSale) => TotalSale = totalSale;

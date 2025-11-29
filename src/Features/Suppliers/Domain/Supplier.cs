@@ -1,7 +1,7 @@
 ﻿using Autoparts.Api.Features.Purchases.Domain;
-using Autoparts.Api.Shared.Exceptions;
 using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.ValueObejct;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Suppliers.Domain;
@@ -29,7 +29,7 @@ public sealed class Supplier
 
         var validationResult = SupplierResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string companyName, Address address)
@@ -40,7 +40,7 @@ public sealed class Supplier
 
         var validationResult = SupplierResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

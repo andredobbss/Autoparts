@@ -11,4 +11,5 @@ public interface ISupplierRepository
     Task<ValidationResult> AddAsync(Supplier supplier, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Supplier supplier, CancellationToken cancellationToken);
     Task<bool> DeleteAsync(Supplier supplier, CancellationToken cancellationToken);
+    Task<bool> CommitAsync(CancellationToken cancellationToken);
 }

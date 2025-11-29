@@ -4,6 +4,7 @@ using Autoparts.Api.Shared.Products.Stock;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Z.PagedList;
 
 namespace Autoparts.Api.Features.Sales.Infraestructure;
 
@@ -22,9 +23,9 @@ public class SaleRepository : ISaleRepository, IDisposable
         _stockCalculator = stockCalculator;
     }
 
-    public async Task<IEnumerable<Sale>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IPagedList<Sale>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Sales!.AsNoTracking().ToListAsync(cancellationToken);
+        return await _context.Sales!.AsNoTracking().Include(s => s.Products).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -34,7 +35,7 @@ public class SaleRepository : ISaleRepository, IDisposable
 
     public async Task<ValidationResult> AddAsync(Sale sale, CancellationToken cancellationToken)
     {
-        var result = await _alidator.ValidateAsync(sale, cancellationToken);
+        var result = _alidator.Validate(sale);
 
         if (!result.IsValid)
             return result;
@@ -46,7 +47,7 @@ public class SaleRepository : ISaleRepository, IDisposable
 
     public async Task<ValidationResult> UpdateAsync(Sale sale, CancellationToken cancellationToken)
     {
-        var result = await _alidator.ValidateAsync(sale, cancellationToken);
+        var result = _alidator.Validate(sale);
 
         if (!result.IsValid)
             return result;

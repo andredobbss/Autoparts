@@ -17,15 +17,14 @@ public sealed class CreateReturnCommandHandler(IReturnRepository returnRepositor
         if (request.Products is null || !request.Products.Any())
             return new ValidationResult([new ValidationFailure(nameof(request.Products), Resource.PRODUCTS_REQUIRED)]);
 
-        var productsList = await _productList.GetProductsListAsync(request.Products.Select(r => new SharedProductsDto(request.Products.Select(r => r.ProductId).First(), request.Products.Select(r => r.Quantity).First())), cancellationToken);
+        var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
         if (productsList is null || !productsList.Any())
             return new ValidationResult([new ValidationFailure(nameof(productsList), Resource.PRODUCTS_NOT_FOUND)]);
 
         Guid returnId = Guid.NewGuid();
 
         var returnProducts = productsList
-            .Select(p => new ReturnProduct(returnId, p.ProductId, p.Quantity, p.SellingPrice, request.Products
-            .Select(r => r.Loss).FirstOrDefault()))
+            .Select(product => new ReturnProduct(returnId, product.ProductId, product.Quantity, product.SellingPrice, request.Loss))
             .ToList();
 
         var returnEntity = new Return(returnId, request.Justification, request.InvoiceNumber, request.UserId, request.ClientId, returnProducts);

@@ -4,8 +4,8 @@ using Autoparts.Api.Features.Purchases.Domain;
 using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Features.Sales.Domain;
 using Autoparts.Api.Shared.Enums;
-using Autoparts.Api.Shared.Exceptions;
 using Autoparts.Api.Shared.Resources;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Products.Domain;
@@ -72,7 +72,7 @@ public sealed class Product
 
         var validationResult = ProductDomainResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public Product(
@@ -104,7 +104,7 @@ public sealed class Product
 
         var validationResult = ProductDomainResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
 
@@ -127,7 +127,7 @@ public sealed class Product
 
         var validationResult = ProductDomainResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;
@@ -135,7 +135,7 @@ public sealed class Product
     private decimal CalculateSellingPrice(decimal acquisitionCost)
     {
         if (acquisitionCost <= 0)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, ProductDomainResult().Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, ProductDomainResult().Errors);
 
         return acquisitionCost * Constants.ProfitMargin;
     }

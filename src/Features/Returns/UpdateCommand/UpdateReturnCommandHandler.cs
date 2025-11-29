@@ -17,7 +17,7 @@ public sealed class UpdateReturnCommandHandler(IReturnRepository returnRepositor
         if (request.Products is null || !request.Products.Any())
             return new ValidationResult([new ValidationFailure(nameof(request.Products), Resource.PRODUCTS_REQUIRED)]);
 
-        var productsList = await _productList.GetProductsListAsync(request.Products.Select(r => new SharedProductsDto(request.Products.Select(r => r.ProductId).First(), request.Products.Select(r => r.Quantity).First())), cancellationToken);
+        var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
         if (productsList is null || !productsList.Any())
             return new ValidationResult([new ValidationFailure(nameof(productsList), Resource.PRODUCTS_NOT_FOUND)]);
 
@@ -25,7 +25,7 @@ public sealed class UpdateReturnCommandHandler(IReturnRepository returnRepositor
         if (returnEntity is null)
             return new ValidationResult { Errors = { new ValidationFailure("Return", $"{Resource.ID_NOT_FOUND} : {request.ReturnId}") } };
 
-        var returnProducts = productsList.Select(p => new ReturnProduct(request.ReturnId, p.ProductId, p.Quantity, p.SellingPrice, request.Products.Select(r => r.Loss).FirstOrDefault())).ToList();
+        var returnProducts = productsList.Select(p => new ReturnProduct(request.ReturnId, p.ProductId, p.Quantity, p.SellingPrice, request.Loss)).ToList();
 
         returnEntity.Update(
             request.Justification,

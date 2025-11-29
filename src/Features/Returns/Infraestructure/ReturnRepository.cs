@@ -25,7 +25,7 @@ public class ReturnRepository : IReturnRepository, IDisposable
 
     public async Task<IPagedList<Return>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Returns!.AsNoTracking().ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        return await _context.Returns!.AsNoTracking().Include(r => r.Products).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Return?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

@@ -13,7 +13,7 @@ public class ProductValidator : AbstractValidator<Product>
         RuleFor(p => p.AcquisitionCost).GreaterThan(0).WithMessage(Resource.GREATER_THAN_ZERO).NotEmpty().WithMessage(Resource.NOT_NULL_OR_EMPTY);
         RuleFor(p => p.CategoryId).NotNull().NotEmpty().WithMessage(Resource.NOT_NULL_OR_EMPTY);
         RuleFor(p => p.ManufacturerId).NotNull().NotEmpty().WithMessage(Resource.NOT_NULL_OR_EMPTY);
-        //RuleFor(p => (int)p.Quantity).GreaterThanOrEqualTo(0).WithMessage(Resource.GREATER_THAN_ZERO).NotEmpty().WithMessage(Resource.NOT_NULL_OR_EMPTY); 
+        RuleFor(p => p.Quantity).GreaterThanOrEqualTo(0).WithMessage(Resource.GREATER_THAN_ZERO).NotEmpty().WithMessage(Resource.NOT_NULL_OR_EMPTY);    
         RuleFor(p => p.SKU).NotNull().NotEmpty().WithMessage(Resource.NOT_NULL_OR_EMPTY);
     }
 }

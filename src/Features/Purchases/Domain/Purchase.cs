@@ -2,8 +2,8 @@
 using Autoparts.Api.Features.Suppliers.Domain;
 using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Shared.Enums;
-using Autoparts.Api.Shared.Exceptions;
 using Autoparts.Api.Shared.Resources;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Purchases.Domain;
@@ -43,7 +43,7 @@ public sealed class Purchase
 
         var validationResult = PurchaseResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string invoiceNumber, EPaymentMethod paymentMethod, Guid userId, Guid supplierId, ICollection<PurchaseProduct> purchaseProducts)
@@ -57,7 +57,7 @@ public sealed class Purchase
 
         var validationResult = PurchaseResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void UpdateTotalPurchase(decimal totalPurchase)
@@ -66,7 +66,7 @@ public sealed class Purchase
 
         var validationResult = PurchaseResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

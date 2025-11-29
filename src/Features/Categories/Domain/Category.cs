@@ -1,6 +1,6 @@
 ﻿using Autoparts.Api.Features.Products.Domain;
-using Autoparts.Api.Shared.Exceptions;
 using Autoparts.Api.Shared.Resources;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Categories.Domain;
@@ -26,7 +26,7 @@ public sealed class Category
 
         var validationResult = CategoryResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string description)
@@ -36,7 +36,7 @@ public sealed class Category
 
         var validationResult = CategoryResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

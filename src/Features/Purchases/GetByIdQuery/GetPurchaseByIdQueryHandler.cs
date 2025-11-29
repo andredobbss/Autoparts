@@ -12,7 +12,7 @@ public sealed record GetPurchaseByIdQueryHandler(IPurchaseRepository purchaseRep
         var purchase = await _purchaseRepository.GetByIdAsync(request.PurchaseId, cancellationToken);
 
         var purchasesResponse = new GetPurchaseByIdQueryResponse(
-           purchase.PurchaseId,
+           purchase!.PurchaseId,
            purchase.InvoiceNumber,
            purchase.PaymentMethod,
            purchase.TotalPurchase,

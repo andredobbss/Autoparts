@@ -1,8 +1,8 @@
 ﻿using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Features.Sales.Domain;
-using Autoparts.Api.Shared.Exceptions;
 using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.ValueObejct;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Clients.Domain;
@@ -31,7 +31,7 @@ public sealed class Client
 
         var validationResult = ClientResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
 
     }
 
@@ -43,7 +43,7 @@ public sealed class Client
 
         var validationResult = ClientResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

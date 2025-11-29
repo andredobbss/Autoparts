@@ -1,8 +1,8 @@
 ﻿using Autoparts.Api.Features.Clients.Domain;
 using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Features.Users.Domain;
-using Autoparts.Api.Shared.Exceptions;
 using Autoparts.Api.Shared.Resources;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Autoparts.Api.Features.Returns.Domain;
@@ -38,7 +38,7 @@ public sealed class Return
 
         var validationResult = ReturnResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Update(string justification, string invoiceNumber, Guid userId, Guid clientId, ICollection<ReturnProduct> returnProducts)
@@ -52,7 +52,7 @@ public sealed class Return
 
         var validationResult = ReturnResult();
         if (validationResult.IsValid is false)
-            throw new DomainValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
+            throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
 
     public void Delete() => DeletedAt = DateTime.UtcNow;

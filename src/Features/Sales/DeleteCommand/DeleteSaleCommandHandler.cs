@@ -1,5 +1,6 @@
 using Autoparts.Api.Features.Sales.Infraestructure;
 using MediatR;
+
 namespace Autoparts.Api.Features.Sales.DeleteCommand;
 
 public sealed class DeleteSaleCommandHandler(ISaleRepository saleRepository) : IRequestHandler<DeleteSaleCommand, bool>

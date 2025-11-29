@@ -17,7 +17,7 @@ public class PurchaseProductConfiguration : IEntityTypeConfiguration<PurchasePro
         builder.Property(pp => pp.ProductId)
             .HasColumnName("ProductId")
             .IsRequired(true)
-            .HasColumnType("UNIQUEIDENTIFIER");     
+            .HasColumnType("UNIQUEIDENTIFIER");
         builder.Property(pp => pp.Quantity)
             .HasColumnName("Quantity")
             .IsRequired(true)
