@@ -5,5 +5,5 @@ namespace Autoparts.Api.Shared.Products.Repository;
 
 public interface IProductList
 {
-    Task<IEnumerable<Product>> GetProductsListAsync(IEnumerable<SharedProductsDto> products, CancellationToken cancellationToken);
+    Task<IEnumerable<Product>> GetProductsListAsync(IEnumerable<LineItemDto> products, CancellationToken cancellationToken);
 }

@@ -22,50 +22,27 @@ public class ProductRepository : IProductRepository
 
     public async Task<IPagedList<Product>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        const string sql = @"SELECT 
-                                 p.[ProductId],
-                                 p.[Name],
-                                 p.[TechnicalDescription],
-                                 p.[SKU],
-                                 p.[Compatibility],
-                                 p.[AcquisitionCost],
-                                 p.[SellingPrice],
-                                 p.[Stock],
-                                 p.[CreatedAt],
-                                 p.[UpdatedAt],
-                                 p.[DeletedAt],
-                                 p.[CategoryId],
-                                 p.[ManufacturerId],
-                             CASE 
-                             WHEN DATEDIFF(DAY, x.DaysLastSale, GETDATE()) > 90 THEN 1
-                             ELSE 0
-                             END AS StockStatusOverTime
-                             FROM Products p
-                             OUTER APPLY (
-                                 SELECT MAX(s.CreatedAt) AS DaysLastSale
-                                 FROM SaleProducts sp
-                                 LEFT JOIN Sales s ON s.SaleId = sp.SaleId
-                                 WHERE sp.ProductId = p.ProductId
-                             ) AS x";
-
-        var products = await _context.Products!.FromSqlRaw(sql).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        var products = await _context.Products!.AsNoTracking()
+                                               .Include(p => p.Category)
+                                               .Include(p => p.Manufacturer)
+                                               .Include(p => p.Sales)
+                                               .ToPagedListAsync(pageNumber, pageSize, cancellationToken);
 
         return products;
     }
 
-    public async Task<IEnumerable<Product>> GetAllByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
-    {
-        return await _context.Products!.Where(p => ids.Contains(p.ProductId)).ToListAsync(cancellationToken);
-    }
-
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Products!.FindAsync(id, cancellationToken);
+        return await _context.Products!
+                             .Include(p => p.Category)
+                             .Include(p => p.Manufacturer)
+                             .Include(p => p.Sales)
+                             .FirstOrDefaultAsync(p => p.ProductId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Product product, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(product);
+        var result = await _validator.ValidateAsync(product, cancellationToken);
 
         if (!result.IsValid)
             return result;
@@ -76,7 +53,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<ValidationResult> UpdateAsync(Product product, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(product);
+        var result = await _validator.ValidateAsync(product, cancellationToken);
 
         if (!result.IsValid)
             return result;
@@ -87,10 +64,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<bool> DeleteAsync(Product product, CancellationToken cancellationToken)
     {
-        var result = _context.Products!.Update(product);
-
-        if (result is null)
-            return false;
+        _context.Products!.Update(product);
 
         return true;
     }

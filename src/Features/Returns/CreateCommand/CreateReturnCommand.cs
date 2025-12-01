@@ -11,4 +11,4 @@ public sealed record CreateReturnCommand(string Justification,
                                          bool Loss,
                                          Guid UserId,
                                          Guid ClientId,
-                                         IEnumerable<SharedProductsDto> Products) : IRequest<ValidationResult>;
+                                         IEnumerable<LineItemDto> Products) : IRequest<ValidationResult>;

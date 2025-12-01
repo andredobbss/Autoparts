@@ -11,4 +11,4 @@ public sealed record UpdateReturnCommand(Guid ReturnId,
                                          bool Loss,
                                          Guid UserId,
                                          Guid ClientId,
-                                         IEnumerable<SharedProductsDto> Products) : IRequest<ValidationResult>;
+                                         IEnumerable<LineItemDto> Products) : IRequest<ValidationResult>;

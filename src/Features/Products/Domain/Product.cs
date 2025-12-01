@@ -23,7 +23,7 @@ public sealed class Product
     public string Compatibility { get; private set; } = null!;
     public decimal AcquisitionCost { get; private set; } = 0m;
     public decimal SellingPrice { get; private set; } = 0m;
-    public int Quantity { get; private set; } =0;
+    public int Quantity { get; private set; } = 0;
     public int Stock { get; private set; } = 0;
     public EStockStatus StockStatus =>
     Stock switch
@@ -49,6 +49,7 @@ public sealed class Product
     public ICollection<Purchase> Purchases { get; private set; } = [];
     public ICollection<Sale> Sales { get; private set; } = [];
     public ICollection<Return> Returns { get; private set; } = [];
+
 
     public Product(
         string name,
@@ -95,7 +96,7 @@ public sealed class Product
         Compatibility = compatibility;
         SKU = sku;
         Quantity = quantity;
-        Stock =stock;
+        Stock = stock;
         CreatedAt = createdAt;
         AcquisitionCost = acquisitionCost;
         SellingPrice = sellingPrice;

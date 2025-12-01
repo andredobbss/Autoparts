@@ -1,5 +1,5 @@
-﻿using Autoparts.Api.Shared.Exceptions;
-using FluentValidation;
+﻿using FluentValidation;
+using Microsoft.Data.SqlClient;
 using System.Net;
 using System.Text.Json;
 
@@ -22,10 +22,10 @@ public class ExceptionHandlingMiddleware
         {
             await _next(context);
         }
-        catch (DomainValidationException ex)
+        catch (KeyNotFoundException ex)
         {
-            _logger.LogWarning(ex, "Domain validation error.");
-            await HandleExceptionAsync(context, ex.Message, "DomainValidationException", HttpStatusCode.BadRequest);
+            _logger.LogWarning(ex, "Resource not found.");
+            await HandleExceptionAsync(context, ex.Message, "KeyNotFoundException", HttpStatusCode.NotFound);
         }
         catch (ValidationException ex)
         {
@@ -37,6 +37,11 @@ public class ExceptionHandlingMiddleware
         {
             _logger.LogWarning(ex, "Unauthorized access.");
             await HandleExceptionAsync(context, ex.Message, "UnauthorizedAccessException", HttpStatusCode.Unauthorized);
+        }
+        catch (SqlException ex)
+        {
+            _logger.LogError(ex, "Database error.");
+            await HandleExceptionAsync(context, ex.Message, "SqlException", HttpStatusCode.InternalServerError);
         }
         catch (Exception ex)
         {

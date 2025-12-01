@@ -16,7 +16,6 @@ public static class PurchaseApi
         var group = app.MapGroup("/api/purchase")
             .WithTags("Purchases");
         group.MapGet("/", GetAll);
-        group.MapGet("/GetAllIPurchaseProductCategoryManufaturer", GetAllIPurchaseProductCategoryManufaturer);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);
         group.MapPut("/", Update);
@@ -29,16 +28,10 @@ public static class PurchaseApi
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> GetAllIPurchaseProductCategoryManufaturer(ISender mediator, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(new GetPurchaseProductCategoryManufaturerQuery(),cancellationToken);
-        return Results.Ok(result);
-    }
-
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new GetPurchaseByIdQuery(id),cancellationToken);
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        var result = await mediator.Send(new GetPurchaseByIdQuery(id), cancellationToken);
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> Create([FromBody] CreatePurchaseCommand command, ISender mediator, CancellationToken cancellationToken)
@@ -56,6 +49,6 @@ public static class PurchaseApi
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new DeletePurchaseCommand(id), cancellationToken);
-        return result is true ? Results.NoContent() : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());
     }
 }

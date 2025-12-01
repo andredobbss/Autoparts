@@ -10,9 +10,8 @@ public sealed class UpdateProductCommandHandler(IProductRepository productReposi
     public async Task<ValidationResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
-
         if (product is null)
-            return new ValidationResult { Errors = { new ValidationFailure("Product", $"{Resource.ID_NOT_FOUND} : {request.ProductId}") } };
+            return new ValidationResult { Errors = { new ValidationFailure(Resource.PRODUCT, string.Format(Resource.PRODUCTS_NOT_FOUND, request.ProductId)) } };
 
         product.Update(request.Name,
                         request.TechnicalDescription,

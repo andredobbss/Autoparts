@@ -1,6 +1,5 @@
 using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Features.Returns.Infraestructure;
-using Autoparts.Api.Shared.Products.Dto;
 using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;

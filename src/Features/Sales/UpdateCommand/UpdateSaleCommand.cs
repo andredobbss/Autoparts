@@ -9,4 +9,4 @@ public sealed record UpdateSaleCommand(Guid SaleId,
                                        EPaymentMethod PaymentMethod,
                                        Guid UserId,
                                        Guid ClientId,
-                                       IEnumerable<SharedProductsDto> Products) : IRequest<ValidationResult>;
+                                       IEnumerable<LineItemDto> Products) : IRequest<ValidationResult>;

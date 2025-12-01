@@ -9,20 +9,17 @@ public class ProductList(AutopartsDbContext context) : IProductList
 {
     private readonly AutopartsDbContext _context = context;
 
-    public async Task<IEnumerable<Product>> GetProductsListAsync(IEnumerable<SharedProductsDto> products, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Product>> GetProductsListAsync(IEnumerable<LineItemDto> products, CancellationToken cancellationToken)
     {
         var productIds = products.Select(p => p.ProductId).ToList();
 
-        // 1) Uma única consulta ao banco
         var productsFromDb = await _context.Products!
             .AsNoTracking()
             .Where(p => productIds.Contains(p.ProductId))
             .ToListAsync(cancellationToken);
 
-        // 2) Índice para lookup em memória
         var dict = productsFromDb.ToDictionary(p => p.ProductId);
 
-        // 3) Construção final SEM async dentro do foreach
         var response = new List<Product>();
 
         foreach (var dto in products)

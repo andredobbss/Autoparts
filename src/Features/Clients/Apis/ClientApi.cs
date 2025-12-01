@@ -30,7 +30,7 @@ public static class ClientApi
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetClientByIdQuery(id), cancellationToken);
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return Results.Ok(result);
     }
     private static async Task<IResult> Create([FromBody] CreateClientCommand command, ISender mediator, CancellationToken cancellationToken)
     {
@@ -45,6 +45,6 @@ public static class ClientApi
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new DeleteClientCommand(id), cancellationToken);
-        return result is true ? Results.NoContent() : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());
     }
 }

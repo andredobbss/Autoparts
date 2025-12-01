@@ -18,8 +18,8 @@ public sealed class Client
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
 
-    public ICollection<Sale> Sales { get; private set; } = []; //ok
-    public ICollection<Return> Returns { get; private set; } = []; //ok
+    public ICollection<Sale> Sales { get; private set; } = [];
+    public ICollection<Return> Returns { get; private set; } = [];
     public Address Address { get; private set; } = null!;
 
     public Client(string clientName, Address address)

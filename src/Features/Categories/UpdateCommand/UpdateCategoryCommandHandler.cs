@@ -13,7 +13,7 @@ public sealed class UpdateCategoryCommandHandler(ICategoryRepository categoryRep
     {
         var category = await _categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
         if (category is null)
-            return new ValidationResult { Errors = { new ValidationFailure("Category", $"{Resource.ID_NOT_FOUND} : {request.CategoryId}") } };
+            return new ValidationResult { Errors = { new ValidationFailure(Resource.CATEGORY, string.Format(Resource.CATEGORY_NOT_FOUND, request.CategoryId)) } };
 
         category.Update(request.Description);
 

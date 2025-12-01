@@ -13,7 +13,7 @@ public sealed class UpdateClientCommandHandler(IClientRepository clientRepositor
     {
         var client = await _clientRepository.GetByIdAsync(request.ClientId, cancellationToken);
         if (client is null)
-            return new ValidationResult { Errors = { new ValidationFailure("Client", $"{Resource.ID_NOT_FOUND} : {request.ClientId}") } };
+            return new ValidationResult { Errors = { new ValidationFailure(Resource.CLIENT, string.Format(Resource.CLIENT_NOT_FOUND, request.ClientId)) } };
 
         client.Update(request.ClientName, request.Address);
 

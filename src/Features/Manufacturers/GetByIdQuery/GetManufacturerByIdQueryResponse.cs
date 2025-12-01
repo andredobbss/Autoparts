@@ -1,3 +1,8 @@
+using Autoparts.Api.Shared.Products.Dto;
+
 namespace Autoparts.Api.Features.Manufacturers.GetByIdQuery;
 
-public sealed record GetManufacturerByIdQueryResponse(Guid ManufacturerId, string Description, DateTime CreatedAt, DateTime UpdatedAt);
+public sealed record GetManufacturerByIdQueryResponse(Guid ManufacturerId,
+                                                      string Description,
+                                                      DateTime CreatedAt,
+                                                      IEnumerable<ProductDto> Products);

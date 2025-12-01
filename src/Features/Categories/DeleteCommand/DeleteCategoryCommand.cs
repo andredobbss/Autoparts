@@ -1,4 +1,5 @@
+using FluentValidation.Results;
 using MediatR;
 namespace Autoparts.Api.Features.Categories.DeleteCommand;
 
-public sealed record DeleteCategoryCommand(Guid CategoryId) : IRequest<bool>;
+public sealed record DeleteCategoryCommand(Guid CategoryId) : IRequest<ValidationResult>;

@@ -61,6 +61,42 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Category.
+        /// </summary>
+        public static string CATEGORY {
+            get {
+                return ResourceManager.GetString("CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Category with ID {0} was not found.
+        /// </summary>
+        public static string CATEGORY_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("CATEGORY_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Client.
+        /// </summary>
+        public static string CLIENT {
+            get {
+                return ResourceManager.GetString("CLIENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Client with ID {0} was not found.
+        /// </summary>
+        public static string CLIENT_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("CLIENT_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Commit.
         /// </summary>
         public static string COMMIT {
@@ -84,6 +120,51 @@ namespace Autoparts.Api.Shared.Resources {
         public static string ERROR_DOMAIN {
             get {
                 return ResourceManager.GetString("ERROR_DOMAIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the category.
+        /// </summary>
+        public static string FAILED_TO_DELETE_CATEGORY {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the client.
+        /// </summary>
+        public static string FAILED_TO_DELETE_CLIENT {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_CLIENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the manufactorer.
+        /// </summary>
+        public static string FAILED_TO_DELETE_MANUFACTORER {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_MANUFACTORER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the product.
+        /// </summary>
+        public static string FAILED_TO_DELETE_PRODUCT {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_PRODUCT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the purchase.
+        /// </summary>
+        public static string FAILED_TO_DELETE_PURCHASE {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_PURCHASE", resourceCulture);
             }
         }
         
@@ -133,6 +214,24 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Manufactorer.
+        /// </summary>
+        public static string MANUFACTORER {
+            get {
+                return ResourceManager.GetString("MANUFACTORER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Manufactorer with ID {0} was not found.
+        /// </summary>
+        public static string MANUFACTORER_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("MANUFACTORER_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 100 character limit.
         /// </summary>
         public static string MAX_LENGTH_100 {
@@ -178,7 +277,16 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Product not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Product.
+        /// </summary>
+        public static string PRODUCT {
+            get {
+                return ResourceManager.GetString("PRODUCT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Product with ID {0} was not found.
         /// </summary>
         public static string PRODUCTS_NOT_FOUND {
             get {
@@ -196,7 +304,16 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Purchase not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Purchase.
+        /// </summary>
+        public static string PURCHASE {
+            get {
+                return ResourceManager.GetString("PURCHASE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Purchase with ID {0} was not found.
         /// </summary>
         public static string PURCHASE_NOT_FOUND {
             get {

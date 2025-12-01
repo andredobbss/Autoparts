@@ -3,7 +3,6 @@ using Autoparts.Api.Features.Manufacturers.DeleteCommand;
 using Autoparts.Api.Features.Manufacturers.GetAllQuery;
 using Autoparts.Api.Features.Manufacturers.GetByIdQuery;
 using Autoparts.Api.Features.Manufacturers.UpdateCommand;
-using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +28,7 @@ public static class ManufactureApi
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new GetManufacturerByIdQuery(id));
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return Results.Ok(result);
     }
     private static async Task<IResult> Create([FromBody] CreateManufacturerCommand command, ISender mediator)
     {
@@ -44,6 +43,6 @@ public static class ManufactureApi
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new DeleteManufacturerCommand(id));
-        return result is true ? Results.NoContent() : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());
     }
 }

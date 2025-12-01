@@ -1,5 +1,4 @@
 ﻿using Autoparts.Api.Features.Purchases.Domain;
-using Autoparts.Api.Features.Purchases.Dto;
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Products.Stock;
 using FluentValidation;
@@ -27,48 +26,26 @@ public class PurchaseRepository : IPurchaseRepository, IDisposable
     public async Task<IPagedList<Purchase>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
         return await _context.Purchases!.AsNoTracking()
-                                        .Include(p => p.PurchaseProducts)
-                                        .ThenInclude(p => p.Product)
+                                        .Include(p => p.User)
+                                        .Include(p => p.Supplier)
                                         .Include(p => p.Products)
-                                        .ThenInclude(p => p.Manufacturer)
+                                        .Include(P => P.PurchaseProducts)
                                         .ToPagedListAsync(pageNumber, pageSize, cancellationToken);
-    }
-
-    public async Task<IEnumerable<PurchaseProductCategoryManufaturerDto>> GetPurchaseProductCategoryManufaturerAsync(CancellationToken cancellationToken)
-    {
-        var query = await _context.Purchases!
-                   .Join(_context.PurchaseProducts!, pu => pu.PurchaseId, pp => pp.PurchaseId, (pu, pp) => new { pu, pp })
-                   .Join(_context.Products!, temp => temp.pp.ProductId, pr => pr.ProductId, (temp, pr) => new { temp.pu, temp.pp, pr })
-                   .Join(_context.Categories!, temp => temp.pr.CategoryId, ca => ca.CategoryId, (temp, ca) => new { temp.pu, temp.pp, temp.pr, ca })
-                   .Join(_context.Manufacturers!, temp => temp.pr.ManufacturerId, ma => ma.ManufacturerId, (temp, ma) => new { temp.pu, temp.pp, temp.pr, temp.ca, ma })
-                   .Join(_context.Suppliers!, temp => temp.pu.SupplierId, su => su.SupplierId, (temp, su) => new { temp.pu, temp.pp, temp.pr, temp.ca, temp.ma, su })
-                   .Select(result => new PurchaseProductCategoryManufaturerDto(
-                                     result.pu.InvoiceNumber,
-                                     result.pp.Quantity,
-                                     result.pu.TotalPurchase,
-                                     result.pu.PaymentMethod,
-                                     result.pr.Name,
-                                     result.pr.TechnicalDescription,
-                                     result.pr.SKU,
-                                     result.pr.Compatibility,
-                                     result.pr.SellingPrice,
-                                     result.pr.Stock,
-                                     result.pr.StockStatus,
-                                     result.ca.Description,
-                                     result.ma.Description,
-                                     result.su.CompanyName
-                                 )).ToListAsync(cancellationToken);
-        return query;
     }
 
     public async Task<Purchase?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Purchases!.AsNoTracking().Include(p => p.PurchaseProducts).ThenInclude(p => p.Product).SingleOrDefaultAsync(p => p.PurchaseId == id, cancellationToken);
+        return await _context.Purchases!.AsNoTracking()
+                                        .Include(p => p.User)
+                                        .Include(p => p.Supplier)
+                                        .Include(p => p.Products)
+                                        .Include(P => P.PurchaseProducts)
+                                        .FirstOrDefaultAsync(p => p.PurchaseId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Purchase purchase, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(purchase);
+        var result = await _validator.ValidateAsync(purchase, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -78,7 +55,7 @@ public class PurchaseRepository : IPurchaseRepository, IDisposable
 
     public async Task<ValidationResult> UpdateAsync(Purchase purchase, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(purchase);
+        var result = await _validator.ValidateAsync(purchase, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -88,9 +65,7 @@ public class PurchaseRepository : IPurchaseRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Purchase purchase, CancellationToken cancellationToken)
     {
-        var result = _context.Purchases!.Update(purchase);
-        if (result is null)
-            return false;
+       _context.Purchases!.Update(purchase);
 
         return true;
     }

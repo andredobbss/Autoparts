@@ -32,7 +32,7 @@ public sealed class CategoryRepository : ICategoryRepository, IDisposable
 
     public async Task<ValidationResult> AddAsync(Category category, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(category);
+        var result = await _validator.ValidateAsync(category, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -42,7 +42,7 @@ public sealed class CategoryRepository : ICategoryRepository, IDisposable
 
     public async Task<ValidationResult> UpdateAsync(Category category, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(category);
+        var result = await _validator.ValidateAsync(category, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -52,9 +52,7 @@ public sealed class CategoryRepository : ICategoryRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Category category, CancellationToken cancellationToken)
     {
-        var result = _context.Categories!.Update(category);
-        if (result is null)
-            return false;
+        _context.Categories!.Update(category);
 
         return true;
     }

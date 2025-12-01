@@ -2,6 +2,7 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 using Z.PagedList;
 
 namespace Autoparts.Api.Features.Manufacturers.Infraestructure;
@@ -19,17 +20,21 @@ public class ManufacturerRepository : IManufacturerRepository, IDisposable
 
     public async Task<IPagedList<Manufacturer>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Manufacturers.ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        return await _context.Manufacturers!.AsNoTracking()
+                                            .Include(m => m.Products)
+                                            .ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Manufacturer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Manufacturers!.FindAsync(id, cancellationToken);
+        return await _context.Manufacturers!
+                             .Include(m => m.Products)
+                             .FirstOrDefaultAsync(m => m.ManufacturerId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(manufacturer);
+        var result = await _validator.ValidateAsync(manufacturer, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -39,7 +44,7 @@ public class ManufacturerRepository : IManufacturerRepository, IDisposable
 
     public async Task<ValidationResult> UpdateAsync(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(manufacturer);
+        var result = await _validator.ValidateAsync(manufacturer, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -49,9 +54,7 @@ public class ManufacturerRepository : IManufacturerRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-       var result = _context.Manufacturers!.Update(manufacturer);
-        if (result is null)
-            return false;
+        _context.Manufacturers!.Update(manufacturer);
 
         return true;
     }

@@ -176,10 +176,10 @@
     <value>Enter the product</value>
   </data>
   <data name="PRODUCTS_NOT_FOUND" xml:space="preserve">
-    <value>Product not found</value>
+    <value>Product with ID {0} was not found</value>
   </data>
   <data name="PURCHASE_NOT_FOUND" xml:space="preserve">
-    <value>Purchase not found</value>
+    <value>Purchase with ID {0} was not found</value>
   </data>
   <data name="SKU" xml:space="preserve">
     <value>SKU</value>
@@ -192,5 +192,44 @@
   </data>
   <data name="STOCK_ZERO" xml:space="preserve">
     <value>Out of Stock</value>
+  </data>
+  <data name="CATEGORY" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="CATEGORY_NOT_FOUND" xml:space="preserve">
+    <value>Category with ID {0} was not found</value>
+  </data>
+  <data name="FAILED_TO_DELETE_CATEGORY" xml:space="preserve">
+    <value>Failed to delete the category</value>
+  </data>
+  <data name="CLIENT" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="CLIENT_NOT_FOUND" xml:space="preserve">
+    <value>Client with ID {0} was not found</value>
+  </data>
+  <data name="FAILED_TO_DELETE_CLIENT" xml:space="preserve">
+    <value>Failed to delete the client</value>
+  </data>
+  <data name="MANUFACTORER_NOT_FOUND" xml:space="preserve">
+    <value>Manufactorer with ID {0} was not found</value>
+  </data>
+  <data name="MANUFACTORER" xml:space="preserve">
+    <value>Manufactorer</value>
+  </data>
+  <data name="FAILED_TO_DELETE_MANUFACTORER" xml:space="preserve">
+    <value>Failed to delete the manufactorer</value>
+  </data>
+  <data name="PRODUCT" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="FAILED_TO_DELETE_PRODUCT" xml:space="preserve">
+    <value>Failed to delete the product</value>
+  </data>
+  <data name="PURCHASE" xml:space="preserve">
+    <value>Purchase</value>
+  </data>
+  <data name="FAILED_TO_DELETE_PURCHASE" xml:space="preserve">
+    <value>Failed to delete the purchase</value>
   </data>
 </root>

@@ -12,7 +12,7 @@ public sealed class UpdateManufacturerCommandHandler(IManufacturerRepository man
     {
         var manufacturer = await _manufacturerRepository.GetByIdAsync(request.ManufacturerId, cancellationToken);
         if (manufacturer is null)
-            return new ValidationResult { Errors = { new ValidationFailure("Manufacturer", $"{Resource.ID_NOT_FOUND} : {request.ManufacturerId}") } };
+            return new ValidationResult { Errors = { new ValidationFailure(Resource.MANUFACTORER, string.Format(Resource.MANUFACTORER_NOT_FOUND, request.ManufacturerId)) } };
 
         manufacturer.Update(request.Description);
 

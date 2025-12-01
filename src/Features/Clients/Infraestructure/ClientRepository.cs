@@ -21,27 +21,31 @@ public class ClientRepository : IClientRepository, IDisposable
 
     public async Task<IPagedList<Client>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Clients!.AsNoTracking().ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        return await _context.Clients!.AsNoTracking()
+                                       .Include(c => c.Address)
+                                       .ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Clients!.FindAsync(id, cancellationToken);
+        return await _context.Clients!
+                             .Include(c => c.Address)
+                             .FirstOrDefaultAsync(c => c.ClientId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Client client, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(client);
+        var result = await _validator.ValidateAsync(client, cancellationToken);
         if (!result.IsValid)
             return result;
 
-        await _context.Clients!.AddAsync(client,cancellationToken);
+        await _context.Clients!.AddAsync(client, cancellationToken);
         return result;
     }
 
     public async Task<ValidationResult> UpdateAsync(Client client, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(client);
+        var result = await _validator.ValidateAsync(client, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -51,9 +55,7 @@ public class ClientRepository : IClientRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Client client, CancellationToken cancellationToken)
     {
-        var result = _context.Clients!.Update(client);
-        if (result is null)
-            return false;
+        _context.Clients!.Update(client);
 
         return true;
     }

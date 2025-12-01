@@ -3,7 +3,6 @@ using Autoparts.Api.Features.Categories.DeleteCommand;
 using Autoparts.Api.Features.Categories.GetAllQuery;
 using Autoparts.Api.Features.Categories.GetByIdQuery;
 using Autoparts.Api.Features.Categories.UpdateCommand;
-using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +34,7 @@ public static class CategoryApi
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new GetCategoryByIdQuery(id));
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> Create([FromBody] CreateCategoryCommand command, ISender mediator)
@@ -53,7 +52,7 @@ public static class CategoryApi
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new DeleteCategoryCommand(id));
-        return result is true ? Results.NoContent() : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());
     }
 }
 

@@ -7,7 +7,6 @@ namespace Autoparts.Api.Features.Products.Infraestructure;
 public interface IProductRepository
 {
     Task<IPagedList<Product>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
-    Task<IEnumerable<Product>> GetAllByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
     Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<ValidationResult> AddAsync(Product product, CancellationToken cancellationToken);
     Task<ValidationResult> UpdateAsync(Product product, CancellationToken cancellationToken);
