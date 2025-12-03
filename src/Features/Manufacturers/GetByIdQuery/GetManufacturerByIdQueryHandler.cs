@@ -1,5 +1,5 @@
+using Autoparts.Api.Features.Manufacturers.DTOs;
 using Autoparts.Api.Features.Manufacturers.Infraestructure;
-using Autoparts.Api.Shared.Products.Dto;
 using Autoparts.Api.Shared.Resources;
 using MediatR;
 

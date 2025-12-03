@@ -1,4 +1,4 @@
-﻿namespace Autoparts.Api.Shared.Products.Dto;
+﻿namespace Autoparts.Api.Features.Manufacturers.DTOs;
 public sealed record ProductDto(Guid ProductId,
                                 string Name,
                                 string TechnicalDescription,

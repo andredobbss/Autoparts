@@ -17,6 +17,9 @@ public sealed record GetAllClientsQueryHandler(IClientRepository clientRepositor
             (
                 c.ClientId,
                 c.ClientName,
+                c.Email,
+                c.TaxIdType,
+                c.TaxId,
                 c.CreatedAt,
                 c.Address
             ));

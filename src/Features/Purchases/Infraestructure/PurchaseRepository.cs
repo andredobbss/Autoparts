@@ -28,18 +28,17 @@ public class PurchaseRepository : IPurchaseRepository, IDisposable
         return await _context.Purchases!.AsNoTracking()
                                         .Include(p => p.User)
                                         .Include(p => p.Supplier)
-                                        .Include(p => p.Products)
                                         .Include(P => P.PurchaseProducts)
+                                        .ThenInclude(pp => pp.Product)
                                         .ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Purchase?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Purchases!.AsNoTracking()
-                                        .Include(p => p.User)
+        return await _context.Purchases!.Include(p => p.User)
                                         .Include(p => p.Supplier)
-                                        .Include(p => p.Products)
                                         .Include(P => P.PurchaseProducts)
+                                        .ThenInclude(pp => pp.Product)
                                         .FirstOrDefaultAsync(p => p.PurchaseId == id, cancellationToken);
     }
 
@@ -65,7 +64,7 @@ public class PurchaseRepository : IPurchaseRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Purchase purchase, CancellationToken cancellationToken)
     {
-       _context.Purchases!.Update(purchase);
+        _context.Purchases!.Update(purchase);
 
         return true;
     }

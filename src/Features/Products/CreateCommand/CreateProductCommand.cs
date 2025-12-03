@@ -1,5 +1,6 @@
 using FluentValidation.Results;
 using MediatR;
+
 namespace Autoparts.Api.Features.Products.CreateCommand;
 
 public sealed record CreateProductCommand(string Name,

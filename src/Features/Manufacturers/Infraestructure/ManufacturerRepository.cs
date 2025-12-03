@@ -27,9 +27,8 @@ public class ManufacturerRepository : IManufacturerRepository, IDisposable
 
     public async Task<Manufacturer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Manufacturers!
-                             .Include(m => m.Products)
-                             .FirstOrDefaultAsync(m => m.ManufacturerId == id, cancellationToken);
+        return await _context.Manufacturers!.Include(m => m.Products)
+                                            .FirstOrDefaultAsync(m => m.ManufacturerId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Manufacturer manufacturer, CancellationToken cancellationToken)

@@ -14,7 +14,7 @@ public sealed class Sale
     private Sale() { }
 
     public Guid SaleId { get; private set; }
-    public string InvoiceNumber { get; private set; } = null!;
+    public string InvoiceNumber { get; private set; }
     public decimal TotalSale { get; private set; } = 0m;
     public EPaymentMethod PaymentMethod { get; private set; }
     public DateTime CreatedAt { get; private set; }
@@ -25,8 +25,8 @@ public sealed class Sale
     public Guid UserId { get; private set; } = Guid.Empty;
     public Guid ClientId { get; private set; }
 
-    public Client Client { get; private set; } = null!;
-    public User User { get; private set; } = null!;
+    public Client Client { get; private set; }
+    public User User { get; private set; }
     public ICollection<Product> Products { get; private set; } = [];
     public ICollection<SaleProduct> SaleProducts { get; private set; } = [];
 

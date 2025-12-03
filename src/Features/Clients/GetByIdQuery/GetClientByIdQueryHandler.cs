@@ -15,10 +15,13 @@ public sealed record GetClientByIdQueryHandler(IClientRepository clientRepositor
 
         return new GetClientByIdQueryResponse
         (
-            client.ClientId,
-            client.ClientName,
-            client.CreatedAt,
-            client.Address
+             client.ClientId,
+             client.ClientName,
+             client.Email,
+             client.TaxIdType,
+             client.TaxId,
+             client.CreatedAt,
+             client.Address
         );
 
     }

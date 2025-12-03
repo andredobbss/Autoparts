@@ -1,3 +1,4 @@
+using Autoparts.Api.Features.Categories.DTOs;
 using Autoparts.Api.Features.Categories.Infraestructure;
 using Autoparts.Api.Shared.Paginate;
 using MediatR;
@@ -17,7 +18,17 @@ public sealed record GetAllCategoriesQueryHandler(ICategoryRepository categoryRe
                      (
                          c.CategoryId,
                          c.Description,
-                         c.CreatedAt
+                         c.CreatedAt,
+                         c.Products.Select(p => new ProductDto
+                         (
+                               p.ProductId,
+                               p.Name,
+                               p.TechnicalDescription,
+                               p.SKU,
+                               p.Compatibility,
+                               p.AcquisitionCost,
+                               p.SellingPrice
+                         )).ToList()
                      ));
 
         return new PagedResponse<GetAllCategoriesQueryResponse>(pagedResponse);

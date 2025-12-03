@@ -10,7 +10,7 @@ public sealed class CreateClientCommandHandler(IClientRepository clientRepositor
     private readonly IClientRepository _clientRepository = clientRepository;
     public async Task<ValidationResult> Handle(CreateClientCommand request, CancellationToken cancellationToken)
     {
-        var client = new Client(request.ClientName, request.Address);
+        var client = new Client(request.ClientName, request.Address, request.Email, request.TaxIdType, request.TaxId);
 
         var result = await _clientRepository.AddAsync(client, cancellationToken);
         if (!result.IsValid)

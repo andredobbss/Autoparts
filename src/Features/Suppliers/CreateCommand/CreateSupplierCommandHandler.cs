@@ -1,5 +1,6 @@
 using Autoparts.Api.Features.Suppliers.Domain;
 using Autoparts.Api.Features.Suppliers.Infraestructure;
+using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
 
@@ -10,9 +11,19 @@ public sealed class CreateSupplierCommandHandler(ISupplierRepository supplierRep
 
     public async Task<ValidationResult> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
     {
-        var supplier = new Supplier(request.CompanyName, request.Address);
+        var supplier = new Supplier(request.CompanyName, request.Address, request.Email, request.TaxIdType, request.TaxId);
 
         var result = await _supplierRepository.AddAsync(supplier, cancellationToken);
+        if (!result.IsValid)
+            return result;
+
+        var commitResult = await _supplierRepository.CommitAsync(cancellationToken);
+        if (!commitResult)
+        {
+            var failures = result.Errors.ToList();
+            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
+            return new ValidationResult(failures);
+        }
 
         return result;
     }

@@ -21,6 +21,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.HasIndex(c => c.CategoryId).HasDatabaseName("IX_Categories_CategoryId");
         builder.HasIndex(c => c.CreatedAt).HasDatabaseName("IX_Categories_CreatedAt");
         builder.HasIndex(c => c.DeletedAt).HasDatabaseName("IX_Categories_DeletedAt");
+        builder.HasIndex(c => c.Description).IsUnique(true);
     }
 
 }

@@ -1,10 +1,13 @@
+using Autoparts.Api.Features.Purchases.Domain;
+using Autoparts.Api.Features.Purchases.GetByIdQuery;
 using Autoparts.Api.Features.Purchases.Infraestructure;
 using Autoparts.Api.Shared.Paginate;
-using Autoparts.Api.Shared.Products.Dto;
 using MediatR;
+using System.Linq;
 using Z.PagedList;
 
 namespace Autoparts.Api.Features.Purchases.GetAllQuery;
+
 public sealed record GetAllPurchasesQueryHandler(IPurchaseRepository purchaseRepository) : IRequestHandler<GetAllPurchasesQuery, PagedResponse<GetAllPurchasesQueryResponse>>
 {
     private readonly IPurchaseRepository _purchaseRepository = purchaseRepository;
@@ -22,15 +25,13 @@ public sealed record GetAllPurchasesQueryHandler(IPurchaseRepository purchaseRep
                 p.CreatedAt,
                 p.User.UserName,
                 p.Supplier.CompanyName,
-                p.Products.Select(pp => new ProductDto
+                p.PurchaseProducts.Select(pp => new PurchaseProduct
                 (
-                    pp.ProductId,
-                    pp.Name,
-                    pp.TechnicalDescription,
-                    pp.SKU,
-                    pp.Compatibility,
+                    pp.Product.Name,
+                    pp.Product.SKU,
+                    pp.Quantity,
                     pp.AcquisitionCost,
-                    pp.SellingPrice
+                    pp.TotalItem
                 )).ToList()
             ));
 

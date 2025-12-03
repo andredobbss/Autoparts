@@ -3,7 +3,6 @@ using Autoparts.Api.Features.Suppliers.DeleteCommand;
 using Autoparts.Api.Features.Suppliers.GetAllQuery;
 using Autoparts.Api.Features.Suppliers.GetByIdQuery;
 using Autoparts.Api.Features.Suppliers.UpdateCommand;
-using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,13 +25,13 @@ public static class SupplierApi
     private static async Task<IResult> GetAll(ISender mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllSuppliersQuery(pageNumber, pageSize));
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = Resource.RETURN_NULL });
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new GetSupplierByIdQuery(id));
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> Create([FromBody] CreateSupplierCommand command, ISender mediator)
@@ -50,6 +49,6 @@ public static class SupplierApi
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new DeleteSupplierCommand(id));
-        return result is true ? Results.NoContent() : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());
     }
 }

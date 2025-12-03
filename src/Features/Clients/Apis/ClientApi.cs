@@ -3,7 +3,6 @@ using Autoparts.Api.Features.Clients.DeleteCommand;
 using Autoparts.Api.Features.Clients.GetAllQuery;
 using Autoparts.Api.Features.Clients.GetByIdQuery;
 using Autoparts.Api.Features.Clients.UpdateCommand;
-using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

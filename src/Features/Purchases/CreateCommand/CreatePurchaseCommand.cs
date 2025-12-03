@@ -1,7 +1,8 @@
 using Autoparts.Api.Shared.Enums;
-using Autoparts.Api.Shared.Products.Dto;
+using Autoparts.Api.Shared.Products.DTOs;
 using FluentValidation.Results;
 using MediatR;
+
 namespace Autoparts.Api.Features.Purchases.CreateCommand;
 
 public sealed record CreatePurchaseCommand(string InvoiceNumber,

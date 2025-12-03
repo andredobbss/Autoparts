@@ -22,12 +22,15 @@ public sealed class CategoryRepository : ICategoryRepository, IDisposable
 
     public async Task<IPagedList<Category>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Categories!.AsNoTracking().ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        return await _context.Categories!.AsNoTracking()
+                                         .Include(c => c.Products)
+                                         .ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Categories!.FindAsync(id, cancellationToken);
+        return await _context.Categories!.Include(c => c.Products)
+                                         .FirstOrDefaultAsync(c => c.CategoryId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Category category, CancellationToken cancellationToken)

@@ -118,118 +118,147 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="COMMIT" xml:space="preserve">
-    <value>Commit</value>
+    <value>Confirmação</value>
   </data>
   <data name="COMMIT_FAILED_MESSAGE" xml:space="preserve">
-    <value>Commit failed</value>
+    <value>Falha na confirmação</value>
   </data>
   <data name="ERROR_DOMAIN" xml:space="preserve">
-    <value>Domain validation error</value>
+    <value>Erro de validação de domínio</value>
   </data>
   <data name="GREATER_THAN_ZERO" xml:space="preserve">
-    <value>The value entered must be greater than zero</value>
+    <value>O valor inserido deve ser maior que zero.</value>
   </data>
   <data name="ID_NOT_FOUND" xml:space="preserve">
-    <value>ID Not Found:</value>
+    <value>ID não encontrado:</value>
   </data>
   <data name="INVALID_CALCULATION_TYPE" xml:space="preserve">
-    <value>Invalid Calculation Type</value>
+    <value>Tipo de cálculo inválido</value>
   </data>
   <data name="INVALID_CNPJ" xml:space="preserve">
-    <value>CNPJ Number Proivided is Invalid</value>
+    <value>O número CNPJ fornecido é inválido.</value>
   </data>
   <data name="INVALID_CPF" xml:space="preserve">
-    <value>CPF Number Proivided is Invalid</value>
+    <value>O número CPF fornecido é inválido.</value>
   </data>
   <data name="MAX_LENGTH_100" xml:space="preserve">
-    <value>The text exceeded the 100 character limit</value>
+    <value>O texto excedeu o limite de 100 caracteres.</value>
   </data>
   <data name="MAX_LENGTH_14" xml:space="preserve">
-    <value>The text exceeded the 14 character limit</value>
+    <value>O texto excedeu o limite de 14 caracteres.</value>
   </data>
   <data name="MAX_LENGTH_255" xml:space="preserve">
-    <value>The text exceeded the 255 character limit</value>
+    <value>O texto excedeu o limite de 255 caracteres.</value>
   </data>
   <data name="MAX_LENGTH_50" xml:space="preserve">
-    <value>The text exceeded the 50 character limit</value>
+    <value>O texto excedeu o limite de 50 caracteres.</value>
   </data>
   <data name="NOT_NULL_OR_EMPTY" xml:space="preserve">
-    <value>This information is required</value>
+    <value>Esta informação é necessária</value>
   </data>
   <data name="RETURN_NULL" xml:space="preserve">
-    <value>No data found</value>
+    <value>Nenhum dado encontrado</value>
   </data>
   <data name="STOCK_INSUFFICIENT" xml:space="preserve">
-    <value>Insufficient Stock</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="UpdateStock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Scripts\UpdateStock.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>Estoque insuficiente</value>
   </data>
   <data name="STOCK" xml:space="preserve">
-    <value>Stock</value>
+    <value>Estoque</value>
   </data>
   <data name="STOCK_FAILED_MESSAGE" xml:space="preserve">
-    <value>Failed to calculate stock</value>
+    <value>Falha no cálculo do estoque</value>
   </data>
   <data name="PRODUCTS_REQUIRED" xml:space="preserve">
-    <value>Enter the product</value>
+    <value>Insira o produto</value>
   </data>
   <data name="PRODUCTS_NOT_FOUND" xml:space="preserve">
-    <value>Product with ID {0} was not found</value>
+    <value>O produto com ID {0} não foi encontrado.</value>
   </data>
   <data name="PURCHASE_NOT_FOUND" xml:space="preserve">
-    <value>Purchase with ID {0} was not found</value>
+    <value>A compra com o ID {0} não foi encontrada.</value>
   </data>
   <data name="SKU" xml:space="preserve">
     <value>SKU</value>
   </data>
   <data name="SKU_FAILED" xml:space="preserve">
-    <value>Failed to generate SKU</value>
+    <value>Falha ao gerar o SKU</value>
   </data>
   <data name="SALES_NOT_FOUND" xml:space="preserve">
-    <value>Sale not found</value>
+    <value>Venda com ID {0} não foi encontrada</value>
   </data>
   <data name="STOCK_ZERO" xml:space="preserve">
-    <value>Out of Stock</value>
+    <value>Sem estoque</value>
   </data>
   <data name="CATEGORY" xml:space="preserve">
-    <value>Category</value>
+    <value>Categoria</value>
   </data>
   <data name="CATEGORY_NOT_FOUND" xml:space="preserve">
-    <value>Category with ID {0} was not found</value>
+    <value>Categoria com ID {0} não foi encontrada</value>
   </data>
   <data name="FAILED_TO_DELETE_CATEGORY" xml:space="preserve">
-    <value>Failed to delete the category</value>
+    <value>Falha ao excluir a categoria</value>
   </data>
   <data name="CLIENT" xml:space="preserve">
-    <value>Client</value>
+    <value>Cliente</value>
   </data>
   <data name="CLIENT_NOT_FOUND" xml:space="preserve">
-    <value>Client with ID {0} was not found</value>
+    <value>Cliente com ID {0} não foi encontrado</value>
   </data>
   <data name="FAILED_TO_DELETE_CLIENT" xml:space="preserve">
-    <value>Failed to delete the client</value>
+    <value>Falha ao excluir o cliente</value>
   </data>
   <data name="MANUFACTORER_NOT_FOUND" xml:space="preserve">
-    <value>Manufactorer with ID {0} was not found</value>
+    <value>Fabricante com ID {0} não foi encontrado</value>
   </data>
   <data name="MANUFACTORER" xml:space="preserve">
-    <value>Manufactorer</value>
+    <value>Fabricante</value>
   </data>
   <data name="FAILED_TO_DELETE_MANUFACTORER" xml:space="preserve">
-    <value>Failed to delete the manufactorer</value>
+    <value>Falha ao excluir o fabricante</value>
   </data>
   <data name="PRODUCT" xml:space="preserve">
-    <value>Product</value>
+    <value>Produto</value>
   </data>
   <data name="FAILED_TO_DELETE_PRODUCT" xml:space="preserve">
-    <value>Failed to delete the product</value>
+    <value>Falha ao excluir o produto</value>
   </data>
   <data name="PURCHASE" xml:space="preserve">
-    <value>Purchase</value>
+    <value>Compra</value>
   </data>
   <data name="FAILED_TO_DELETE_PURCHASE" xml:space="preserve">
-    <value>Failed to delete the purchase</value>
+    <value>Não foi possível excluir a compra</value>
+  </data>
+  <data name="RETURN_NOT_FOUND" xml:space="preserve">
+    <value>A devolução com o ID {0} não foi encontrada.</value>
+  </data>
+  <data name="RETURN" xml:space="preserve">
+    <value>Devolução</value>
+  </data>
+  <data name="FAILED_TO_DELETE_RETURN" xml:space="preserve">
+    <value>Falha ao excluir a devolução</value>
+  </data>
+  <data name="SALE" xml:space="preserve">
+    <value>Venda</value>
+  </data>
+  <data name="FAILED_TO_DELETE_SALE" xml:space="preserve">
+    <value>Falha ao excluir a venda</value>
+  </data>
+  <data name="INVALID_EMAIL" xml:space="preserve">
+    <value>Email inválido</value>
+  </data>
+  <data name="SUPPLIER" xml:space="preserve">
+    <value>Fornecedor</value>
+  </data>
+  <data name="SUPPLIER_NOT_FOUND" xml:space="preserve">
+    <value>O Fornecedor com ID {0} não foi encontrada</value>
+  </data>
+  <data name="FAILED_TO_DELETE_SUPPLIER" xml:space="preserve">
+    <value>Falha ao excluir o fornecedor</value>
+  </data>
+  <data name="EMAIL_IS_REQUIRED" xml:space="preserve">
+    <value>Email é obrigatório</value>
+  </data>
+  <data name="NAME_IS_REQUIRED" xml:space="preserve">
+    <value>Nome é obrigatório</value>
   </data>
 </root>

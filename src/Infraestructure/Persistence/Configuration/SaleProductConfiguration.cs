@@ -23,5 +23,8 @@ public class SaleProductConfiguration : IEntityTypeConfiguration<SaleProduct>
             .IsRequired(true)
             .HasColumnType("INT")
             .HasDefaultValue(0);
+
+        builder.Ignore(sp => sp.Name);
+        builder.Ignore(sp => sp.SKU);
     }
 }

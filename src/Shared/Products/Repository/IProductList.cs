@@ -1,5 +1,5 @@
 ﻿using Autoparts.Api.Features.Products.Domain;
-using Autoparts.Api.Shared.Products.Dto;
+using Autoparts.Api.Shared.Products.DTOs;
 
 namespace Autoparts.Api.Shared.Products.Repository;
 

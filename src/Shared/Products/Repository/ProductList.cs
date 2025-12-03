@@ -1,6 +1,6 @@
 ﻿using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
-using Autoparts.Api.Shared.Products.Dto;
+using Autoparts.Api.Shared.Products.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Shared.Products.Repository;

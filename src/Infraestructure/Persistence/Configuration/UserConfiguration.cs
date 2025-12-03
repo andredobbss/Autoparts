@@ -12,15 +12,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("IdentityUser");
         builder.HasKey(u => u.Id);
         builder.Property(u => u.Id).HasColumnName("Id").HasColumnType("UNIQUEIDENTIFIER");
-        builder.Property(u => u.Email).HasColumnName("Email").HasColumnType("VARCHAR").HasMaxLength(256);
+        builder.Property(u => u.TaxIdType).HasColumnName("TaxIdType").HasColumnType("INT").IsRequired(false);
+        builder.Property(u => u.TaxId).HasColumnName("TaxId").HasColumnType("VARCHAR").HasMaxLength(15).IsRequired(false);
+        builder.Property(u => u.Email).HasColumnName("Email").HasColumnType("VARCHAR").HasMaxLength(255);
         builder.Property(u => u.NormalizedEmail).HasColumnName("NormalizedEmail").HasColumnType("VARCHAR").HasMaxLength(256);
-        builder.Property(u => u.UserName ).HasColumnName("UserName").HasColumnType("NVARCHAR").HasMaxLength(256);
+        builder.Property(u => u.UserName).HasColumnName("UserName").HasColumnType("NVARCHAR").HasMaxLength(256);
         builder.Property(u => u.NormalizedUserName).HasColumnName("NormalizedUserName").HasColumnType("NVARCHAR").HasMaxLength(256);
         builder.Property(u => u.PhoneNumber).HasColumnType("VARCHAR").HasMaxLength(20);
         builder.Property(u => u.EmailConfirmed).HasColumnType("BIT").HasDefaultValue(true);
         builder.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
-
-
 
         builder.HasMany<IdentityUserClaim<Guid>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
         builder.HasMany<IdentityUserRole<Guid>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
@@ -28,7 +28,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany<IdentityRoleClaim<Guid>>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
         builder.HasMany<IdentityUserToken<Guid>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
 
-        builder.OwnsOne(u => u.Address, AddressMappingHelper.MapAddress);
+        builder.OwnsOne(u => u.Address);
 
         builder.HasMany(u => u.Purchases).WithOne(p => p.User).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
         builder.HasMany(u => u.Sales).WithOne(s => s.User).HasForeignKey(s => s.UserId).OnDelete(DeleteBehavior.Restrict);

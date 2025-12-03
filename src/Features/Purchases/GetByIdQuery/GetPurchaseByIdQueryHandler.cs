@@ -1,5 +1,5 @@
+using Autoparts.Api.Features.Purchases.Domain;
 using Autoparts.Api.Features.Purchases.Infraestructure;
-using Autoparts.Api.Shared.Products.Dto;
 using Autoparts.Api.Shared.Resources;
 using MediatR;
 
@@ -11,7 +11,7 @@ public sealed record GetPurchaseByIdQueryHandler(IPurchaseRepository purchaseRep
     public async Task<GetPurchaseByIdQueryResponse> Handle(GetPurchaseByIdQuery request, CancellationToken cancellationToken)
     {
         var purchase = await _purchaseRepository.GetByIdAsync(request.PurchaseId, cancellationToken);
-        if (purchase == null)
+        if (purchase is null)
             throw new KeyNotFoundException(string.Format(Resource.PURCHASE_NOT_FOUND, request.PurchaseId));
 
         return new GetPurchaseByIdQueryResponse
@@ -23,15 +23,13 @@ public sealed record GetPurchaseByIdQueryHandler(IPurchaseRepository purchaseRep
                 purchase.CreatedAt,
                 purchase.User.UserName,
                 purchase.Supplier.CompanyName,
-                purchase.Products.Select(pp => new ProductDto
+                purchase.PurchaseProducts.Select(pp => new PurchaseProduct
                 (
-                    pp.ProductId,
-                    pp.Name,
-                    pp.TechnicalDescription,
-                    pp.SKU,
-                    pp.Compatibility,
+                    pp.Product.Name,
+                    pp.Product.SKU,
+                    pp.Quantity,
                     pp.AcquisitionCost,
-                    pp.SellingPrice
+                    pp.TotalItem
                 )).ToList()
             );
     }

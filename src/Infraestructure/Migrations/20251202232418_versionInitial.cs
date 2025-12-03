@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Autoparts.Api.Infraestructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class versionInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,19 +32,21 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 {
                     ClientId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     ClientName = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
+                    TaxIdType = table.Column<int>(type: "INT", nullable: true),
+                    TaxId = table.Column<string>(type: "VARCHAR(15)", maxLength: 15, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
-                    Address_Street = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Neighborhood = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Address_City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Address_State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Country = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_ZipCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Complement = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_CellPhone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Address_TaxId = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Complement = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_CellPhone = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,19 +58,20 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    Address_Street = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Neighborhood = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Address_City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Address_State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Country = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_ZipCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Complement = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_CellPhone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Address_TaxId = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
+                    TaxIdType = table.Column<int>(type: "INT", nullable: true),
+                    TaxId = table.Column<string>(type: "VARCHAR(15)", maxLength: 15, nullable: true),
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Complement = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_CellPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "VARCHAR(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "VARCHAR(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "BIT", nullable: false, defaultValue: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -107,19 +110,21 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 {
                     SupplierId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     CompanyName = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
+                    Email = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
+                    TaxIdType = table.Column<int>(type: "INT", nullable: true),
+                    TaxId = table.Column<string>(type: "VARCHAR(15)", maxLength: 15, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
-                    Address_Street = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Neighborhood = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Address_City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Address_State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Country = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_ZipCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address_Complement = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_CellPhone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Address_TaxId = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Complement = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_CellPhone = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -214,8 +219,6 @@ namespace Autoparts.Api.Infraestructure.Migrations
                     ReturnId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     Justification = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     InvoiceNumber = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
-                    Quantity = table.Column<int>(type: "INT", nullable: false, defaultValue: 0),
-                    Loss = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
@@ -245,7 +248,8 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 {
                     SaleId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     InvoiceNumber = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
-                    Quantity = table.Column<int>(type: "INT", nullable: false, defaultValue: 0),
+                    TotalSale = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false),
+                    PaymentMethod = table.Column<int>(type: "INT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
@@ -310,7 +314,8 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 {
                     PurchaseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     InvoiceNumber = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: false),
-                    Quantity = table.Column<int>(type: "INT", nullable: false, defaultValue: 0),
+                    TotalPurchase = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false),
+                    PaymentMethod = table.Column<int>(type: "INT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
@@ -389,21 +394,25 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 name: "ReturnProducts",
                 columns: table => new
                 {
-                    ProductsProductId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    ReturnsReturnId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false)
+                    ReturnId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    ProductId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Quantity = table.Column<int>(type: "INT", nullable: false, defaultValue: 0),
+                    Loss = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),
+                    SellingPrice = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false, defaultValue: 0m),
+                    TotalItem = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReturnProducts", x => new { x.ProductsProductId, x.ReturnsReturnId });
+                    table.PrimaryKey("PK_ReturnProducts", x => new { x.ReturnId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_ReturnProducts_Products_ProductsProductId",
-                        column: x => x.ProductsProductId,
+                        name: "FK_ReturnProducts_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReturnProducts_Returns_ReturnsReturnId",
-                        column: x => x.ReturnsReturnId,
+                        name: "FK_ReturnProducts_Returns_ReturnId",
+                        column: x => x.ReturnId,
                         principalTable: "Returns",
                         principalColumn: "ReturnId",
                         onDelete: ReferentialAction.Cascade);
@@ -413,21 +422,24 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 name: "SaleProducts",
                 columns: table => new
                 {
-                    ProductsProductId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    SalesSaleId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false)
+                    SaleId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    ProductId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Quantity = table.Column<int>(type: "INT", nullable: false, defaultValue: 0),
+                    SellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalItem = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SaleProducts", x => new { x.ProductsProductId, x.SalesSaleId });
+                    table.PrimaryKey("PK_SaleProducts", x => new { x.SaleId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_SaleProducts_Products_ProductsProductId",
-                        column: x => x.ProductsProductId,
+                        name: "FK_SaleProducts_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SaleProducts_Sales_SalesSaleId",
-                        column: x => x.SalesSaleId,
+                        name: "FK_SaleProducts_Sales_SaleId",
+                        column: x => x.SaleId,
                         principalTable: "Sales",
                         principalColumn: "SaleId",
                         onDelete: ReferentialAction.Cascade);
@@ -437,21 +449,24 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 name: "PurchaseProducts",
                 columns: table => new
                 {
-                    ProductsProductId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    PurchasesPurchaseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false)
+                    PurchaseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    ProductId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Quantity = table.Column<int>(type: "INT", nullable: false, defaultValue: 0),
+                    AcquisitionCost = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false, defaultValue: 0m),
+                    TotalItem = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchaseProducts", x => new { x.ProductsProductId, x.PurchasesPurchaseId });
+                    table.PrimaryKey("PK_PurchaseProducts", x => new { x.PurchaseId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_PurchaseProducts_Products_ProductsProductId",
-                        column: x => x.ProductsProductId,
+                        name: "FK_PurchaseProducts_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PurchaseProducts_Purchases_PurchasesPurchaseId",
-                        column: x => x.PurchasesPurchaseId,
+                        name: "FK_PurchaseProducts_Purchases_PurchaseId",
+                        column: x => x.PurchaseId,
                         principalTable: "Purchases",
                         principalColumn: "PurchaseId",
                         onDelete: ReferentialAction.Cascade);
@@ -468,6 +483,17 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_DeletedAt",
+                table: "Categories",
+                column: "DeletedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_Description",
+                table: "Categories",
+                column: "Description",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Clients_ClientId",
                 table: "Clients",
                 column: "ClientId");
@@ -481,6 +507,18 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 name: "IX_Clients_CreatedAt",
                 table: "Clients",
                 column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_DeletedAt",
+                table: "Clients",
+                column: "DeletedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_Email",
+                table: "Clients",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityRole_UserId",
@@ -534,6 +572,17 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Manufacturers_DeletedAt",
+                table: "Manufacturers",
+                column: "DeletedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Manufacturers_Description",
+                table: "Manufacturers",
+                column: "Description",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Manufacturers_ManufacturerId",
                 table: "Manufacturers",
                 column: "ManufacturerId");
@@ -547,6 +596,11 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 name: "IX_Products_CreatedAt",
                 table: "Products",
                 column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_DeletedAt",
+                table: "Products",
+                column: "DeletedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_ManufacturerId",
@@ -565,14 +619,19 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseProducts_PurchasesPurchaseId",
+                name: "IX_PurchaseProducts_ProductId",
                 table: "PurchaseProducts",
-                column: "PurchasesPurchaseId");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Purchases_CreatedAt",
                 table: "Purchases",
                 column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Purchases_DeletedAt",
+                table: "Purchases",
+                column: "DeletedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Purchases_InvoiceNumber",
@@ -595,9 +654,9 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReturnProducts_ReturnsReturnId",
+                name: "IX_ReturnProducts_ProductId",
                 table: "ReturnProducts",
-                column: "ReturnsReturnId");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Returns_ClientId",
@@ -610,6 +669,11 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Returns_DeletedAt",
+                table: "Returns",
+                column: "DeletedAt");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Returns_ReturnId",
                 table: "Returns",
                 column: "ReturnId");
@@ -620,9 +684,9 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SaleProducts_SalesSaleId",
+                name: "IX_SaleProducts_ProductId",
                 table: "SaleProducts",
-                column: "SalesSaleId");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sales_ClientId",
@@ -635,6 +699,11 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sales_DeletedAt",
+                table: "Sales",
+                column: "DeletedAt");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sales_SaleId",
                 table: "Sales",
                 column: "SaleId");
@@ -645,9 +714,27 @@ namespace Autoparts.Api.Infraestructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Suppliers_CompanyName",
+                table: "Suppliers",
+                column: "CompanyName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Suppliers_CreatedAt",
                 table: "Suppliers",
                 column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suppliers_DeletedAt",
+                table: "Suppliers",
+                column: "DeletedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suppliers_Email",
+                table: "Suppliers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Suppliers_SupplierId",

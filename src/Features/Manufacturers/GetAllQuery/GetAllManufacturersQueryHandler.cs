@@ -1,6 +1,6 @@
+using Autoparts.Api.Features.Manufacturers.DTOs;
 using Autoparts.Api.Features.Manufacturers.Infraestructure;
 using Autoparts.Api.Shared.Paginate;
-using Autoparts.Api.Shared.Products.Dto;
 using MediatR;
 using Z.PagedList;
 
@@ -16,18 +16,18 @@ public sealed record GetAllManufacturersQueryHandler(IManufacturerRepository man
         var pagedResponse = manufactures
             .Select(m => new GetAllManufacturersQueryResponse
             (
-            m.ManufacturerId,
-            m.Description,
-            m.CreatedAt,
-            m.Products.Select(pp => new ProductDto
-                (
-                    pp.ProductId,
-                    pp.Name,
-                    pp.TechnicalDescription,
-                    pp.SKU,
-                    pp.Compatibility,
-                    pp.AcquisitionCost,
-                    pp.SellingPrice
+                m.ManufacturerId,
+                m.Description,
+                m.CreatedAt,
+                m.Products.Select(pp => new ProductDto
+                    (
+                        pp.ProductId,
+                        pp.Name,
+                        pp.TechnicalDescription,
+                        pp.SKU,
+                        pp.Compatibility,
+                        pp.AcquisitionCost,
+                        pp.SellingPrice
                 )).ToList()
                 ));
 

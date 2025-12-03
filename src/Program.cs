@@ -37,7 +37,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
 
 #endregion
@@ -133,15 +132,8 @@ builder.Services.AddMediatR(cfg =>
 
 #endregion
 
-#region Register AutoMapper
-
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-#endregion
-
 #region Register Validators
 
-builder.Services.AddScoped<IValidator<Address>, AddressValidator>();
 builder.Services.AddScoped<IValidator<Category>, CategoryValidator>();
 builder.Services.AddScoped<IValidator<Client>, ClientValidator>();
 builder.Services.AddScoped<IValidator<Manufacturer>, ManufacturerValidator>();

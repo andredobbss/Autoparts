@@ -30,7 +30,7 @@ public class SupplierRepository : ISupplierRepository, IDisposable
 
     public async Task<ValidationResult> AddAsync(Supplier supplier, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(supplier);
+        var result = await _validator.ValidateAsync(supplier, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -40,7 +40,7 @@ public class SupplierRepository : ISupplierRepository, IDisposable
 
     public async Task<ValidationResult> UpdateAsync(Supplier supplier, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(supplier);
+        var result = await _validator.ValidateAsync(supplier, cancellationToken);
         if (!result.IsValid)
             return result;
 
@@ -50,9 +50,7 @@ public class SupplierRepository : ISupplierRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Supplier supplier, CancellationToken cancellationToken)
     {
-       var result = _context.Suppliers!.Remove(supplier);
-        if (result is null)
-            return false;
+        _context.Suppliers!.Update(supplier);
 
         return true;
     }

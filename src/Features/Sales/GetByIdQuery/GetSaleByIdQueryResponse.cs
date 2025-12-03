@@ -1,4 +1,4 @@
-using Autoparts.Api.Features.Products.Domain;
+using Autoparts.Api.Features.Sales.Domain;
 using Autoparts.Api.Shared.Enums;
 
 namespace Autoparts.Api.Features.Sales.GetByIdQuery;
@@ -8,8 +8,7 @@ public sealed record GetSaleByIdQueryResponse(Guid SaleId,
                                               decimal TotalSale,
                                               EPaymentMethod PaymentMethod,
                                               int DaysLastSale,
-                                              Guid UserId,
-                                              Guid ClientId,
+                                              string UserName,
+                                              string ClientName,
                                               DateTime CreatedAt,
-                                              DateTime? UpdatedAt,
-                                              IEnumerable<Product> Products);
+                                              IEnumerable<SaleProduct> SaleProducts);

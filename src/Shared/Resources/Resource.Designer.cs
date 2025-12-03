@@ -61,7 +61,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Category.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Categoria.
         /// </summary>
         public static string CATEGORY {
             get {
@@ -70,7 +70,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Category with ID {0} was not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Categoria com ID {0} não foi encontrada.
         /// </summary>
         public static string CATEGORY_NOT_FOUND {
             get {
@@ -79,7 +79,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Client.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Cliente.
         /// </summary>
         public static string CLIENT {
             get {
@@ -88,7 +88,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Client with ID {0} was not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Cliente com ID {0} não foi encontrado.
         /// </summary>
         public static string CLIENT_NOT_FOUND {
             get {
@@ -97,7 +97,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Commit.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Confirmação.
         /// </summary>
         public static string COMMIT {
             get {
@@ -106,7 +106,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Commit failed.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha na confirmação.
         /// </summary>
         public static string COMMIT_FAILED_MESSAGE {
             get {
@@ -115,7 +115,16 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Domain validation error.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Email é obrigatório.
+        /// </summary>
+        public static string EMAIL_IS_REQUIRED {
+            get {
+                return ResourceManager.GetString("EMAIL_IS_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro de validação de domínio.
         /// </summary>
         public static string ERROR_DOMAIN {
             get {
@@ -124,7 +133,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the category.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao excluir a categoria.
         /// </summary>
         public static string FAILED_TO_DELETE_CATEGORY {
             get {
@@ -133,7 +142,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the client.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao excluir o cliente.
         /// </summary>
         public static string FAILED_TO_DELETE_CLIENT {
             get {
@@ -142,7 +151,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the manufactorer.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao excluir o fabricante.
         /// </summary>
         public static string FAILED_TO_DELETE_MANUFACTORER {
             get {
@@ -151,7 +160,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the product.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao excluir o produto.
         /// </summary>
         public static string FAILED_TO_DELETE_PRODUCT {
             get {
@@ -160,7 +169,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to delete the purchase.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível excluir a compra.
         /// </summary>
         public static string FAILED_TO_DELETE_PURCHASE {
             get {
@@ -169,7 +178,34 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a The value entered must be greater than zero.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao excluir a devolução.
+        /// </summary>
+        public static string FAILED_TO_DELETE_RETURN {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_RETURN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao excluir a venda.
+        /// </summary>
+        public static string FAILED_TO_DELETE_SALE {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_SALE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao excluir o fornecedor.
+        /// </summary>
+        public static string FAILED_TO_DELETE_SUPPLIER {
+            get {
+                return ResourceManager.GetString("FAILED_TO_DELETE_SUPPLIER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O valor inserido deve ser maior que zero..
         /// </summary>
         public static string GREATER_THAN_ZERO {
             get {
@@ -178,7 +214,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a ID Not Found:.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a ID não encontrado:.
         /// </summary>
         public static string ID_NOT_FOUND {
             get {
@@ -187,7 +223,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Invalid Calculation Type.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Tipo de cálculo inválido.
         /// </summary>
         public static string INVALID_CALCULATION_TYPE {
             get {
@@ -196,7 +232,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a CNPJ Number Proivided is Invalid.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O número CNPJ fornecido é inválido..
         /// </summary>
         public static string INVALID_CNPJ {
             get {
@@ -205,7 +241,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a CPF Number Proivided is Invalid.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O número CPF fornecido é inválido..
         /// </summary>
         public static string INVALID_CPF {
             get {
@@ -214,7 +250,16 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Manufactorer.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Email inválido.
+        /// </summary>
+        public static string INVALID_EMAIL {
+            get {
+                return ResourceManager.GetString("INVALID_EMAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Fabricante.
         /// </summary>
         public static string MANUFACTORER {
             get {
@@ -223,7 +268,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Manufactorer with ID {0} was not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Fabricante com ID {0} não foi encontrado.
         /// </summary>
         public static string MANUFACTORER_NOT_FOUND {
             get {
@@ -232,7 +277,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 100 character limit.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O texto excedeu o limite de 100 caracteres..
         /// </summary>
         public static string MAX_LENGTH_100 {
             get {
@@ -241,7 +286,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 14 character limit.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O texto excedeu o limite de 14 caracteres..
         /// </summary>
         public static string MAX_LENGTH_14 {
             get {
@@ -250,7 +295,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 255 character limit.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O texto excedeu o limite de 255 caracteres..
         /// </summary>
         public static string MAX_LENGTH_255 {
             get {
@@ -259,7 +304,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a The text exceeded the 50 character limit.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O texto excedeu o limite de 50 caracteres..
         /// </summary>
         public static string MAX_LENGTH_50 {
             get {
@@ -268,7 +313,16 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a This information is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nome é obrigatório.
+        /// </summary>
+        public static string NAME_IS_REQUIRED {
+            get {
+                return ResourceManager.GetString("NAME_IS_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Esta informação é necessária.
         /// </summary>
         public static string NOT_NULL_OR_EMPTY {
             get {
@@ -277,7 +331,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Product.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Produto.
         /// </summary>
         public static string PRODUCT {
             get {
@@ -286,7 +340,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Product with ID {0} was not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O produto com ID {0} não foi encontrado..
         /// </summary>
         public static string PRODUCTS_NOT_FOUND {
             get {
@@ -295,7 +349,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Enter the product.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Insira o produto.
         /// </summary>
         public static string PRODUCTS_REQUIRED {
             get {
@@ -304,7 +358,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Purchase.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Compra.
         /// </summary>
         public static string PURCHASE {
             get {
@@ -313,7 +367,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Purchase with ID {0} was not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A compra com o ID {0} não foi encontrada..
         /// </summary>
         public static string PURCHASE_NOT_FOUND {
             get {
@@ -322,7 +376,25 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a No data found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Devolução.
+        /// </summary>
+        public static string RETURN {
+            get {
+                return ResourceManager.GetString("RETURN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A devolução com o ID {0} não foi encontrada..
+        /// </summary>
+        public static string RETURN_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("RETURN_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nenhum dado encontrado.
         /// </summary>
         public static string RETURN_NULL {
             get {
@@ -331,7 +403,16 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Sale not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Venda.
+        /// </summary>
+        public static string SALE {
+            get {
+                return ResourceManager.GetString("SALE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Venda com ID {0} não foi encontrada.
         /// </summary>
         public static string SALES_NOT_FOUND {
             get {
@@ -349,7 +430,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to generate SKU.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha ao gerar o SKU.
         /// </summary>
         public static string SKU_FAILED {
             get {
@@ -358,7 +439,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Stock.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Estoque.
         /// </summary>
         public static string STOCK {
             get {
@@ -367,7 +448,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Failed to calculate stock.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha no cálculo do estoque.
         /// </summary>
         public static string STOCK_FAILED_MESSAGE {
             get {
@@ -376,7 +457,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Insufficient Stock.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Estoque insuficiente.
         /// </summary>
         public static string STOCK_INSUFFICIENT {
             get {
@@ -385,7 +466,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Out of Stock.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Sem estoque.
         /// </summary>
         public static string STOCK_ZERO {
             get {
@@ -394,27 +475,20 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a UPDATE Products
-        ///SET Stock = StockMovements.Stock
-        ///FROM (
-        ///    SELECT 
-        ///        ProductId,
-        ///        SUM(Quantity) AS Stock
-        ///    FROM (
-        ///        SELECT ProductId, Quantity FROM PurchaseProducts
-        ///        UNION ALL
-        ///        SELECT ProductId, Quantity FROM ReturnProducts WHERE Loss = 0
-        ///        UNION ALL
-        ///        SELECT ProductId, -Quantity AS Quantity FROM SaleProducts
-        ///    ) AS Movements
-        ///    GROUP BY ProductId
-        ///) AS StockMovements
-        ///WHERE Products.ProductId = StockMovements.ProductId
-        ///.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Fornecedor.
         /// </summary>
-        public static string UpdateStock {
+        public static string SUPPLIER {
             get {
-                return ResourceManager.GetString("UpdateStock", resourceCulture);
+                return ResourceManager.GetString("SUPPLIER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O Fornecedor com ID {0} não foi encontrada.
+        /// </summary>
+        public static string SUPPLIER_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("SUPPLIER_NOT_FOUND", resourceCulture);
             }
         }
     }

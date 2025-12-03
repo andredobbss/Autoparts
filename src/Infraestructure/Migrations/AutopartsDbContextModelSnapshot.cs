@@ -58,6 +58,9 @@ namespace Autoparts.Api.Infraestructure.Migrations
                     b.HasIndex("DeletedAt")
                         .HasDatabaseName("IX_Categories_DeletedAt");
 
+                    b.HasIndex("Description")
+                        .IsUnique();
+
                     b.ToTable("Categories", (string)null);
                 });
 
@@ -82,6 +85,20 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("DeletedAt");
 
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("TaxId")
+                        .HasMaxLength(15)
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("TaxId");
+
+                    b.Property<int?>("TaxIdType")
+                        .HasColumnType("INT")
+                        .HasColumnName("TaxIdType");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("DATETIME2")
                         .HasColumnName("UpdatedAt");
@@ -99,6 +116,10 @@ namespace Autoparts.Api.Infraestructure.Migrations
 
                     b.HasIndex("DeletedAt")
                         .HasDatabaseName("IX_Clients_DeletedAt");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Clients", (string)null);
                 });
@@ -135,6 +156,9 @@ namespace Autoparts.Api.Infraestructure.Migrations
 
                     b.HasIndex("DeletedAt")
                         .HasDatabaseName("IX_Manufacturers_DeletedAt");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
 
                     b.HasIndex("ManufacturerId")
                         .HasDatabaseName("IX_Manufacturers_ManufacturerId");
@@ -534,17 +558,38 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("DeletedAt");
 
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("TaxId")
+                        .HasMaxLength(15)
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("TaxId");
+
+                    b.Property<int?>("TaxIdType")
+                        .HasColumnType("INT")
+                        .HasColumnName("TaxIdType");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("DATETIME2")
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("SupplierId");
 
+                    b.HasIndex("CompanyName")
+                        .IsUnique();
+
                     b.HasIndex("CreatedAt")
                         .HasDatabaseName("IX_Suppliers_CreatedAt");
 
                     b.HasIndex("DeletedAt")
                         .HasDatabaseName("IX_Suppliers_DeletedAt");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.HasIndex("SupplierId")
                         .HasDatabaseName("IX_Suppliers_SupplierId");
@@ -567,7 +612,7 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
+                        .HasMaxLength(255)
                         .HasColumnType("VARCHAR")
                         .HasColumnName("Email");
 
@@ -604,6 +649,15 @@ namespace Autoparts.Api.Infraestructure.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaxId")
+                        .HasMaxLength(15)
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("TaxId");
+
+                    b.Property<int?>("TaxIdType")
+                        .HasColumnType("INT")
+                        .HasColumnName("TaxIdType");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -781,44 +835,31 @@ namespace Autoparts.Api.Infraestructure.Migrations
                                 .HasColumnType("UNIQUEIDENTIFIER");
 
                             b1.Property<string>("CellPhone")
-                                .HasMaxLength(15)
-                                .HasColumnType("nvarchar(15)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("City")
-                                .HasMaxLength(30)
-                                .HasColumnType("nvarchar(30)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Complement")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Country")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Neighborhood")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Number")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("State")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Street")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
-
-                            b1.Property<string>("TaxId")
-                                .HasMaxLength(15)
-                                .HasColumnType("nvarchar(15)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("ZipCode")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("ClientId");
 
@@ -973,44 +1014,31 @@ namespace Autoparts.Api.Infraestructure.Migrations
                                 .HasColumnType("UNIQUEIDENTIFIER");
 
                             b1.Property<string>("CellPhone")
-                                .HasMaxLength(15)
-                                .HasColumnType("nvarchar(15)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("City")
-                                .HasMaxLength(30)
-                                .HasColumnType("nvarchar(30)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Complement")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Country")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Neighborhood")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Number")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("State")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Street")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
-
-                            b1.Property<string>("TaxId")
-                                .HasMaxLength(15)
-                                .HasColumnType("nvarchar(15)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("ZipCode")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("SupplierId");
 
@@ -1032,44 +1060,31 @@ namespace Autoparts.Api.Infraestructure.Migrations
                                 .HasColumnType("UNIQUEIDENTIFIER");
 
                             b1.Property<string>("CellPhone")
-                                .HasMaxLength(15)
-                                .HasColumnType("nvarchar(15)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("City")
-                                .HasMaxLength(30)
-                                .HasColumnType("nvarchar(30)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Complement")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Country")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Neighborhood")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Number")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("State")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Street")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
-
-                            b1.Property<string>("TaxId")
-                                .HasMaxLength(15)
-                                .HasColumnType("nvarchar(15)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("ZipCode")
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("UserId");
 

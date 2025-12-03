@@ -1,4 +1,4 @@
-using Autoparts.Api.Shared.Products.Dto;
+using Autoparts.Api.Features.Manufacturers.DTOs;
 
 namespace Autoparts.Api.Features.Manufacturers.GetAllQuery;
 

@@ -1,5 +1,5 @@
+using Autoparts.Api.Features.Purchases.Domain;
 using Autoparts.Api.Shared.Enums;
-using Autoparts.Api.Shared.Products.Dto;
 
 namespace Autoparts.Api.Features.Purchases.GetByIdQuery;
 
@@ -10,4 +10,4 @@ public sealed record GetPurchaseByIdQueryResponse(Guid PurchaseId,
                                                   DateTime CreatedAt,
                                                   string UserName,
                                                   string SupplierName,
-                                                  IEnumerable<ProductDto> Products);
+                                                  IEnumerable<PurchaseProduct> PurchaseProducts);

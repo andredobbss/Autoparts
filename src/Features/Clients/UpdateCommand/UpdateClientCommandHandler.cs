@@ -15,7 +15,7 @@ public sealed class UpdateClientCommandHandler(IClientRepository clientRepositor
         if (client is null)
             return new ValidationResult { Errors = { new ValidationFailure(Resource.CLIENT, string.Format(Resource.CLIENT_NOT_FOUND, request.ClientId)) } };
 
-        client.Update(request.ClientName, request.Address);
+        client.Update(request.ClientName, request.Address, request.Email, request.TaxIdType, request.TaxId);
 
         var result = await _clientRepository.UpdateAsync(client, cancellationToken);
         if (!result.IsValid)

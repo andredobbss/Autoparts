@@ -38,5 +38,8 @@ public class ReturnProductConfiguration : IEntityTypeConfiguration<ReturnProduct
             .IsRequired(true)
             .HasColumnType("DECIMAL(18,2)")
             .HasDefaultValue(0m);
+
+        builder.Ignore(rp => rp.Name);
+        builder.Ignore(rp => rp.SKU);
     }
 }

@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Infraestructure.Persistence;
 
-public sealed class AutopartsDbContext : IdentityDbContext<User, 
+public sealed class AutopartsDbContext : IdentityDbContext<User,
                                                            IdentityRole<Guid>,
                                                            Guid,
                                                            IdentityUserClaim<Guid>,
@@ -22,7 +22,7 @@ public sealed class AutopartsDbContext : IdentityDbContext<User,
                                                            IdentityUserLogin<Guid>,
                                                            IdentityRoleClaim<Guid>,
                                                            IdentityUserToken<Guid>>
-                                                           
+
 {
     public AutopartsDbContext(DbContextOptions<AutopartsDbContext> options) : base(options) { }
 

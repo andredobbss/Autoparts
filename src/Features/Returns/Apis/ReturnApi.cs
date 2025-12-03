@@ -3,7 +3,6 @@ using Autoparts.Api.Features.Returns.DeleteCommand;
 using Autoparts.Api.Features.Returns.GetAllQuery;
 using Autoparts.Api.Features.Returns.GetByIdQuery;
 using Autoparts.Api.Features.Returns.UpdateCommand;
-using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +30,7 @@ public static class ReturnApi
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new GetReturnByIdQuery(id));
-        return result is not null ? Results.Ok(result) : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> Create([FromBody] CreateReturnCommand command, ISender mediator)
@@ -49,6 +48,6 @@ public static class ReturnApi
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new DeleteReturnCommand(id));
-        return result is true ? Results.NoContent() : Results.NotFound(new { Message = $"{Resource.ID_NOT_FOUND} : {id}" });
+        return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());
     }
 }

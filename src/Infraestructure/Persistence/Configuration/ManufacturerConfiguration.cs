@@ -21,6 +21,7 @@ public class ManufacturerConfiguration : IEntityTypeConfiguration<Manufacturer>
         builder.HasIndex(m => m.ManufacturerId).HasDatabaseName("IX_Manufacturers_ManufacturerId");
         builder.HasIndex(m => m.CreatedAt).HasDatabaseName("IX_Manufacturers_CreatedAt");
         builder.HasIndex(m => m.DeletedAt).HasDatabaseName("IX_Manufacturers_DeletedAt");
+        builder.HasIndex(m => m.Description).IsUnique(true);
 
     }
 }

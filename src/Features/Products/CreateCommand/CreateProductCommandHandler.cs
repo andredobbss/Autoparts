@@ -15,11 +15,8 @@ public sealed class CreateProductCommandHandler(IProductRepository productReposi
     public async Task<ValidationResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         var sku = await _skuGenerator.GenerateSKUAsync(request.ManufacturerId, request.CategoryId, cancellationToken);
-
         if (string.IsNullOrWhiteSpace(sku))
-        {
             return new ValidationResult([new ValidationFailure(Resource.SKU, Resource.SKU_FAILED)]);
-        }
 
         var product = new Product(
             request.Name,
@@ -31,12 +28,10 @@ public sealed class CreateProductCommandHandler(IProductRepository productReposi
             request.ManufacturerId);
 
         var result = await _productRepository.AddAsync(product, cancellationToken);
-
         if (!result.IsValid)
             return result;
 
         var commitResult = await _productRepository.CommitAsync(cancellationToken);
-
         if (!commitResult)
         {
             var failures = result.Errors.ToList();

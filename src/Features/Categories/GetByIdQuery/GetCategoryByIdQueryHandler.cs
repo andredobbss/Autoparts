@@ -1,3 +1,4 @@
+using Autoparts.Api.Features.Categories.DTOs;
 using Autoparts.Api.Features.Categories.Infraestructure;
 using Autoparts.Api.Shared.Resources;
 using MediatR;
@@ -17,6 +18,17 @@ public sealed record GetCategoryByIdQueryHandler(ICategoryRepository categoryRep
         return new GetCategoryByIdQueryResponse(
                          category.CategoryId,
                          category.Description,
-                         category.CreatedAt);
+                         category.CreatedAt,
+                         category.Products.Select(p => new ProductDto
+                         (
+                               p.ProductId,
+                               p.Name,
+                               p.TechnicalDescription,
+                               p.SKU,
+                               p.Compatibility,
+                               p.AcquisitionCost,
+                               p.SellingPrice
+                         )).ToList()
+                        );
     }
 }

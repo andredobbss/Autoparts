@@ -9,7 +9,6 @@ public class CategoryValidator : AbstractValidator<Category>
     {
         RuleFor(c => c.Description)
             .NotEmpty()
-            .NotNull()
             .WithMessage(Resource.NOT_NULL_OR_EMPTY)
             .MaximumLength(100)
             .WithMessage(Resource.MAX_LENGTH_100);

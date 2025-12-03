@@ -15,34 +15,31 @@ public sealed class CreateSaleCommandHandler(ISaleRepository saleRepository, IPr
     public async Task<ValidationResult> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
-            return new ValidationResult([new ValidationFailure(nameof(request.Products), Resource.PRODUCTS_REQUIRED)]);
+            return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_REQUIRED)]);
 
         var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
         if (productsList is null || !productsList.Any())
-            return new ValidationResult([new ValidationFailure(nameof(productsList), Resource.PRODUCTS_NOT_FOUND)]);
+            return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_NOT_FOUND)]);
 
         foreach (var product in productsList)
         {
             var requestedProduct = request.Products.FirstOrDefault(rp => rp.ProductId == product.ProductId);
 
             if (requestedProduct is null || requestedProduct.Quantity <= 0)
-                return new ValidationResult([new ValidationFailure(nameof(request.Products), Resource.PRODUCTS_NOT_FOUND)]);
+                return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_NOT_FOUND)]);
 
             if (product.StockStatus == EStockStatus.None)
-                return new ValidationResult([new ValidationFailure(nameof(product.StockStatus), Resource.STOCK_ZERO)]);
+                return new ValidationResult([new ValidationFailure(Resource.STOCK, Resource.STOCK_ZERO)]);
 
             if (product.Stock < requestedProduct.Quantity)
-                return new ValidationResult([new ValidationFailure(nameof(product.Stock), Resource.STOCK_INSUFFICIENT)]);
+                return new ValidationResult([new ValidationFailure(Resource.STOCK, Resource.STOCK_INSUFFICIENT)]);
         }
 
         Guid saleId = Guid.NewGuid();
 
-        var saleProducts = productsList
-            .Select(product => new SaleProduct(saleId, product.ProductId, product.Quantity, product.SellingPrice))
-            .ToList();
-
+        var saleProducts = productsList.Select(product => new SaleProduct(saleId, product.ProductId, product.Quantity, product.SellingPrice)).ToList();
         if (saleProducts is null || !saleProducts.Any())
-            return new ValidationResult([new ValidationFailure(nameof(saleProducts), Resource.PRODUCTS_NOT_FOUND)]);
+            return new ValidationResult([new ValidationFailure(Resource.SALE, Resource.SALES_NOT_FOUND)]);
 
         var totalSale = saleProducts.Sum(sp => sp.TotalItem);
 

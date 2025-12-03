@@ -28,8 +28,7 @@ public class ClientRepository : IClientRepository, IDisposable
 
     public async Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Clients!
-                             .Include(c => c.Address)
+        return await _context.Clients!.Include(c => c.Address)
                              .FirstOrDefaultAsync(c => c.ClientId == id, cancellationToken);
     }
 

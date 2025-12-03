@@ -1,5 +1,8 @@
+using Autoparts.Api.Features.Categories.DTOs;
+
 namespace Autoparts.Api.Features.Categories.GetByIdQuery;
 
 public sealed record GetCategoryByIdQueryResponse(Guid ClientId,
                                                   string ClientName,
-                                                  DateTime CreatedAt);
+                                                  DateTime CreatedAt,
+                                                  IEnumerable<ProductDto> Products);

@@ -25,12 +25,21 @@ public class ReturnRepository : IReturnRepository, IDisposable
 
     public async Task<IPagedList<Return>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Returns!.AsNoTracking().Include(r => r.Products).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        return await _context.Returns!.AsNoTracking()
+                                      .Include(r => r.User)
+                                      .Include(r => r.Client)
+                                      .Include(r => r.ReturnProducts)
+                                      .ThenInclude(rp => rp.Product)
+                                      .ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Return?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Returns!.FindAsync(id, cancellationToken);
+        return await _context.Returns!.Include(r => r.User)
+                                      .Include(r => r.Client)
+                                      .Include(r => r.ReturnProducts)
+                                      .ThenInclude(rp => rp.Product)
+                                      .FirstOrDefaultAsync(r => r.ReturnId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Return returnItem, CancellationToken cancellationToken)
@@ -57,9 +66,7 @@ public class ReturnRepository : IReturnRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Return returnItem, CancellationToken cancellationToken)
     {
-        var result = _context.Returns!.Update(returnItem);
-        if (result is null)
-            return false;
+        _context.Returns!.Update(returnItem);
 
         return true;
     }

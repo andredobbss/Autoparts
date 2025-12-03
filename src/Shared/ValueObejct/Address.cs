@@ -1,14 +1,16 @@
-﻿using Autoparts.Api.Shared.Resources;
-using FluentValidation;
-using FluentValidation.Results;
-
-namespace Autoparts.Api.Shared.ValueObejct;
+﻿namespace Autoparts.Api.Shared.ValueObejct;
 
 public sealed record Address
 {
-    //private readonly AddressValidator _addressValidation = new();
-
-    public Address(string? street, string? number, string? neighborhood, string? city, string? state, string? country, string? zipCode, string? complement, string? cellPhone, string taxId)
+    public Address(string? street,
+                   string? number,
+                   string? neighborhood,
+                   string? city,
+                   string? state,
+                   string? country,
+                   string? zipCode,
+                   string? complement,
+                   string? cellPhone)
     {
         Street = street;
         Number = number;
@@ -19,25 +21,15 @@ public sealed record Address
         ZipCode = zipCode;
         Complement = complement;
         CellPhone = cellPhone;
-        TaxId = taxId;
-
-        //if (AddressResult().IsValid is false)
-        //    throw new ValidationException(Resource.ERROR_DOMAIN, AddressResult().Errors);
     }
 
-    public string? Street { get; init; }
-    public string? Number { get; init; }
-    public string? Neighborhood { get; init; }
-    public string? City { get; init; }
-    public string? State { get; init; }
-    public string? Country { get; init; }
-    public string? ZipCode { get; init; }
-    public string? Complement { get; init; }
-    public string? CellPhone { get; init; }
-    public string? TaxId { get; init; }
-
-    //private ValidationResult AddressResult()
-    //{
-    //    return _addressValidation.Validate(this);
-    //}
+    public string? Street { get; private set; }
+    public string? Number { get; private set; }
+    public string? Neighborhood { get; private set; }
+    public string? City { get; private set; }
+    public string? State { get; private set; }
+    public string? Country { get; private set; }
+    public string? ZipCode { get; private set; }
+    public string? Complement { get; private set; }
+    public string? CellPhone { get; private set; }
 }

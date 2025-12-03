@@ -25,17 +25,26 @@ public class SaleRepository : ISaleRepository, IDisposable
 
     public async Task<IPagedList<Sale>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        return await _context.Sales!.AsNoTracking().Include(s => s.Products).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        return await _context.Sales!.AsNoTracking()
+                                    .Include(s => s.User)
+                                    .Include(s => s.Client)
+                                    .Include(s => s.SaleProducts)
+                                    .ThenInclude(sp => sp.Product)
+                                    .Include(s => s.Products).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
     }
 
     public async Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Sales!.FindAsync(id, cancellationToken);
+        return await _context.Sales!.Include(s => s.User)
+                                    .Include(s => s.Client)
+                                    .Include(s => s.SaleProducts)
+                                    .ThenInclude(sp => sp.Product)
+                                    .FirstOrDefaultAsync(s => s.SaleId == id, cancellationToken);
     }
 
     public async Task<ValidationResult> AddAsync(Sale sale, CancellationToken cancellationToken)
     {
-        var result = _alidator.Validate(sale);
+        var result = await _alidator.ValidateAsync(sale, cancellationToken);
 
         if (!result.IsValid)
             return result;
@@ -47,7 +56,7 @@ public class SaleRepository : ISaleRepository, IDisposable
 
     public async Task<ValidationResult> UpdateAsync(Sale sale, CancellationToken cancellationToken)
     {
-        var result = _alidator.Validate(sale);
+        var result = await _alidator.ValidateAsync(sale, cancellationToken);
 
         if (!result.IsValid)
             return result;
@@ -59,9 +68,7 @@ public class SaleRepository : ISaleRepository, IDisposable
 
     public async Task<bool> DeleteAsync(Sale sale, CancellationToken cancellationToken)
     {
-        var result = _context.Sales!.Update(sale);
-        if (result is null)
-            return false;
+        _context.Sales!.Update(sale);
 
         return true;
     }

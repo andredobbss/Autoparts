@@ -32,5 +32,8 @@ public class PurchaseProductConfiguration : IEntityTypeConfiguration<PurchasePro
             .HasColumnName("TotalItem")
             .HasColumnType("DECIMAL(18,2)")
             .HasDefaultValue(0m);
+
+        builder.Ignore(pp => pp.Name);
+        builder.Ignore(pp => pp.SKU);
     }
 }

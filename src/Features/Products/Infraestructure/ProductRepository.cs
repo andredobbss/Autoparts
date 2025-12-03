@@ -33,8 +33,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Products!
-                             .Include(p => p.Category)
+        return await _context.Products!.Include(p => p.Category)
                              .Include(p => p.Manufacturer)
                              .Include(p => p.Sales)
                              .FirstOrDefaultAsync(p => p.ProductId == id, cancellationToken);
