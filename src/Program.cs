@@ -102,6 +102,14 @@ builder.Services
 
 #endregion
 
+# region Configure Authentication and Authorization
+
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
+
+builder.Services.AddAuthorization();
+
+# endregion
+
 # region Register Repositories
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -191,7 +199,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
 app.UseAuthorization();
 

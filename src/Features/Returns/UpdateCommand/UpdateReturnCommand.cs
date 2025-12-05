@@ -10,4 +10,4 @@ public sealed record UpdateReturnCommand(Guid ReturnId,
                                          EPaymentMethod PaymentMethod,
                                          Guid UserId,
                                          Guid ClientId,
-                                         IEnumerable<ProductDto> Products) : IRequest<ValidationResult>;
+                                         IEnumerable<ProductInput> Products) : IRequest<ValidationResult>;

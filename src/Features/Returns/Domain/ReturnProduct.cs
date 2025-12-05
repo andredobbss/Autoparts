@@ -5,6 +5,7 @@ namespace Autoparts.Api.Features.Returns.Domain;
 public class ReturnProduct
 {
     private ReturnProduct() { }
+
     public ReturnProduct(Guid? returnId, Guid? productId, int quantity, decimal sellingPrice, bool loss)
     {
         ReturnId = returnId;
@@ -34,6 +35,7 @@ public class ReturnProduct
     public decimal SellingPrice { get; private set; } = 0m;
     public decimal TotalItem { get; private set; }
 
+    // Navigation Properties
     public Return Return { get; private set; } = null!;
     public Product Product { get; private set; } = null!;
 

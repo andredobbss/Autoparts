@@ -24,6 +24,7 @@ public class SaleProductConfiguration : IEntityTypeConfiguration<SaleProduct>
             .HasColumnType("INT")
             .HasDefaultValue(0);
 
+        // Ignore non-mapped properties
         builder.Ignore(sp => sp.Name);
         builder.Ignore(sp => sp.SKU);
     }

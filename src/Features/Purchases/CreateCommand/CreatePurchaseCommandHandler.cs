@@ -23,8 +23,6 @@ public sealed class CreatePurchaseCommandHandler(IPurchaseRepository purchaseRep
         Guid purchaseId = Guid.NewGuid();
 
         var purchaseProducts = productsList.Select(product => new PurchaseProduct(purchaseId, product.ProductId, product.Quantity, product.AcquisitionCost)).ToList();
-        if (purchaseProducts is null || purchaseProducts.Any())
-            return new ValidationResult([new ValidationFailure(nameof(purchaseProducts), Resource.PURCHASE_NOT_FOUND)]);
 
         var totalPurchase = purchaseProducts.Sum(p => p.TotalItem);
 

@@ -1,6 +1,6 @@
-using Autoparts.Api.Features.Categories.DTOs;
 using Autoparts.Api.Features.Categories.Infraestructure;
 using Autoparts.Api.Shared.Paginate;
+using Autoparts.Api.Shared.Products.DTOs;
 using MediatR;
 using Z.PagedList;
 

@@ -19,11 +19,14 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
         builder.Property(c => c.UpdatedAt).HasColumnName("UpdatedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(c => c.DeletedAt).HasColumnName("DeletedAt").IsRequired(false).HasColumnType("DATETIME2");
 
+        // Owned Types
         builder.OwnsOne(c => c.Address);
 
+        // Relationships
         builder.HasMany(c => c.Sales).WithOne(sales => sales.Client).HasForeignKey(sales => sales.ClientId).OnDelete(DeleteBehavior.Restrict);
         builder.HasMany(c => c.Returns).WithOne(returns => returns.Client).HasForeignKey(returns => returns.ClientId).OnDelete(DeleteBehavior.Restrict);
 
+        // Indexes
         builder.HasIndex(c => c.ClientId).HasDatabaseName("IX_Clients_ClientId");
         builder.HasIndex(c => c.ClientName).HasDatabaseName("IX_Clients_ClientName");
         builder.HasIndex(c => c.CreatedAt).HasDatabaseName("IX_Clients_CreatedAt");

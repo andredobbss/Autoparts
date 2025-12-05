@@ -5,6 +5,7 @@ namespace Autoparts.Api.Features.Purchases.Domain;
 public sealed class PurchaseProduct
 {
     private PurchaseProduct() { }
+
     public PurchaseProduct(Guid? purchaseId, Guid? productId, int quantity, decimal acquisitionCost)
     {
         PurchaseId = purchaseId;
@@ -31,6 +32,7 @@ public sealed class PurchaseProduct
     public decimal AcquisitionCost { get; private set; } = 0m;
     public decimal TotalItem { get; private set; }
 
+    // Navigation properties
     public Purchase Purchase { get; private set; } = null!;
     public Product Product { get; private set; } = null!;
 

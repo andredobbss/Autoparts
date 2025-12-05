@@ -12,7 +12,7 @@ public sealed class UpdateSaleCommandHandler(ISaleRepository saleRepository, IPr
 {
     private readonly ISaleRepository _saleRepository = saleRepository;
     private readonly IProductList _productList = productList;
-   
+
     public async Task<ValidationResult> Handle(UpdateSaleCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
@@ -29,7 +29,7 @@ public sealed class UpdateSaleCommandHandler(ISaleRepository saleRepository, IPr
             if (requestedProduct is null || requestedProduct.Quantity <= 0)
                 return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_NOT_FOUND)]);
 
-            if(product.StockStatus == EStockStatus.None)
+            if (product.StockStatus == EStockStatus.None)
                 return new ValidationResult([new ValidationFailure(Resource.STOCK, Resource.STOCK_ZERO)]);
 
             if (product.Stock < requestedProduct.Quantity)
@@ -41,8 +41,6 @@ public sealed class UpdateSaleCommandHandler(ISaleRepository saleRepository, IPr
             return new ValidationResult([new ValidationFailure(Resource.SALE, string.Format(Resource.SALES_NOT_FOUND, request.SaleId))]);
 
         var saleProducts = productsList.Select(product => new SaleProduct(request.SaleId, product.ProductId, product.Quantity, product.SellingPrice)).ToList();
-        if (saleProducts is null || saleProducts.Any())
-            return new ValidationResult([new ValidationFailure(Resource.SALE, string.Format(Resource.SALES_NOT_FOUND, request.SaleId))]);
 
         sale.Update(
             request.InvoiceNumber,

@@ -34,22 +34,22 @@ public sealed class Product
     };
     public EStockStatusOverTime StockStatusOverTime { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public DateTime? UpdatedAt { get; private set; } = null;
-    public DateTime? DeletedAt { get; private set; } = null;
+    public DateTime? UpdatedAt { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
 
+    // Foreign Keys
     public Guid CategoryId { get; private set; }
     public Guid ManufacturerId { get; private set; }
 
+    // Navigation Properties
     public Category Category { get; private set; } = null!;
     public Manufacturer Manufacturer { get; private set; } = null!;
-
     public ICollection<PurchaseProduct> PurchaseProducts { get; private set; } = [];
     public ICollection<ReturnProduct> ReturnProducts { get; private set; } = [];
     public ICollection<SaleProduct> SaleProducts { get; private set; } = [];
     public ICollection<Purchase> Purchases { get; private set; } = [];
     public ICollection<Sale> Sales { get; private set; } = [];
     public ICollection<Return> Returns { get; private set; } = [];
-
 
     public Product(
         string name,
@@ -107,7 +107,6 @@ public sealed class Product
         if (validationResult.IsValid is false)
             throw new ValidationException(Resource.ERROR_DOMAIN, validationResult.Errors);
     }
-
 
     public void Update(
         string name,

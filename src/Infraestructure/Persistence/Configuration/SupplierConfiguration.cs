@@ -19,10 +19,13 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
         builder.Property(s => s.UpdatedAt).HasColumnName("UpdatedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(s => s.DeletedAt).HasColumnName("DeletedAt").IsRequired(false).HasColumnType("DATETIME2");
 
+        // Owned Types
         builder.OwnsOne(s => s.Address);
 
+        // Relationships
         builder.HasMany(s => s.Purchases).WithOne(s => s.Supplier).HasForeignKey(purchase => purchase.SupplierId).OnDelete(DeleteBehavior.Restrict);
 
+        // Indexes
         builder.HasIndex(s => s.SupplierId).HasDatabaseName("IX_Suppliers_SupplierId");
         builder.HasIndex(s => s.CreatedAt).HasDatabaseName("IX_Suppliers_CreatedAt");
         builder.HasIndex(s => s.DeletedAt).HasDatabaseName("IX_Suppliers_DeletedAt");

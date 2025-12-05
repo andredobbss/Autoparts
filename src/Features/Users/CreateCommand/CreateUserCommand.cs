@@ -1,5 +1,13 @@
+using Autoparts.Api.Shared.Enums;
+using Autoparts.Api.Shared.ValueObejct;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.CreateCommand;
 
-public sealed record CreateUserCommand(string Name) : IRequest;
+public sealed record CreateUserCommand(string UserName,
+                                       string Email,
+                                       string Password,
+                                       ETaxIdType? TaxIdType,
+                                       string? TaxId,
+                                       Address Address) : IRequest<IdentityResult>;

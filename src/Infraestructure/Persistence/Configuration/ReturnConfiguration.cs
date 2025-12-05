@@ -19,6 +19,7 @@ public class ReturnConfiguration : IEntityTypeConfiguration<Return>
         builder.Property(r => r.UserId).HasColumnName("UserId").IsRequired(true);
         builder.Property(r => r.ClientId).HasColumnName("ClientId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
 
+        // Relationships
         builder.HasMany(r => r.Products)
             .WithMany(p => p.Returns)
             .UsingEntity<ReturnProduct>(
@@ -30,6 +31,7 @@ public class ReturnConfiguration : IEntityTypeConfiguration<Return>
                  .WithMany(r => r.ReturnProducts)
                  .HasForeignKey(rp => rp.ReturnId));
 
+        // Indexes
         builder.HasIndex(r => r.ReturnId).HasDatabaseName("IX_Returns_ReturnId");
         builder.HasIndex(r => r.CreatedAt).HasDatabaseName("IX_Returns_CreatedAt");
         builder.HasIndex(r => r.DeletedAt).HasDatabaseName("IX_Returns_DeletedAt");

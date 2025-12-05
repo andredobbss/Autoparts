@@ -33,6 +33,7 @@ public class PurchaseProductConfiguration : IEntityTypeConfiguration<PurchasePro
             .HasColumnType("DECIMAL(18,2)")
             .HasDefaultValue(0m);
 
+        // Ignore non-mapped properties
         builder.Ignore(pp => pp.Name);
         builder.Ignore(pp => pp.SKU);
     }

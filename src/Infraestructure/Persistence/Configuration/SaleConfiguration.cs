@@ -20,8 +20,7 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
         builder.Property(s => s.UserId).HasColumnName("UserId").IsRequired(true);
         builder.Property(s => s.ClientId).HasColumnName("ClientId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
 
-        builder .Ignore(s => s.DaysLastSale);
-
+        // Relationships
         builder.HasMany(s => s.Products).WithMany(p => p.Sales)
             .UsingEntity<SaleProduct>(
               j => j.HasOne(sp => sp.Product)
@@ -30,11 +29,14 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
               j => j.HasOne(sp => sp.Sale)
                   .WithMany(s => s.SaleProducts)
                   .HasForeignKey(sp => sp.SaleId));
-           
+
+        // Indexes
         builder.HasIndex(s => s.SaleId).HasDatabaseName("IX_Sales_SaleId");
         builder.HasIndex(s => s.CreatedAt).HasDatabaseName("IX_Sales_CreatedAt");
         builder.HasIndex(s => s.DeletedAt).HasDatabaseName("IX_Sales_DeletedAt");
-    }
 
+        // Ignore non-mapped properties
+        builder.Ignore(s => s.DaysLastSale);
+    }
 }
 

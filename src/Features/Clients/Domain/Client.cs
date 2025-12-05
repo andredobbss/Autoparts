@@ -11,6 +11,7 @@ namespace Autoparts.Api.Features.Clients.Domain;
 public sealed class Client
 {
     private readonly ClientValidator _clientValidation = new();
+
     private Client() { }
 
     public Guid ClientId { get; private set; }
@@ -22,10 +23,10 @@ public sealed class Client
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
 
+    // Navigation Properties
+    public Address Address { get; private set; } = null!;
     public ICollection<Sale> Sales { get; private set; } = [];
     public ICollection<Return> Returns { get; private set; } = [];
-
-    public Address Address { get; private set; } = null!;
 
     public Client(string clientName,
                   Address address,

@@ -39,6 +39,7 @@ public class ReturnProductConfiguration : IEntityTypeConfiguration<ReturnProduct
             .HasColumnType("DECIMAL(18,2)")
             .HasDefaultValue(0m);
 
+        // Ignore non-mapped properties
         builder.Ignore(rp => rp.Name);
         builder.Ignore(rp => rp.SKU);
     }

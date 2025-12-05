@@ -491,5 +491,14 @@ namespace Autoparts.Api.Shared.Resources {
                 return ResourceManager.GetString("SUPPLIER_NOT_FOUND", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Usuário com o ID {0} não foi encontrado..
+        /// </summary>
+        public static string USER_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
+            }
+        }
     }
 }

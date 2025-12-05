@@ -10,6 +10,7 @@ namespace Autoparts.Api.Features.Returns.Domain;
 public sealed class Return
 {
     private readonly ReturnValidator _returnValidator = new();
+
     private Return() { }
 
     public Guid ReturnId { get; private set; }
@@ -18,9 +19,12 @@ public sealed class Return
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
+
+    // Foreign Keys
     public Guid UserId { get; private set; }
     public Guid ClientId { get; private set; }
 
+    // Navigation Properties
     public User User { get; private set; } = null!;
     public Client Client { get; private set; } = null!;
     public ICollection<Product> Products { get; private set; } = [];
@@ -61,5 +65,4 @@ public sealed class Return
     {
         return _returnValidator.Validate(this);
     }
-
 }

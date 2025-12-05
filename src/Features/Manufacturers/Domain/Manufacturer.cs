@@ -8,6 +8,7 @@ namespace Autoparts.Api.Features.Manufacturers.Domain;
 public sealed class Manufacturer
 {
     private readonly ManufacturerValidator _manufacturerValidation = new();
+
     private Manufacturer() { }
 
     public Guid ManufacturerId { get; private set; }
@@ -16,6 +17,7 @@ public sealed class Manufacturer
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
 
+    // Navigation Properties
     public ICollection<Product> Products { get; private set; } = [];
 
     public Manufacturer(string description)

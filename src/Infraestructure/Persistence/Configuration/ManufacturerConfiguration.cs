@@ -16,8 +16,10 @@ public class ManufacturerConfiguration : IEntityTypeConfiguration<Manufacturer>
         builder.Property(m => m.UpdatedAt).HasColumnName("UpdatedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(m => m.DeletedAt).HasColumnName("DeletedAt").IsRequired(false).HasColumnType("DATETIME2");
 
+        // Relationships
         builder.HasMany(m => m.Products).WithOne(product => product.Manufacturer).HasForeignKey(product => product.ManufacturerId).OnDelete(DeleteBehavior.Restrict);
-   
+
+        // Indexes
         builder.HasIndex(m => m.ManufacturerId).HasDatabaseName("IX_Manufacturers_ManufacturerId");
         builder.HasIndex(m => m.CreatedAt).HasDatabaseName("IX_Manufacturers_CreatedAt");
         builder.HasIndex(m => m.DeletedAt).HasDatabaseName("IX_Manufacturers_DeletedAt");

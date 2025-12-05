@@ -23,9 +23,7 @@ public sealed class CreateReturnCommandHandler(IReturnRepository returnRepositor
 
         Guid returnId = Guid.NewGuid();
 
-        var returnProducts = productsList.Select(product => new ReturnProduct(returnId, product.ProductId, product.Quantity, product.SellingPrice, request.Products.Select(p => p.Loss).FirstOrDefault())).ToList();
-        if (returnProducts is null || returnProducts.Any())
-            return new ValidationResult([new ValidationFailure(Resource.RETURN, string.Format(Resource.RETURN_NOT_FOUND, returnId))]);
+        var returnProducts = productsList.Select(product => new ReturnProduct(returnId, product.ProductId, product.Quantity, product.SellingPrice, request.Products.Select(p => p.Loss).FirstOrDefault())).ToList();    
 
         var returnEntity = new Return(
             returnId,

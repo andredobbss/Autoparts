@@ -10,10 +10,11 @@ namespace Autoparts.Api.Features.Suppliers.Domain;
 public sealed class Supplier
 {
     private readonly SupplierValidator _supplierValidator = new();
+
     private Supplier() { }
 
     public Guid SupplierId { get; private set; }
-    public string CompanyName { get; private set; }
+    public string CompanyName { get; private set; } = null!;
     public string? Email { get; private set; }
     public ETaxIdType? TaxIdType { get; private set; }
     public string? TaxId { get; private set; }
@@ -21,9 +22,9 @@ public sealed class Supplier
     public DateTime? UpdatedAt { get; private set; }
     public DateTime? DeletedAt { get; private set; }
 
+    // Navigation Properties
+    public Address Address { get; private set; } = null!;
     public ICollection<Purchase> Purchases { get; private set; } = [];
-
-    public Address Address { get; private set; }
 
     public Supplier(string companyName,
                     Address address,
@@ -68,7 +69,6 @@ public sealed class Supplier
     {
         return _supplierValidator.Validate(this);
     }
-
 }
 
 

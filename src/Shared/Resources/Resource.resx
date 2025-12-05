@@ -261,4 +261,7 @@
   <data name="NAME_IS_REQUIRED" xml:space="preserve">
     <value>Nome é obrigatório</value>
   </data>
+  <data name="USER_NOT_FOUND" xml:space="preserve">
+    <value>Usuário com o ID {0} não foi encontrado.</value>
+  </data>
 </root>

@@ -2,6 +2,7 @@ using Autoparts.Api.Features.Returns.DTOs;
 using Autoparts.Api.Shared.Enums;
 using FluentValidation.Results;
 using MediatR;
+
 namespace Autoparts.Api.Features.Returns.CreateCommand;
 
 public sealed record CreateReturnCommand(string Justification,
@@ -10,4 +11,4 @@ public sealed record CreateReturnCommand(string Justification,
                                          EPaymentMethod PaymentMethod,
                                          Guid UserId,
                                          Guid ClientId,
-                                         IEnumerable<ProductDto> Products) : IRequest<ValidationResult>;
+                                         IEnumerable<ProductInput> Products) : IRequest<ValidationResult>;

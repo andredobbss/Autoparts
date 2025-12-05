@@ -1,7 +1,14 @@
-﻿using Autoparts.Api.Features.Users.Domain;
-using Autoparts.Api.Infraestructure.Persistence;
+﻿using Autoparts.Api.Features.Users.CreateCommand;
+using Autoparts.Api.Features.Users.DeactiveCommand;
+using Autoparts.Api.Features.Users.DeleteCommand;
+using Autoparts.Api.Features.Users.Domain;
+using Autoparts.Api.Features.Users.GetAllQuery;
+using Autoparts.Api.Features.Users.GetByIdQuery;
+using Autoparts.Api.Features.Users.LoginCommand;
+using Autoparts.Api.Features.Users.UpdateCommand;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Autoparts.Api.Features.Users.Apis;
@@ -18,15 +25,15 @@ public static class UserApi
         var group = app.MapGroup("/api/users")
         .WithTags("Users");
 
-        group.MapIdentityApi<User>();
+        //group.MapIdentityApi<User>();
 
         group.MapPost("/logout", async (SignInManager<User> signin) =>
         {
             await signin.SignOutAsync();
 
             return Results.Ok();
-        })
-        .RequireAuthorization();
+        });
+        //.RequireAuthorization();
 
 
         group.MapGet("/roles", (ClaimsPrincipal user) =>
@@ -50,8 +57,8 @@ public static class UserApi
 
 
             return TypedResults.Json(roles);
-        })
-            .RequireAuthorization();
+        });
+        //.RequireAuthorization();
 
         //group.MapGet("/", async (AutopartsDbContext db) =>
         //{
@@ -97,15 +104,46 @@ public static class UserApi
         //    return user is not null ? Results.Ok(user) : Results.NotFound();
         //});
 
-        //group.MapPost("/", async (User user, AutopartsDbContext db) =>
-        //{
-        //    if (user is null)
-        //    {
-        //        return Results.BadRequest("User cannot be null.");
-        //    }
-        //    db.Users.Add(user);
-        //    await db.SaveChangesAsync();
-        //    return Results.Created($"/api/users/{user.Id}", user);
-        //});
+        group.MapGet("/", async (ISender mediator) =>
+        {
+            var result = await mediator.Send(new GetAllUsersQuery());
+            return Results.Ok(result);
+        });
+
+        group.MapGet("/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
+        {
+            var result = await mediator.Send(new GetUserByIdQuery(id));
+            return Results.Ok(result);
+        });
+
+        group.MapPost("/login", async (LoginUserCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return result.Succeeded ? Results.Ok(result) : Results.Unauthorized();
+        });
+
+        group.MapPost("/", async ([FromBody] CreateUserCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return result.Succeeded ? Results.Created($"/api/users/{result}", result) : Results.BadRequest(result.Errors);
+        });
+
+        group.MapPut("/", async ([FromBody] UpdateUserCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return result.Succeeded ? Results.Ok(result) : Results.BadRequest(result.Errors);
+        });
+
+        group.MapDelete("/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
+        {
+            var result = await mediator.Send(new DeleteUserCommand(id));
+            return result.Succeeded ? Results.NoContent() : Results.NotFound(result.Errors);
+        });
+
+        group.MapPatch("/userDeactive/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
+        {
+            var result = await mediator.Send(new DeactiveUserCommand(id));
+            return result.Succeeded ? Results.NoContent() : Results.NotFound(result.Errors);
+        });
     }
 }

@@ -34,8 +34,7 @@ public sealed class AutopartsDbContext : IdentityDbContext<User,
     public DbSet<Return>? Returns { get; set; } = null;
     public DbSet<Sale>? Sales { get; set; } = null;
     public DbSet<Supplier>? Suppliers { get; set; } = null;
-
-
+ 
     // Intermediary Entities
     public DbSet<PurchaseProduct>? PurchaseProducts { get; set; } = null;
     public DbSet<SaleProduct>? SaleProducts { get; set; } = null;
@@ -61,7 +60,6 @@ public sealed class AutopartsDbContext : IdentityDbContext<User,
         modelBuilder.ApplyConfiguration(new SupplierConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
 
-
         // Intermediary Entities
         modelBuilder.ApplyConfiguration(new PurchaseProductConfiguration());
         modelBuilder.ApplyConfiguration(new ReturnProductConfiguration());
@@ -76,6 +74,6 @@ public sealed class AutopartsDbContext : IdentityDbContext<User,
         modelBuilder.Entity<Return>().HasQueryFilter(c => c.DeletedAt == null);
         modelBuilder.Entity<Sale>().HasQueryFilter(c => c.DeletedAt == null);
         modelBuilder.Entity<Supplier>().HasQueryFilter(c => c.DeletedAt == null);
+        modelBuilder.Entity<User>().HasQueryFilter(c => c.IsActive);
     }
-
 }

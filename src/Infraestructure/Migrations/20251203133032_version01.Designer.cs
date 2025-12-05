@@ -4,6 +4,7 @@ using Autoparts.Api.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autoparts.Api.Infraestructure.Migrations
 {
     [DbContext(typeof(AutopartsDbContext))]
-    partial class AutopartsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251203133032_version01")]
+    partial class version01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -632,9 +635,6 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasMaxLength(255)
                         .HasColumnType("VARCHAR")
@@ -644,9 +644,6 @@ namespace Autoparts.Api.Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("BIT")
                         .HasDefaultValue(true);
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -688,9 +685,6 @@ namespace Autoparts.Api.Infraestructure.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

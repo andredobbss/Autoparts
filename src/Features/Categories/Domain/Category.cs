@@ -8,6 +8,7 @@ namespace Autoparts.Api.Features.Categories.Domain;
 public sealed class Category
 {
     private readonly CategoryValidator _categoryValidation = new();
+
     private Category() { }
 
     public Guid CategoryId { get; private set; }
@@ -16,6 +17,7 @@ public sealed class Category
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
 
+    // Navigation Properties
     public ICollection<Product> Products { get; private set; } = [];
 
     public Category(string description)

@@ -11,6 +11,7 @@ namespace Autoparts.Api.Features.Purchases.Domain;
 public sealed class Purchase
 {
     private readonly PurchaseValidator _purchaseValidator = new();
+
     private Purchase() { }
 
     public Guid PurchaseId { get; private set; }
@@ -21,14 +22,15 @@ public sealed class Purchase
     public DateTime? UpdatedAt { get; private set; } = null;
     public DateTime? DeletedAt { get; private set; } = null;
 
-    public Guid UserId { get; private set; } = Guid.Empty;
+    // Foreign Keys
+    public Guid UserId { get; private set; }
     public Guid SupplierId { get; private set; }
+
+    // Navigation Properties
     public User User { get; private set; } = null!;
     public Supplier Supplier { get; private set; } = null!;
-
     public ICollection<PurchaseProduct> PurchaseProducts { get; private set; } = [];
     public ICollection<Product> Products { get; private set; } = [];
-
 
     public Purchase(Guid purchaseId, string invoiceNumber, decimal totalPurchase, EPaymentMethod paymentMethod, Guid userId, Guid supplierId, ICollection<PurchaseProduct> purchaseProducts)
     {

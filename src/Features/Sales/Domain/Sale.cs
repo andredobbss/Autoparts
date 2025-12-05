@@ -11,10 +11,11 @@ namespace Autoparts.Api.Features.Sales.Domain;
 public sealed class Sale
 {
     private readonly SaleValidator _saleValidator = new();
+
     private Sale() { }
 
     public Guid SaleId { get; private set; }
-    public string InvoiceNumber { get; private set; }
+    public string InvoiceNumber { get; private set; } = null!;
     public decimal TotalSale { get; private set; } = 0m;
     public EPaymentMethod PaymentMethod { get; private set; }
     public DateTime CreatedAt { get; private set; }
@@ -22,11 +23,13 @@ public sealed class Sale
     public DateTime? DeletedAt { get; private set; } = null;
     public int DaysLastSale => (DateTime.UtcNow - CreatedAt).Days;
 
-    public Guid UserId { get; private set; } = Guid.Empty;
+    // Foreign Keys
+    public Guid UserId { get; private set; }
     public Guid ClientId { get; private set; }
 
-    public Client Client { get; private set; }
-    public User User { get; private set; }
+    // Navigation Properties
+    public Client Client { get; private set; } = null!;
+    public User User { get; private set; } = null!;
     public ICollection<Product> Products { get; private set; } = [];
     public ICollection<SaleProduct> SaleProducts { get; private set; } = [];
 
@@ -68,5 +71,4 @@ public sealed class Sale
     {
         return _saleValidator.Validate(this);
     }
-
 }

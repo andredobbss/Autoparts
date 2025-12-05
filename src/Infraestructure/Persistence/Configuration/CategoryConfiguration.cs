@@ -16,8 +16,10 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(c => c.UpdatedAt).HasColumnName("UpdatedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(c => c.DeletedAt).HasColumnName("DeletedAt").IsRequired(false).HasColumnType("DATETIME2");
 
+        // Relationships
         builder.HasMany(c => c.Products).WithOne(product => product.Category).HasForeignKey(product => product.CategoryId).OnDelete(DeleteBehavior.Restrict);
 
+        // Indexes
         builder.HasIndex(c => c.CategoryId).HasDatabaseName("IX_Categories_CategoryId");
         builder.HasIndex(c => c.CreatedAt).HasDatabaseName("IX_Categories_CreatedAt");
         builder.HasIndex(c => c.DeletedAt).HasDatabaseName("IX_Categories_DeletedAt");

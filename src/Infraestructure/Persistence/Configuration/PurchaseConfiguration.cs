@@ -19,10 +19,7 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
         builder.Property(p => p.DeletedAt).HasColumnName("DeletedAt").IsRequired(false).HasColumnType("DATETIME2");
         builder.Property(p => p.UserId).HasColumnName("UserId").IsRequired(true);
 
-        //builder.HasMany(p => p.Products)
-        //    .WithMany(products => products.Purchases)
-        //    .UsingEntity(j => j.ToTable("PurchaseProducts"));
-
+        // Relationships
         builder.HasMany(pu => pu.Products)
                .WithMany(pr => pr.Purchases)
                .UsingEntity<PurchaseProduct>(
@@ -35,6 +32,7 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
                        .WithMany(p => p.PurchaseProducts)
                        .HasForeignKey(pp => pp.PurchaseId));
 
+        // Indexes
         builder.HasIndex(p => p.PurchaseId).HasDatabaseName("IX_Purchases_PurchaseId");
         builder.HasIndex(p => p.InvoiceNumber).HasDatabaseName("IX_Purchases_InvoiceNumber");
         builder.HasIndex(p => p.CreatedAt).HasDatabaseName("IX_Purchases_CreatedAt");

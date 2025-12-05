@@ -10,7 +10,6 @@ namespace Autoparts.Api.Features.Categories.Apis;
 
 public static class CategoryApi
 {
-
     public static void MapCategoryApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/categories")
@@ -30,25 +29,21 @@ public static class CategoryApi
         var result = await mediator.Send(new GetAllCategoriesQuery(pageNumber, pageSize));
         return Results.Ok(result);
     }
-
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new GetCategoryByIdQuery(id));
         return Results.Ok(result);
     }
-
     private static async Task<IResult> Create([FromBody] CreateCategoryCommand command, ISender mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Created($"/api/categories/{result.ToDictionary()}", result.ToDictionary()) : Results.BadRequest(result.ToDictionary());
     }
-
     private static async Task<IResult> Update([FromBody] UpdateCategoryCommand command, ISender mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Ok(result) : Results.BadRequest(result.ToDictionary());
     }
-
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new DeleteCategoryCommand(id));

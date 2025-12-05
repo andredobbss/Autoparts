@@ -25,8 +25,6 @@ public sealed class UpdatePurchaseCommandHandler(IPurchaseRepository purchaseRep
             return new ValidationResult { Errors = { new ValidationFailure("Purchase", $"{Resource.ID_NOT_FOUND} : {request.PurchaseId}") } };
 
         var purchaseProducts = productsList.Select(product => new PurchaseProduct(request.PurchaseId, product.ProductId, product.Quantity, product.AcquisitionCost)).ToList();
-        if (purchaseProducts is null || purchaseProducts.Any())
-            return new ValidationResult([new ValidationFailure(nameof(purchaseProducts), Resource.PURCHASE_NOT_FOUND)]);
 
         purchase.Update(request.InvoiceNumber,
                         request.PaymentMethod,

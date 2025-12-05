@@ -8,7 +8,15 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("Products");
+        builder.ToTable("Products", p =>
+        {
+            p.IsTemporal(t =>
+            {
+                t.UseHistoryTable("ProductsHistory");
+                t.HasPeriodStart("SysStartTime").HasColumnName("SysStartTime");
+                t.HasPeriodEnd("SysEndTime").HasColumnName("SysEndTime");
+            });
+        });
         builder.HasKey(p => p.ProductId);
         builder.Property(p => p.ProductId).HasColumnName("ProductId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
         builder.Property(p => p.TechnicalDescription).HasColumnName("TechnicalDescription").IsRequired(true).HasColumnType("NVARCHAR").HasMaxLength(255);
@@ -24,11 +32,13 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.CategoryId).HasColumnName("CategoryId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
         builder.Property(p => p.ManufacturerId).HasColumnName("ManufacturerId").IsRequired(true).HasColumnType("UNIQUEIDENTIFIER");
 
+        // indexes
         builder.HasIndex(p => p.ProductId).HasDatabaseName("IX_Products_ProductId");
         builder.HasIndex(p => p.CreatedAt).HasDatabaseName("IX_Products_CreatedAt");
         builder.HasIndex(p => p.DeletedAt).HasDatabaseName("IX_Products_DeletedAt");
         builder.HasIndex(p => p.SKU).HasDatabaseName("IX_Products_SKU").IsUnique(true);
 
+        // Ignore properties not mapped to database columns
         builder.Ignore(p => p.Quantity);
         builder.Ignore(p => p.StockStatus);
         builder.Ignore(p => p.StockStatusOverTime);

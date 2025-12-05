@@ -9,7 +9,6 @@ namespace Autoparts.Api.Features.Categories.CreateCommand;
 public sealed class CreateCategoryCommandHandler(ICategoryRepository categoryRepository) : IRequestHandler<CreateCategoryCommand, ValidationResult>
 {
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
-
     public async Task<ValidationResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = new Category(request.Description);

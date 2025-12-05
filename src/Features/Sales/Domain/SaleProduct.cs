@@ -5,6 +5,7 @@ namespace Autoparts.Api.Features.Sales.Domain;
 public class SaleProduct
 {
     private SaleProduct() { }
+
     public SaleProduct(Guid? saleId, Guid? productId, int quantity, decimal sellingPrice)
     {
         SaleId = saleId;
@@ -31,8 +32,9 @@ public class SaleProduct
     public decimal SellingPrice { get; private set; } = 0m;
     public decimal TotalItem { get; private set; }
 
-    public Sale Sale { get; private set; }
-    public Product Product { get; private set; }
+    // Navigation Properties
+    public Sale Sale { get; private set; } = null!;
+    public Product Product { get; private set; } = null!;
 
     private static decimal TotalItemCalculate(int quantity, decimal sellingPrice)
     {
