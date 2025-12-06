@@ -136,10 +136,10 @@
     <value>Invalid Calculation Type</value>
   </data>
   <data name="INVALID_CNPJ" xml:space="preserve">
-    <value>CNPJ Number Proivided is Invalid</value>
+    <value>The CNPJ number provided is invalid.</value>
   </data>
   <data name="INVALID_CPF" xml:space="preserve">
-    <value>CPF Number Proivided is Invalid</value>
+    <value>The CPF number provided is invalid.</value>
   </data>
   <data name="MAX_LENGTH_100" xml:space="preserve">
     <value>The text exceeded the 100 character limit</value>
@@ -263,5 +263,17 @@
   </data>
   <data name="USER_NOT_FOUND" xml:space="preserve">
     <value>User with ID {0} was not found</value>
+  </data>
+  <data name="INVALID_SECRET_KEY" xml:space="preserve">
+    <value>JWT Secret Key is not configured.</value>
+  </data>
+  <data name="INVALID_CREDENTIALS" xml:space="preserve">
+    <value>Invalid credentials</value>
+  </data>
+  <data name="INVALID_LOGIN" xml:space="preserve">
+    <value>Invalid username or password</value>
+  </data>
+  <data name="INVALID_ACCESS_TOKEN" xml:space="preserve">
+    <value>Invalid access token or refresh token</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-﻿namespace Autoparts.Api.Features.Products.Infraestructure;
+﻿namespace Autoparts.Api.Shared.Services;
 
 public interface ISkuGenerator
 {

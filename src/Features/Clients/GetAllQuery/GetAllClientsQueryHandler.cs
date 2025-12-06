@@ -1,16 +1,18 @@
-using Autoparts.Api.Features.Clients.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Paginate;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Z.PagedList;
 
 namespace Autoparts.Api.Features.Clients.GetAllQuery;
 
-public sealed record GetAllClientsQueryHandler(IClientRepository clientRepository) : IRequestHandler<GetAllClientsQuery, PagedResponse<GetAllClientsQueryResponse>>
+public sealed record GetAllClientsQueryHandler(AutopartsDbContext context) : IRequestHandler<GetAllClientsQuery, PagedResponse<GetAllClientsQueryResponse>>
 {
-    private readonly IClientRepository _clientRepository = clientRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<PagedResponse<GetAllClientsQueryResponse>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
     {
-        var clients = await _clientRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
+        var clients = await _context.Clients!.AsNoTracking()
+                                             .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
 
         var pagedResponse = clients.
             Select(c => new GetAllClientsQueryResponse

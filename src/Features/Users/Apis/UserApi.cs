@@ -5,6 +5,9 @@ using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Features.Users.GetAllQuery;
 using Autoparts.Api.Features.Users.GetByIdQuery;
 using Autoparts.Api.Features.Users.LoginCommand;
+using Autoparts.Api.Features.Users.LogoutCommand;
+using Autoparts.Api.Features.Users.RefreshTokenCommand;
+using Autoparts.Api.Features.Users.RevokeCommand;
 using Autoparts.Api.Features.Users.UpdateCommand;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -17,29 +20,15 @@ public static class UserApi
 {
     public static void MapUserApi(this IEndpointRouteBuilder app)
     {
-        //var group = app.MapGroup("/api/users")
-        //      .WithTags("Users")
-        //      .MapIdentityApi<User>();
-
-
         var group = app.MapGroup("/api/users")
         .WithTags("Users");
 
         //group.MapIdentityApi<User>();
 
-        group.MapPost("/logout", async (SignInManager<User> signin) =>
-        {
-            await signin.SignOutAsync();
-
-            return Results.Ok();
-        });
-        //.RequireAuthorization();
-
-
         group.MapGet("/roles", (ClaimsPrincipal user) =>
         {
-            if (user.Identity is null || user.Identity.IsAuthenticated is false)
-                return Results.Unauthorized();
+            //if (user.Identity is null || user.Identity.IsAuthenticated is false)
+            //    return Results.Unauthorized();
 
             var identity = user.Identity as ClaimsIdentity;
 
@@ -60,50 +49,6 @@ public static class UserApi
         });
         //.RequireAuthorization();
 
-        //group.MapGet("/", async (AutopartsDbContext db) =>
-        //{
-        //    var users = await db.Users
-        //        .Select(u => new
-        //        {
-        //            u.Id,
-        //            u.UserName,
-        //            u.Email,
-        //            Address = new
-        //            {
-        //                u.Address.Street,
-        //                u.Address.Number,
-        //                u.Address.City,
-        //                u.Address.State,
-        //                u.Address.ZipCode
-        //            }
-        //        })
-        //        .ToListAsync();
-
-        //    return Results.Ok(users);
-        //});
-
-        //group.MapGet("/{id:guid}", async (Guid id, AutopartsDbContext db) =>
-        //{
-        //    var user = await db.Users
-        //        .Where(u => u.Id == id)
-        //        .Select(u => new
-        //        {
-        //            u.Id,
-        //            u.UserName,
-        //            u.Email,
-        //            Address = new
-        //            {
-        //                u.Address.Street,
-        //                u.Address.Number,
-        //                u.Address.City,
-        //                u.Address.State,
-        //                u.Address.ZipCode
-        //            }
-        //        })
-        //        .FirstOrDefaultAsync();
-        //    return user is not null ? Results.Ok(user) : Results.NotFound();
-        //});
-
         group.MapGet("/", async (ISender mediator) =>
         {
             var result = await mediator.Send(new GetAllUsersQuery());
@@ -119,7 +64,25 @@ public static class UserApi
         group.MapPost("/login", async (LoginUserCommand command, ISender mediator) =>
         {
             var result = await mediator.Send(command);
-            return result.Succeeded ? Results.Ok(result) : Results.Unauthorized();
+            return Results.Ok(result);
+        });
+
+        group.MapPost("/logout", async (LogoutUserCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return Results.Ok(result);
+        });
+
+        group.MapPost("/refresh-token", async (RefreshTokenUserCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return Results.Ok(result);
+        });
+
+        group.MapPost("/revoke-refresh-token", async (RevokeRefreshTokenUserCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return Results.Ok(result);
         });
 
         group.MapPost("/", async ([FromBody] CreateUserCommand command, ISender mediator) =>

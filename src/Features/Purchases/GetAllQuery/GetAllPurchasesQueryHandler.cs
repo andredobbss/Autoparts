@@ -1,19 +1,23 @@
 using Autoparts.Api.Features.Purchases.Domain;
-using Autoparts.Api.Features.Purchases.GetByIdQuery;
-using Autoparts.Api.Features.Purchases.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Paginate;
 using MediatR;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Z.PagedList;
 
 namespace Autoparts.Api.Features.Purchases.GetAllQuery;
 
-public sealed record GetAllPurchasesQueryHandler(IPurchaseRepository purchaseRepository) : IRequestHandler<GetAllPurchasesQuery, PagedResponse<GetAllPurchasesQueryResponse>>
+public sealed record GetAllPurchasesQueryHandler(AutopartsDbContext context) : IRequestHandler<GetAllPurchasesQuery, PagedResponse<GetAllPurchasesQueryResponse>>
 {
-    private readonly IPurchaseRepository _purchaseRepository = purchaseRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<PagedResponse<GetAllPurchasesQueryResponse>> Handle(GetAllPurchasesQuery request, CancellationToken cancellationToken)
     {
-        var purchases = await _purchaseRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
+        var purchases = await _context.Purchases!.AsNoTracking()
+                                                 .Include(p => p.User)
+                                                 .Include(p => p.Supplier)
+                                                 .Include(P => P.PurchaseProducts)
+                                                 .ThenInclude(pp => pp.Product)
+                                                 .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
 
         var pagedResponse = purchases!
             .Select(p => new GetAllPurchasesQueryResponse
@@ -23,7 +27,7 @@ public sealed record GetAllPurchasesQueryHandler(IPurchaseRepository purchaseRep
                 p.PaymentMethod,
                 p.TotalPurchase,
                 p.CreatedAt,
-                p.User.UserName,
+                p.User.UserName!,
                 p.Supplier.CompanyName,
                 p.PurchaseProducts.Select(pp => new PurchaseProduct
                 (

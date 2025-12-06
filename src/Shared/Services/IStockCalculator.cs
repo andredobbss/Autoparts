@@ -1,4 +1,4 @@
-﻿namespace Autoparts.Api.Shared.Products.Stock;
+﻿namespace Autoparts.Api.Shared.Services;
 
 public interface IStockCalculator
 {

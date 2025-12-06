@@ -1,17 +1,19 @@
 using Autoparts.Api.Features.Returns.Domain;
-using Autoparts.Api.Features.Returns.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Products.DTOs;
 using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Resources;
+using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Returns.CreateCommand;
 
-public sealed class CreateReturnCommandHandler(IReturnRepository returnRepository, IProductList productList) : IRequestHandler<CreateReturnCommand, ValidationResult>
+public sealed class CreateReturnCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<CreateReturnCommand, ValidationResult>
 {
-    private readonly IReturnRepository _returnRepository = returnRepository;
+    private readonly AutopartsDbContext _context = context;
     private readonly IProductList _productList = productList;
+    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<ValidationResult> Handle(CreateReturnCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
@@ -33,20 +35,40 @@ public sealed class CreateReturnCommandHandler(IReturnRepository returnRepositor
             request.ClientId,
             returnProducts);
 
-        var result = await _returnRepository.AddAsync(returnEntity, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        await _context.Returns!.AddAsync(returnEntity, cancellationToken);
 
-        var commitResult = await _returnRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        #region Transaction and Commit
+
+        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+
+        try
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            var commitResult = await _context.SaveChangesAsync(cancellationToken);
+
+            bool stockUpdated = await _stockCalculator.StockCalculateAsync(cancellationToken);
+
+            if (commitResult > 0 && stockUpdated)
+            {
+                await transaction.CommitAsync(cancellationToken);
+                return new ValidationResult();
+            }
+
+            await transaction.RollbackAsync(cancellationToken);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
-
+        #endregion
 
     }
 }

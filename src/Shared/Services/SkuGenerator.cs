@@ -1,9 +1,9 @@
 ﻿using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 
-namespace Autoparts.Api.Features.Products.Infraestructure;
+namespace Autoparts.Api.Shared.Services;
 
-public class SkuGenerator : ISkuGenerator, IDisposable
+internal sealed class SkuGenerator : ISkuGenerator
 {
     private readonly AutopartsDbContext _context;
 
@@ -23,10 +23,5 @@ public class SkuGenerator : ISkuGenerator, IDisposable
         var random = new Random();
         var randomNumber = random.Next(1000, 9999);
         return $"{manufacturer.Description[..3].ToUpper()}-{category.Description[..2].ToUpper()}-{randomNumber}";
-    }
-
-    public void Dispose()
-    {
-        _context.Dispose();
     }
 }

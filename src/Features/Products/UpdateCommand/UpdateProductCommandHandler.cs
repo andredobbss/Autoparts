@@ -1,15 +1,15 @@
-using Autoparts.Api.Features.Products.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Products.UpdateCommand;
-public sealed class UpdateProductCommandHandler(IProductRepository productRepository) : IRequestHandler<UpdateProductCommand, ValidationResult>
+public sealed class UpdateProductCommandHandler(AutopartsDbContext context) : IRequestHandler<UpdateProductCommand, ValidationResult>
 {
-    private readonly IProductRepository _productRepository = productRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
+        var product = await _context.Products!.FindAsync(request.ProductId, cancellationToken);
         if (product is null)
             return new ValidationResult { Errors = { new ValidationFailure(Resource.PRODUCT, string.Format(Resource.PRODUCTS_NOT_FOUND, request.ProductId)) } };
 
@@ -20,19 +20,17 @@ public sealed class UpdateProductCommandHandler(IProductRepository productReposi
                         request.CategoryId,
                         request.ManufacturerId);
 
-        var result = await _productRepository.UpdateAsync(product, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        _context.Products!.Update(product);
 
-        var commitResult = await _productRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        if (commitResult <= 0)
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
-
+        return new ValidationResult();
     }
 }

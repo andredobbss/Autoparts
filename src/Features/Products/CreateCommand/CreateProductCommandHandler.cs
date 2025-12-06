@@ -1,14 +1,15 @@
 using Autoparts.Api.Features.Products.Domain;
-using Autoparts.Api.Features.Products.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
+using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Products.CreateCommand;
 
-public sealed class CreateProductCommandHandler(IProductRepository productRepository, ISkuGenerator skuGenerator) : IRequestHandler<CreateProductCommand, ValidationResult>
+public sealed class CreateProductCommandHandler(AutopartsDbContext context, ISkuGenerator skuGenerator) : IRequestHandler<CreateProductCommand, ValidationResult>
 {
-    private readonly IProductRepository _productRepository = productRepository;
+    private readonly AutopartsDbContext _context = context;
 
     private readonly ISkuGenerator _skuGenerator = skuGenerator;
 
@@ -27,18 +28,17 @@ public sealed class CreateProductCommandHandler(IProductRepository productReposi
             request.CategoryId,
             request.ManufacturerId);
 
-        var result = await _productRepository.AddAsync(product, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        await _context.AddAsync(product, cancellationToken);
 
-        var commitResult = await _productRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        if (commitResult <= 0)
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
+        return new ValidationResult();
     }
 }

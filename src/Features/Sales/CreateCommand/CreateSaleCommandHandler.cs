@@ -1,17 +1,19 @@
 using Autoparts.Api.Features.Sales.Domain;
-using Autoparts.Api.Features.Sales.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Enums;
 using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Resources;
+using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Sales.CreateCommand;
 
-public sealed class CreateSaleCommandHandler(ISaleRepository saleRepository, IProductList productList) : IRequestHandler<CreateSaleCommand, ValidationResult>
+public sealed class CreateSaleCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<CreateSaleCommand, ValidationResult>
 {
-    private readonly ISaleRepository _saleRepository = saleRepository;
+    private readonly AutopartsDbContext _context = context;
     private readonly IProductList _productList = productList;
+    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<ValidationResult> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
@@ -51,18 +53,39 @@ public sealed class CreateSaleCommandHandler(ISaleRepository saleRepository, IPr
             saleProducts
         );
 
-        var result = await _saleRepository.AddAsync(sale, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        await _context.Sales!.AddAsync(sale, cancellationToken);
 
-        var commitResult = await _saleRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        #region Transaction and Commit
+
+        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+
+        try
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            var commitResult = await _context.SaveChangesAsync(cancellationToken);
+
+            bool stockUpdated = await _stockCalculator.StockCalculateAsync(cancellationToken);
+
+            if (commitResult > 0 && stockUpdated)
+            {
+                await transaction.CommitAsync(cancellationToken);
+                return new ValidationResult();
+            }
+
+            await transaction.RollbackAsync(cancellationToken);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
+        #endregion
     }
 }

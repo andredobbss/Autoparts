@@ -9,7 +9,7 @@ public class PurchaseValidator : AbstractValidator<Purchase>
     {
         RuleFor(p => p.InvoiceNumber)
             .NotEmpty()
-            .NotNull()         
+            .NotNull()
             .WithMessage(Resource.NOT_NULL_OR_EMPTY)
             .MaximumLength(50)
             .WithMessage(Resource.MAX_LENGTH_50);

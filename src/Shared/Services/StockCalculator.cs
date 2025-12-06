@@ -1,7 +1,7 @@
 ﻿using Autoparts.Api.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Autoparts.Api.Shared.Products.Stock;
+namespace Autoparts.Api.Shared.Services;
 
 public sealed class StockCalculator(AutopartsDbContext context) : IStockCalculator
 {

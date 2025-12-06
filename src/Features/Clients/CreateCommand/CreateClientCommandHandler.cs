@@ -1,29 +1,28 @@
 using Autoparts.Api.Features.Clients.Domain;
-using Autoparts.Api.Features.Clients.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Clients.CreateCommand;
-public sealed class CreateClientCommandHandler(IClientRepository clientRepository) : IRequestHandler<CreateClientCommand, ValidationResult>
+public sealed class CreateClientCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateClientCommand, ValidationResult>
 {
-    private readonly IClientRepository _clientRepository = clientRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(CreateClientCommand request, CancellationToken cancellationToken)
     {
         var client = new Client(request.ClientName, request.Address, request.Email, request.TaxIdType, request.TaxId);
 
-        var result = await _clientRepository.AddAsync(client, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        await _context.Clients!.AddAsync(client, cancellationToken);
 
-        var commitResult = await _clientRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        if (commitResult <= 0)
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
+        return new ValidationResult();
     }
 }

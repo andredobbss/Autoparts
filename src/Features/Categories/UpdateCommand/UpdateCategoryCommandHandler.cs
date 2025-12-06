@@ -1,34 +1,33 @@
-using Autoparts.Api.Features.Categories.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Categories.UpdateCommand;
 
-public sealed class UpdateCategoryCommandHandler(ICategoryRepository categoryRepository) : IRequestHandler<UpdateCategoryCommand, ValidationResult>
+public sealed class UpdateCategoryCommandHandler(AutopartsDbContext context) : IRequestHandler<UpdateCategoryCommand, ValidationResult>
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
+    private readonly AutopartsDbContext _context = context;
 
     public async Task<ValidationResult> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
+        var category = await _context.Categories!.FindAsync(request.CategoryId, cancellationToken);
         if (category is null)
             return new ValidationResult { Errors = { new ValidationFailure(Resource.CATEGORY, string.Format(Resource.CATEGORY_NOT_FOUND, request.CategoryId)) } };
 
         category.Update(request.Description);
 
-        var result = await _categoryRepository.UpdateAsync(category, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        _context.Categories!.Update(category);
 
-        var commitResult = await _categoryRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        if (commitResult <= 0)
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
+        return new ValidationResult();
     }
 }

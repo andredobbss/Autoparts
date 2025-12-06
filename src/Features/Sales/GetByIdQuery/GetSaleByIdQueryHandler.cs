@@ -1,16 +1,21 @@
 using Autoparts.Api.Features.Sales.Domain;
-using Autoparts.Api.Features.Sales.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Sales.GetByIdQuery;
 
-public sealed record GetSaleByIdQueryHandler(ISaleRepository SaleRepository) : IRequestHandler<GetSaleByIdQuery, GetSaleByIdQueryResponse>
+public sealed record GetSaleByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetSaleByIdQuery, GetSaleByIdQueryResponse>
 {
-    private readonly ISaleRepository _saleRepository = SaleRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<GetSaleByIdQueryResponse> Handle(GetSaleByIdQuery request, CancellationToken cancellationToken)
     {
-        var sale = await _saleRepository.GetByIdAsync(request.SaleId, cancellationToken);
+        var sale = await _context.Sales!.Include(s => s.User)
+                                    .Include(s => s.Client)
+                                    .Include(s => s.SaleProducts)
+                                    .ThenInclude(sp => sp.Product)
+                                    .FirstOrDefaultAsync(s => s.SaleId == request.SaleId, cancellationToken);
         if (sale is null)
             throw new KeyNotFoundException(string.Format(Resource.SALES_NOT_FOUND, request.SaleId));
 
@@ -21,13 +26,13 @@ public sealed record GetSaleByIdQueryHandler(ISaleRepository SaleRepository) : I
                 sale.TotalSale,
                 sale.PaymentMethod,
                 sale.DaysLastSale,
-                sale.User.UserName,
+                sale.User.UserName!,
                 sale.Client.ClientName,
                 sale.CreatedAt,
                 sale.SaleProducts.Select(sp => new SaleProduct
                 (
                     sp.Product.Name,
-                    sp.SKU,
+                    sp.SKU!,
                     sp.Quantity,
                     sp.SellingPrice,
                     sp.TotalItem

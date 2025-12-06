@@ -1,27 +1,30 @@
-using Autoparts.Api.Features.Suppliers.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Suppliers.DeleteCommand;
-public sealed class DeleteSupplierCommandHandler(ISupplierRepository supplierRepository) : IRequestHandler<DeleteSupplierCommand, ValidationResult>
+public sealed class DeleteSupplierCommandHandler(AutopartsDbContext context) : IRequestHandler<DeleteSupplierCommand, ValidationResult>
 {
-    private readonly ISupplierRepository _supplierRepository = supplierRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(DeleteSupplierCommand request, CancellationToken cancellationToken)
     {
-        var supplier = await _supplierRepository.GetByIdAsync(request.SupplierId, cancellationToken);
+        var supplier = await _context.Suppliers!.FindAsync(request.SupplierId, cancellationToken);
         if (supplier is null)
             return new ValidationResult([new ValidationFailure(Resource.SUPPLIER, string.Format(Resource.SUPPLIER_NOT_FOUND, request.SupplierId))]);
 
         supplier.Delete();
 
-        var deleted = await _supplierRepository.DeleteAsync(supplier, cancellationToken);
-        if (!deleted)
-            return new ValidationResult([new ValidationFailure(Resource.SUPPLIER, Resource.FAILED_TO_DELETE_SUPPLIER)]);
+        _context.Suppliers!.Update(supplier);
 
-        var committed = await _supplierRepository.CommitAsync(cancellationToken);
-        if (!committed)
-            return new ValidationResult([new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)]);
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        if (commitResult <= 0)
+        {
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
+        }
 
         return new ValidationResult();
     }

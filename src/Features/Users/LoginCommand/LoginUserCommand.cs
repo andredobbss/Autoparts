@@ -1,7 +1,7 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using Autoparts.Api.Features.Users.DTOs;
+using MediatR;
 
 namespace Autoparts.Api.Features.Users.LoginCommand;
 
-public record LoginUserCommand(string UserName, string Password) : IRequest<SignInResult>;
+public sealed record LoginUserCommand(string UserName, string Password) : IRequest<Token>;
 

@@ -11,5 +11,4 @@ public sealed record UpdateUserCommand(Guid Id,
                                        string Password,
                                        ETaxIdType? TaxIdType,
                                        string? TaxId,
-                                       bool IsActive,
-                                       Address Address) :IRequest<IdentityResult>;
+                                       Address Address) : IRequest<IdentityResult>;

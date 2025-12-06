@@ -18,7 +18,11 @@ public sealed class User : IdentityUser<Guid>
     public string? TaxId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; } = null;
-    public bool IsActive { get; set; } = true;
+    public bool IsActive { get; private set; } = true;
+
+    // Refresh Token properties
+    public string? RefreshToken { get; set; }
+    public DateTime RefreshTokenExpiryTime { get; set; }
 
     // Navigation properties
     public Address Address { get; private set; } = null!;
@@ -55,7 +59,6 @@ public sealed class User : IdentityUser<Guid>
                 string password,
                 ETaxIdType? taxIdType,
                 string? taxId,
-                bool isActive,
                 Address address)
     {
         var user = this;
@@ -65,7 +68,6 @@ public sealed class User : IdentityUser<Guid>
         user.TaxIdType = taxIdType;
         user.TaxId = taxId;
         user.UpdatedAt = DateTime.UtcNow;
-        user.IsActive = isActive;
         user.Address = address;
         user.PhoneNumber = address.CellPhone;
 
@@ -75,6 +77,12 @@ public sealed class User : IdentityUser<Guid>
     public void Deactivate()
     {
         IsActive = false;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void RevokeRefreshToken()
+    {
+        RefreshToken = null;
         UpdatedAt = DateTime.UtcNow;
     }
 

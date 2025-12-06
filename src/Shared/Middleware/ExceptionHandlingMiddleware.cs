@@ -27,6 +27,16 @@ public class ExceptionHandlingMiddleware
             _logger.LogWarning(ex, "Resource not found.");
             await HandleExceptionAsync(context, ex.Message, "KeyNotFoundException", HttpStatusCode.NotFound);
         }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Invalid argument.");
+            await HandleExceptionAsync(context, ex.Message, "ArgumentException", HttpStatusCode.BadRequest);
+        }
+        catch(InvalidOperationException ex)
+        {
+            _logger.LogWarning(ex, "Invalid operation.");
+            await HandleExceptionAsync(context, ex.Message, "InvalidOperationException", HttpStatusCode.BadRequest);
+        }
         catch (ValidationException ex)
         {
             _logger.LogWarning(ex, "FluentValidation error.");

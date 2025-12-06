@@ -1,24 +1,26 @@
 using Autoparts.Api.Features.Purchases.Domain;
-using Autoparts.Api.Features.Purchases.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Resources;
+using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Purchases.CreateCommand;
 
-public sealed class CreatePurchaseCommandHandler(IPurchaseRepository purchaseRepository, IProductList productList) : IRequestHandler<CreatePurchaseCommand, ValidationResult>
+public sealed class CreatePurchaseCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<CreatePurchaseCommand, ValidationResult>
 {
-    private readonly IPurchaseRepository _purchaseRepository = purchaseRepository;
+    private readonly AutopartsDbContext _context = context;
     private readonly IProductList _productList = productList;
+    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<ValidationResult> Handle(CreatePurchaseCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
-            return new ValidationResult([new ValidationFailure(nameof(request.Products), Resource.PRODUCTS_REQUIRED)]);
+            return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_REQUIRED)]);
 
         var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
         if (productsList is null || !productsList.Any())
-            return new ValidationResult([new ValidationFailure(nameof(productsList), Resource.PRODUCTS_NOT_FOUND)]);
+            return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_NOT_FOUND)]);
 
         Guid purchaseId = Guid.NewGuid();
 
@@ -36,19 +38,40 @@ public sealed class CreatePurchaseCommandHandler(IPurchaseRepository purchaseRep
             purchaseProducts
         );
 
-        var result = await _purchaseRepository.AddAsync(purchase, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        await _context.AddAsync(purchase, cancellationToken);
 
-        var commitResult = await _purchaseRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        #region Transaction and Commit
+
+        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+
+        try
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            var commitResult = await _context.SaveChangesAsync(cancellationToken);
+
+            bool stockUpdated = await _stockCalculator.StockCalculateAsync(cancellationToken);
+
+            if (commitResult > 0 && stockUpdated)
+            {
+                await transaction.CommitAsync(cancellationToken);
+                return new ValidationResult();
+            }
+
+            await transaction.RollbackAsync(cancellationToken);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
+        #endregion
     }
 
 }

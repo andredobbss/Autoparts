@@ -223,6 +223,15 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Token de acesso ou token de atualização inválido.
+        /// </summary>
+        public static string INVALID_ACCESS_TOKEN {
+            get {
+                return ResourceManager.GetString("INVALID_ACCESS_TOKEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Tipo de cálculo inválido.
         /// </summary>
         public static string INVALID_CALCULATION_TYPE {
@@ -232,7 +241,7 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O número CNPJ fornecido é inválido..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O número do CNPJ informado é inválido..
         /// </summary>
         public static string INVALID_CNPJ {
             get {
@@ -241,11 +250,20 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O número CPF fornecido é inválido..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O número do CPF informado é inválido..
         /// </summary>
         public static string INVALID_CPF {
             get {
                 return ResourceManager.GetString("INVALID_CPF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Credenciais inválidas.
+        /// </summary>
+        public static string INVALID_CREDENTIALS {
+            get {
+                return ResourceManager.GetString("INVALID_CREDENTIALS", resourceCulture);
             }
         }
         
@@ -255,6 +273,24 @@ namespace Autoparts.Api.Shared.Resources {
         public static string INVALID_EMAIL {
             get {
                 return ResourceManager.GetString("INVALID_EMAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nome de usuário ou senha inválidos.
+        /// </summary>
+        public static string INVALID_LOGIN {
+            get {
+                return ResourceManager.GetString("INVALID_LOGIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A chave secreta JWT não está configurada..
+        /// </summary>
+        public static string INVALID_SECRET_KEY {
+            get {
+                return ResourceManager.GetString("INVALID_SECRET_KEY", resourceCulture);
             }
         }
         

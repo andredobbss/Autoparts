@@ -1,30 +1,29 @@
 using Autoparts.Api.Features.Categories.Domain;
-using Autoparts.Api.Features.Categories.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Categories.CreateCommand;
 
-public sealed class CreateCategoryCommandHandler(ICategoryRepository categoryRepository) : IRequestHandler<CreateCategoryCommand, ValidationResult>
+public sealed class CreateCategoryCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateCategoryCommand, ValidationResult>
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = new Category(request.Description);
 
-        var result = await _categoryRepository.AddAsync(category, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        await _context.Categories!.AddAsync(category, cancellationToken);
 
-        var commitResult = await _categoryRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        if (commitResult <= 0)
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
+        return new ValidationResult();
     }
 }

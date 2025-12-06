@@ -1,15 +1,15 @@
-using Autoparts.Api.Features.Suppliers.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using MediatR;
 
 namespace Autoparts.Api.Features.Suppliers.GetByIdQuery;
 
-public sealed record GetSupplierByIdQueryHandler(ISupplierRepository supplierRepository) : IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdQueryResponse>
+public sealed record GetSupplierByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdQueryResponse>
 {
-    private readonly ISupplierRepository _supplierRepository = supplierRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<GetSupplierByIdQueryResponse> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
     {
-        var supplierEntity = await _supplierRepository.GetByIdAsync(request.SupplierId, cancellationToken);
+        var supplierEntity = await _context.Suppliers!.FindAsync(request.SupplierId, cancellationToken);
         if (supplierEntity is null)
             throw new KeyNotFoundException(string.Format(Resource.SUPPLIER_NOT_FOUND, request.SupplierId));
 

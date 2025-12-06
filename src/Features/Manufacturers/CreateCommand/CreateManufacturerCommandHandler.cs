@@ -1,30 +1,29 @@
 using Autoparts.Api.Features.Manufacturers.Domain;
-using Autoparts.Api.Features.Manufacturers.Infraestructure;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
 using MediatR;
 
 namespace Autoparts.Api.Features.Manufacturers.CreateCommand;
 
-public sealed class CreateManufacturerCommandHandler(IManufacturerRepository manufacturerRepository) : IRequestHandler<CreateManufacturerCommand, ValidationResult>
+public sealed class CreateManufacturerCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateManufacturerCommand, ValidationResult>
 {
-    private readonly IManufacturerRepository _manufacturerRepository = manufacturerRepository;
+    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(CreateManufacturerCommand request, CancellationToken cancellationToken)
     {
         var manufacturer = new Manufacturer(request.Description);
 
-        var result = await _manufacturerRepository.AddAsync(manufacturer, cancellationToken);
-        if (!result.IsValid)
-            return result;
+        await _context.Manufacturers!.AddAsync(manufacturer, cancellationToken);
 
-        var commitResult = await _manufacturerRepository.CommitAsync(cancellationToken);
-        if (!commitResult)
+        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        if (commitResult <= 0)
         {
-            var failures = result.Errors.ToList();
-            failures.Add(new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE));
-            return new ValidationResult(failures);
+            return new ValidationResult(
+            [
+                new ValidationFailure(Resource.COMMIT, Resource.COMMIT_FAILED_MESSAGE)
+            ]);
         }
 
-        return result;
+        return new ValidationResult();
     }
 }
