@@ -2,7 +2,7 @@
 
 namespace Autoparts.Api.Shared.Paginate;
 
-public class PagedResponse<T>
+public sealed class PagedResponse<T>
 {
     public List<T> Items { get; private set; }
     public int TotalItemCount { get; private set; }

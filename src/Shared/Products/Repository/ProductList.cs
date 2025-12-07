@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Shared.Products.Repository;
 
-public class ProductList(AutopartsDbContext context) : IProductList
+public sealed class ProductList(AutopartsDbContext context) : IProductList
 {
     private readonly AutopartsDbContext _context = context;
 

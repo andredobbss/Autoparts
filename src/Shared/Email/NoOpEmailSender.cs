@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Shared.Email;
 
-public class NoOpEmailSender : IEmailSender<User>
+public sealed class NoOpEmailSender : IEmailSender<User>
 {
     public Task SendConfirmationLinkAsync(User user, string email, string confirmationLink) =>
         Task.CompletedTask;
