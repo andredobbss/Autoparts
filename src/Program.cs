@@ -148,7 +148,25 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireRole("Admin");
+    });
+    options.AddPolicy("ManagerOnly", policy =>
+    {
+        policy.RequireRole("Gerente");
+    });
+    options.AddPolicy("SellerOnly", policy =>
+    {
+        policy.RequireRole("Vendedor");
+    });
+    options.AddPolicy("SellerOrManager", policy =>
+    {
+        policy.RequireRole("Vendedor", "Gerente");
+    });
+});
 
 # endregion
 

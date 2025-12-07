@@ -276,4 +276,16 @@
   <data name="INVALID_ACCESS_TOKEN" xml:space="preserve">
     <value>Token de acesso ou token de atualização inválido</value>
   </data>
+  <data name="ROLE_ALREADY_EXIST" xml:space="preserve">
+    <value>O perfil {0} já existe.</value>
+  </data>
+  <data name="USER_CREATED" xml:space="preserve">
+    <value>Usuário criado</value>
+  </data>
+  <data name="ROLE_CREATED" xml:space="preserve">
+    <value>Perfil criado</value>
+  </data>
+  <data name="USER_TO_ROLE" xml:space="preserve">
+    <value>Usuário adicionado perfil</value>
+  </data>
 </root>

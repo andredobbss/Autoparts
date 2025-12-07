@@ -1,7 +1,6 @@
 ﻿using Autoparts.Api.Features.Users.CreateCommand;
 using Autoparts.Api.Features.Users.DeactiveCommand;
 using Autoparts.Api.Features.Users.DeleteCommand;
-using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Features.Users.GetAllQuery;
 using Autoparts.Api.Features.Users.GetByIdQuery;
 using Autoparts.Api.Features.Users.LoginCommand;
@@ -9,10 +8,9 @@ using Autoparts.Api.Features.Users.LogoutCommand;
 using Autoparts.Api.Features.Users.RefreshTokenCommand;
 using Autoparts.Api.Features.Users.RevokeCommand;
 using Autoparts.Api.Features.Users.UpdateCommand;
+using Autoparts.Api.Shared.Resources;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Autoparts.Api.Features.Users.Apis;
 
@@ -25,37 +23,13 @@ public static class UserApi
 
         //group.MapIdentityApi<User>();
 
-        group.MapGet("/roles", (ClaimsPrincipal user) =>
-        {
-            //if (user.Identity is null || user.Identity.IsAuthenticated is false)
-            //    return Results.Unauthorized();
-
-            var identity = user.Identity as ClaimsIdentity;
-
-            var roles = identity
-                .FindAll(identity.RoleClaimType)
-                .Select(c => new
-                {
-                    c.Issuer,
-                    c.OriginalIssuer,
-                    c.Value,
-                    c.Type,
-                    c.ValueType
-                })
-                .ToList();
-
-
-            return TypedResults.Json(roles);
-        });
-        //.RequireAuthorization();
-
-        group.MapGet("/", async (ISender mediator) =>
+        group.MapGet("/get-all-users", async (ISender mediator) =>
         {
             var result = await mediator.Send(new GetAllUsersQuery());
             return Results.Ok(result);
         });
 
-        group.MapGet("/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
+        group.MapGet("/get-user-by-id/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
         {
             var result = await mediator.Send(new GetUserByIdQuery(id));
             return Results.Ok(result);
@@ -85,25 +59,37 @@ public static class UserApi
             return Results.Ok(result);
         });
 
-        group.MapPost("/", async ([FromBody] CreateUserCommand command, ISender mediator) =>
+        group.MapPost("/create-user", async ([FromBody] CreateUserCommand command, ISender mediator) =>
         {
             var result = await mediator.Send(command);
-            return result.Succeeded ? Results.Created($"/api/users/{result}", result) : Results.BadRequest(result.Errors);
+            return result.Succeeded ? Results.Created($"/api/users/{result}", Resource.USER_CREATED) : Results.BadRequest(result.Errors);
         });
 
-        group.MapPut("/", async ([FromBody] UpdateUserCommand command, ISender mediator) =>
+        group.MapPost("/create-role", async ([FromBody] CreateRoleCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return result.Succeeded ? Results.Created($"/api/users/{result}", Resource.ROLE_CREATED) : Results.BadRequest(result.Errors);
+        });
+
+        group.MapPost("/add-user-to-role", async(CreateUserToRoleCommand command, ISender mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return result.Succeeded ? Results.Created($"/api/users/{result}", Resource.USER_TO_ROLE) : Results.BadRequest(result.Errors);
+        });
+
+        group.MapPut("/update-user", async ([FromBody] UpdateUserCommand command, ISender mediator) =>
         {
             var result = await mediator.Send(command);
             return result.Succeeded ? Results.Ok(result) : Results.BadRequest(result.Errors);
         });
 
-        group.MapDelete("/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
+        group.MapDelete("/delete-user/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
         {
             var result = await mediator.Send(new DeleteUserCommand(id));
             return result.Succeeded ? Results.NoContent() : Results.NotFound(result.Errors);
         });
 
-        group.MapPatch("/userDeactive/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
+        group.MapPatch("/deactive-user/{id:guid}", async ([FromRoute] Guid id, ISender mediator) =>
         {
             var result = await mediator.Send(new DeactiveUserCommand(id));
             return result.Succeeded ? Results.NoContent() : Results.NotFound(result.Errors);

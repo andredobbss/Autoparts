@@ -439,6 +439,24 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O perfil {0} já existe..
+        /// </summary>
+        public static string ROLE_ALREADY_EXIST {
+            get {
+                return ResourceManager.GetString("ROLE_ALREADY_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Perfil criado.
+        /// </summary>
+        public static string ROLE_CREATED {
+            get {
+                return ResourceManager.GetString("ROLE_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Venda.
         /// </summary>
         public static string SALE {
@@ -529,11 +547,29 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Usuário criado.
+        /// </summary>
+        public static string USER_CREATED {
+            get {
+                return ResourceManager.GetString("USER_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Usuário com o ID {0} não foi encontrado..
         /// </summary>
         public static string USER_NOT_FOUND {
             get {
                 return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Usuário adicionado perfil.
+        /// </summary>
+        public static string USER_TO_ROLE {
+            get {
+                return ResourceManager.GetString("USER_TO_ROLE", resourceCulture);
             }
         }
     }
