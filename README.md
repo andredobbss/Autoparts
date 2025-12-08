@@ -89,12 +89,12 @@ cd autoparts
 ### 3. Execute as migrations
 
 ```cmd
-dotnet ef database update -s Api
+dotnet ef database update -s Autoparts.Api
 ```
 ### 4. Execute a API
 
 ```cmd
-dotnet run --project Api
+dotnet run --project Autoparts.Api
 ```
 ---
 
