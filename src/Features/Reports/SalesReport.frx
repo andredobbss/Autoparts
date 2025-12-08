@@ -1,10 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="12/07/2025 21:40:45" ReportInfo.Modified="12/07/2025 21:41:45" ReportInfo.CreatorVersion="2024.2.0.0">
-  <Dictionary/>
-  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
-    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="37.8"/>
-    <PageHeaderBand Name="PageHeader1" Top="41.8" Width="718.2" Height="28.35"/>
-    <DataBand Name="Data1" Top="74.15" Width="718.2" Height="75.6"/>
-    <PageFooterBand Name="PageFooter1" Top="153.75" Width="718.2" Height="18.9"/>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="12/08/2025 17:53:52" ReportInfo.Modified="12/08/2025 18:51:26" ReportInfo.CreatorVersion="2024.2.0.0">
+  <Dictionary>
+    <BusinessObjectDataSource Name="products" ReferenceName="products" DataType="System.Int32" Enabled="true">
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="SellingPrice" DataType="System.Decimal"/>
+      <Column Name="AcquisitionCost" DataType="System.Decimal"/>
+      <Column Name="Margin" DataType="System.Decimal"/>
+      <Column Name="Stock" DataType="System.Int32"/>
+      <Column Name="InvoiceNumber" DataType="System.String"/>
+      <Column Name="PaymentMethod" DataType="System.Int32"/>
+      <Column Name="Quantity" DataType="System.Int32"/>
+      <Column Name="TotalItem" DataType="System.Int32"/>
+      <Column Name="TotalSale" DataType="System.Int32"/>
+      <Column Name="CreatedAt" DataType="System.Int32"/>
+      <Column Name="StockStatusOverTime" DataType="System.Int32"/>
+    </BusinessObjectDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" Landscape="true" PaperWidth="297" PaperHeight="210" RawPaperSize="9" Guides="287.28,759.78,850.5,1020.6,9.45,94.5,170.1,264.6,330.75,378,500.85,614.25,670.95,756,1143.45,1237.95,916.65,0,926.1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="1047.06" Height="37.8" Guides="9.45,28.35">
+      <TextObject Name="Text28" Left="287.28" Top="9.45" Width="472.5" Height="18.9" Text="AUTOPARTS REPORT" HorzAlign="Center" VertAlign="Center" Font="Montserrat Black, 14pt"/>
+      <TextObject Name="Text30" Left="850.5" Top="9.45" Width="170.1" Height="18.9" Text="[Date]" HorzAlign="Right" VertAlign="Center" Font="Montserrat Light, 7pt"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="40.66" Width="1047.06" Height="28.35" Guides="0,18.9">
+      <TextObject Name="Text13" Left="9.45" Width="85.05" Height="18.9" Text="Name" AutoWidth="true" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text14" Left="94.5" Width="75.6" Height="18.9" Text="Selling Price" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text15" Left="170.1" Width="94.5" Height="18.9" Text="Acquisition Cost" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text16" Left="264.6" Width="66.15" Height="18.9" Text="Margin" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text17" Left="330.75" Width="47.25" Height="18.9" Text="Stock" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text18" Left="378" Width="122.85" Height="18.9" Text="Invoice Number" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text19" Left="500.85" Width="113.4" Height="18.9" Text="Payment Method" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text20" Left="614.25" Width="56.7" Height="18.9" Text="Quantity" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text21" Left="670.95" Width="85.05" Height="18.9" Text="Total Item" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text22" Left="756" Width="94.5" Height="18.9" Text="Total Sale" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text24" Left="1143.45" Width="94.5" Height="18.9" Text="StockStatusOverTime" Font="Arial, 10pt"/>
+      <TextObject Name="Text23" Left="850.5" Width="66.15" Height="18.9" Text="CreatedAt" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <TextObject Name="Text27" Left="916.65" Width="103.95" Height="18.9" Text="Stock Status" HorzAlign="Right" VertAlign="Center" Font="Montserrat Black, 7pt"/>
+      <LineObject Name="Line3" Left="9.45" Width="1011.15"/>
+      <LineObject Name="Line4" Left="9.45" Top="18.9" Width="1011.15"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="71.86" Width="1047.06" Height="28.35" Guides="0,9.449997,28.35" DataSource="products">
+      <TextObject Name="Text7" Left="500.85" Width="113.4" Height="9.45" Text="[products.PaymentMethod]" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text8" Left="614.25" Width="56.7" Height="9.45" Text="[products.Quantity]" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text9" Left="670.95" Width="85.05" Height="9.45" Text="[products.TotalItem]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text10" Left="756" Width="94.5" Height="9.45" Text="[products.TotalSale]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text12" Left="1143.45" Top="9.45" Width="94.5" Height="18.9" Text="[products.StockStatusOverTime]" Font="Arial, 7pt"/>
+      <TextObject Name="Text1" Left="9.45" Width="85.05" Height="9.45" CanGrow="true" Text="[products.Name]" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text2" Left="94.5" Width="75.6" Height="9.45" Text="[products.SellingPrice]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" WordWrap="false" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text3" Left="170.1" Width="94.5" Height="9.45" Text="[products.AcquisitionCost]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" WordWrap="false" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text4" Left="264.6" Width="66.15" Height="9.45" Text="[products.Margin]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" WordWrap="false" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text5" Left="330.75" Width="47.25" Height="9.45" Text="[products.Stock]" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text6" Left="378" Width="122.85" Height="9.45" Text="[products.InvoiceNumber]" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text25" Left="850.5" Width="66.15" Height="9.45" Text="[products.CreatedAt]" Format="Date" Format.Format="MM/dd/yy" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+      <TextObject Name="Text26" Left="916.65" Width="103.95" Height="9.45" Text="[products.StockStatusOverTime]" HorzAlign="Right" Font="Montserrat Light, 6pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="103.07" Width="1047.06" Height="28.35" Guides="0,18.9">
+      <LineObject Name="Line1"/>
+      <LineObject Name="Line5" Left="9.45" Width="1011.15"/>
+      <TextObject Name="Text29" Left="926.1" Width="94.5" Height="18.9" Text="[Page]" HorzAlign="Right" VertAlign="Center" Font="Montserrat Light, 7pt"/>
+    </PageFooterBand>
   </ReportPage>
 </Report>

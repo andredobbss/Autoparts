@@ -1,4 +1,5 @@
-﻿using Autoparts.Api.Features.Reports.GetSalesReport;
+﻿using Autoparts.Api.Features.Reports.CreateSalesReport;
+using Autoparts.Api.Features.Reports.GetSalesReport;
 using MediatR;
 
 namespace Autoparts.Api.Features.Reports.Apis;
@@ -10,7 +11,13 @@ public static class SaleReportApi
         var group = app.MapGroup("/api/sale-report")
             .WithTags("Sale Reports");
         group.MapGet("/", GetSaleReport);
-        // Define endpoints here
+        group.MapPost("/create-sales-report", CreateSalesReport);
+    }
+
+    private static async Task<IResult> CreateSalesReport(CreateSalesReportCommand command, ISender mediator)
+    {
+        var result = await mediator.Send(command);
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> GetSaleReport(DateTime startDate, DateTime endDate, ISender mediator)
