@@ -51,7 +51,7 @@ A arquitetura é organizada por features, não por camadas. Cada funcionalidade 
 - Middlewares transformam exceções em respostas JSON padrão
 
 ---
-## 🧪 Testes Automatizados
+## 🧪 Testes Automatizados (em desenvolvimento...)
 
 O projeto contém testes de:
 
