@@ -3,6 +3,7 @@ using Autoparts.Api.Features.Manufacturers.DeleteCommand;
 using Autoparts.Api.Features.Manufacturers.GetAllQuery;
 using Autoparts.Api.Features.Manufacturers.GetByIdQuery;
 using Autoparts.Api.Features.Manufacturers.UpdateCommand;
+using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +34,7 @@ public static class ManufactureApi
     private static async Task<IResult> Create([FromBody] CreateManufacturerCommand command, ISender mediator)
     {
         var result = await mediator.Send(command);
-        return result.IsValid ? Results.Created($"/api/manufacturers/{result.ToDictionary()}", result.ToDictionary()) : Results.BadRequest(result.ToDictionary());
+        return result.IsValid ? Results.Created($"/api/manufacturers/{result.ToDictionary()}", Resource.MANUFACTORER_CREATED) : Results.BadRequest(result.ToDictionary());
     }
     private static async Task<IResult> Update([FromBody] UpdateManufacturerCommand command, ISender mediator)
     {

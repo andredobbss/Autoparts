@@ -288,4 +288,28 @@
   <data name="USER_TO_ROLE" xml:space="preserve">
     <value>Usuário adicionado perfil</value>
   </data>
+  <data name="CATEGORY_CREATED" xml:space="preserve">
+    <value>Categoria criada</value>
+  </data>
+  <data name="CLIENT_CREATED" xml:space="preserve">
+    <value>Cliente criado</value>
+  </data>
+  <data name="MANUFACTORER_CREATED" xml:space="preserve">
+    <value>Fabricante criado</value>
+  </data>
+  <data name="PRODUCT_CREATED" xml:space="preserve">
+    <value>Produto criado</value>
+  </data>
+  <data name="PURCHASE_CREATED" xml:space="preserve">
+    <value>Compra criada</value>
+  </data>
+  <data name="RETURN_CREATED" xml:space="preserve">
+    <value>Retorno criado</value>
+  </data>
+  <data name="SALE_CREATED" xml:space="preserve">
+    <value>Venda criada</value>
+  </data>
+  <data name="SUPPLIER_CREATED" xml:space="preserve">
+    <value>Fornecedor criado</value>
+  </data>
 </root>

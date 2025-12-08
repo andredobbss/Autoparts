@@ -10,6 +10,7 @@ using Autoparts.Api.Features.Products.Apis;
 using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Features.Purchases.Apis;
 using Autoparts.Api.Features.Purchases.Domain;
+using Autoparts.Api.Features.Reports.Apis;
 using Autoparts.Api.Features.Returns.Apis;
 using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Features.Sales.Apis;
@@ -179,6 +180,7 @@ builder.Services.AddScoped<IProductList, ProductList>();
 
 builder.Services.AddSingleton<IEmailSender<User>, NoOpEmailSender>();
 
+builder.Services.AddFastReport();
 
 # endregion
 
@@ -241,19 +243,21 @@ app.UseExceptionHandling();
 
 #endregion
 
-#region Configure HTTP request pipeline
+#region Configure Pipeline
 
 app.UseHttpsRedirection();
-
-#endregion
 
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseFastReport();
+
 //app.UseAuthentication();
 
 app.UseAuthorization();
+
+#endregion
 
 #region Configure Minimal APIs
 
@@ -262,6 +266,7 @@ app.MapClientApi();
 app.MapManufactureApi();
 app.MapProductApi();
 app.MapPurchaseApi();
+app.MapSaleReportApi();
 app.MapReturnApi();
 app.MapSaleApi();
 app.MapSupplierApi();
@@ -269,4 +274,8 @@ app.MapUserApi();
 
 #endregion
 
+# region Run the application
+
 app.Run();
+
+#endregion

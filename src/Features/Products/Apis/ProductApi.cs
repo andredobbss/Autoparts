@@ -3,6 +3,7 @@ using Autoparts.Api.Features.Products.DeleteCommand;
 using Autoparts.Api.Features.Products.GetAllQuery;
 using Autoparts.Api.Features.Products.GetByIdQuery;
 using Autoparts.Api.Features.Products.UpdateCommand;
+using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +34,7 @@ public static class ProductApi
     private static async Task<IResult> Create([FromBody] CreateProductCommand command, ISender mediator)
     {
         var result = await mediator.Send(command);
-        return result.IsValid ? Results.Created($"/api/products/{result.ToDictionary()}", result.ToDictionary()) : Results.BadRequest(result.ToDictionary());
+        return result.IsValid ? Results.Created($"/api/products/{result.ToDictionary()}", Resource.PRODUCT_CREATED) : Results.BadRequest(result.ToDictionary());
     }
     private static async Task<IResult> Update([FromBody] UpdateProductCommand command, ISender mediator)
     {

@@ -70,6 +70,15 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Categoria criada.
+        /// </summary>
+        public static string CATEGORY_CREATED {
+            get {
+                return ResourceManager.GetString("CATEGORY_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Categoria com ID {0} não foi encontrada.
         /// </summary>
         public static string CATEGORY_NOT_FOUND {
@@ -84,6 +93,15 @@ namespace Autoparts.Api.Shared.Resources {
         public static string CLIENT {
             get {
                 return ResourceManager.GetString("CLIENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Cliente criado.
+        /// </summary>
+        public static string CLIENT_CREATED {
+            get {
+                return ResourceManager.GetString("CLIENT_CREATED", resourceCulture);
             }
         }
         
@@ -304,6 +322,15 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Fabricante criado.
+        /// </summary>
+        public static string MANUFACTORER_CREATED {
+            get {
+                return ResourceManager.GetString("MANUFACTORER_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Fabricante com ID {0} não foi encontrado.
         /// </summary>
         public static string MANUFACTORER_NOT_FOUND {
@@ -376,6 +403,15 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Produto criado.
+        /// </summary>
+        public static string PRODUCT_CREATED {
+            get {
+                return ResourceManager.GetString("PRODUCT_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O produto com ID {0} não foi encontrado..
         /// </summary>
         public static string PRODUCTS_NOT_FOUND {
@@ -403,6 +439,15 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Compra criada.
+        /// </summary>
+        public static string PURCHASE_CREATED {
+            get {
+                return ResourceManager.GetString("PURCHASE_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a A compra com o ID {0} não foi encontrada..
         /// </summary>
         public static string PURCHASE_NOT_FOUND {
@@ -417,6 +462,15 @@ namespace Autoparts.Api.Shared.Resources {
         public static string RETURN {
             get {
                 return ResourceManager.GetString("RETURN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Retorno criado.
+        /// </summary>
+        public static string RETURN_CREATED {
+            get {
+                return ResourceManager.GetString("RETURN_CREATED", resourceCulture);
             }
         }
         
@@ -462,6 +516,15 @@ namespace Autoparts.Api.Shared.Resources {
         public static string SALE {
             get {
                 return ResourceManager.GetString("SALE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Venda criada.
+        /// </summary>
+        public static string SALE_CREATED {
+            get {
+                return ResourceManager.GetString("SALE_CREATED", resourceCulture);
             }
         }
         
@@ -534,6 +597,15 @@ namespace Autoparts.Api.Shared.Resources {
         public static string SUPPLIER {
             get {
                 return ResourceManager.GetString("SUPPLIER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Fornecedor criado.
+        /// </summary>
+        public static string SUPPLIER_CREATED {
+            get {
+                return ResourceManager.GetString("SUPPLIER_CREATED", resourceCulture);
             }
         }
         

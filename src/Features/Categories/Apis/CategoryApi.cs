@@ -3,6 +3,7 @@ using Autoparts.Api.Features.Categories.DeleteCommand;
 using Autoparts.Api.Features.Categories.GetAllQuery;
 using Autoparts.Api.Features.Categories.GetByIdQuery;
 using Autoparts.Api.Features.Categories.UpdateCommand;
+using Autoparts.Api.Shared.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +38,7 @@ public static class CategoryApi
     private static async Task<IResult> Create([FromBody] CreateCategoryCommand command, ISender mediator)
     {
         var result = await mediator.Send(command);
-        return result.IsValid ? Results.Created($"/api/categories/{result.ToDictionary()}", result.ToDictionary()) : Results.BadRequest(result.ToDictionary());
+        return result.IsValid ? Results.Created($"/api/categories/{result.ToDictionary()}", Resource.CATEGORY_CREATED) : Results.BadRequest(result.ToDictionary());
     }
     private static async Task<IResult> Update([FromBody] UpdateCategoryCommand command, ISender mediator)
     {

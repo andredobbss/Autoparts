@@ -22,33 +22,33 @@ public static class PurchaseApi
         group.MapDelete("/{id}", Delete);
     }
 
-    private static async Task<IResult> GetAll(ISender mediator, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    private static async Task<IResult> GetAll(ISender mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var result = await mediator.Send(new GetAllPurchasesQuery(pageNumber, pageSize), cancellationToken);
+        var result = await mediator.Send(new GetAllPurchasesQuery(pageNumber, pageSize));
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
     {
-        var result = await mediator.Send(new GetPurchaseByIdQuery(id), cancellationToken);
+        var result = await mediator.Send(new GetPurchaseByIdQuery(id));
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> Create([FromBody] CreatePurchaseCommand command, ISender mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Create([FromBody] CreatePurchaseCommand command, ISender mediator)
     {
-        var result = await mediator.Send(command, cancellationToken);
-        return result.IsValid ? Results.Created($"/api/purchase/{result.ToDictionary()}", result.ToDictionary()) : Results.BadRequest(result.ToDictionary());
+        var result = await mediator.Send(command);
+        return result.IsValid ? Results.Created($"/api/purchase/{result.ToDictionary()}", Resource.PURCHASE_CREATED) : Results.BadRequest(result.ToDictionary());
     }
 
-    private static async Task<IResult> Update([FromBody] UpdatePurchaseCommand command, ISender mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Update([FromBody] UpdatePurchaseCommand command, ISender mediator)
     {
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(command);
         return result.IsValid ? Results.Ok(result) : Results.BadRequest(result.ToDictionary());
     }
 
-    private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
     {
-        var result = await mediator.Send(new DeletePurchaseCommand(id), cancellationToken);
+        var result = await mediator.Send(new DeletePurchaseCommand(id));
         return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());
     }
 }
