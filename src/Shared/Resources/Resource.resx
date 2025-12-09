@@ -312,4 +312,7 @@
   <data name="SUPPLIER_CREATED" xml:space="preserve">
     <value>Fornecedor criado</value>
   </data>
+  <data name="REPORT_ALREADY_EXISTIS" xml:space="preserve">
+    <value>O relatório já existe no diretório: {0}</value>
+  </data>
 </root>

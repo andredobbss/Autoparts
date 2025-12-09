@@ -43,6 +43,11 @@ public class ExceptionHandlingMiddleware
             var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
             await HandleExceptionAsync(context, errors, "FluentValidationException", HttpStatusCode.BadRequest);
         }
+        catch (FileNotFoundException ex)
+        {
+            _logger.LogWarning(ex, "File not found.");
+            await HandleExceptionAsync(context, ex.Message, "FileNotFoundException", HttpStatusCode.NotFound);
+        }
         catch (UnauthorizedAccessException ex)
         {
             _logger.LogWarning(ex, "Unauthorized access.");

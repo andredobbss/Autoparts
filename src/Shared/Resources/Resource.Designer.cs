@@ -457,6 +457,15 @@ namespace Autoparts.Api.Shared.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O relatório já existe no diretório: {0}.
+        /// </summary>
+        public static string REPORT_ALREADY_EXISTIS {
+            get {
+                return ResourceManager.GetString("REPORT_ALREADY_EXISTIS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Devolução.
         /// </summary>
         public static string RETURN {
