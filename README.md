@@ -51,22 +51,6 @@ A arquitetura é organizada por features, não por camadas. Cada funcionalidade 
 - Middlewares transformam exceções em respostas JSON padrão
 
 ---
-## 🧪 Testes Automatizados (em desenvolvimento...)
-
-O projeto contém testes de:
-
-- Entidades do domínio (Categories, Clients, Manufactures, Products...)
-- Validação de regras com FluentValidation
-- Serviços usando NSubstitute
-- Geração de dados fake com Bogus
-
-Exemplo de stack:
-
-- xUnit
-- Bogus
-- NSubstitute
-
----
 ## ▶️ Como Rodar o Projeto
 ### 1. Clone o repositório
 
