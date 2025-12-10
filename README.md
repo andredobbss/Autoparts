@@ -23,7 +23,6 @@
 - Authentication JWT Bearer
 - Fast Report (Geração de relatório)
 - Z.PagedList
-- xUnit + Bogus + NSubstitute (Testes)
 - Minimals APIs
 - Swagger (Documentação da API)
 
@@ -47,7 +46,6 @@ A arquitetura é organizada por features, não por camadas. Cada funcionalidade 
 
 - Validações no domínio, não em DTOs
 - FluentValidation aplicado direto nas entidades
-- Erros geram DomainValidationException
 - Middlewares transformam exceções em respostas JSON padrão
 
 ---
