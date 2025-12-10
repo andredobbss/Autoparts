@@ -14,10 +14,8 @@ public static class CategoryApi
     public static void MapCategoryApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/categories")
-          .WithTags("Categories");
-        //.RequireAuthorization("AdminOnly");
-        //.RequireAuthorization();
-
+          .WithTags("Categories")
+          .RequireAuthorization("ManagerOnly");
         group.MapGet("/", GetAll);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);

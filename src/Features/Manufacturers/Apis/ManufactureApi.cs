@@ -14,7 +14,8 @@ public static class ManufactureApi
     public static void MapManufactureApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/manufacturers")
-            .WithTags("Manufacturers");
+            .WithTags("Manufacturers")
+            .RequireAuthorization("ManagerOnly");
         group.MapGet("/", GetAll);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);

@@ -14,8 +14,8 @@ public static class SupplierApi
     public static void MapSupplierApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/supplier")
-             .WithTags("Suppliers");
-
+             .WithTags("Suppliers")
+             .RequireAuthorization("ManagerOnly");
         group.MapGet("/", GetAll);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);

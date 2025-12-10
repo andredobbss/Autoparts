@@ -14,8 +14,8 @@ public static class ClientApi
     public static void MapClientApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/clients")
-            .WithTags("Clients");
-        //.RequireAuthorization("AdminOnly");
+            .WithTags("Clients")
+            .RequireAuthorization("ManagerOnly");
         group.MapGet("/", GetAll);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);

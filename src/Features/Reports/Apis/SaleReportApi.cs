@@ -9,7 +9,8 @@ public static class SaleReportApi
     public static void MapSaleReportApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/sale-report")
-            .WithTags("Sale Reports");
+            .WithTags("Sale Reports")
+            .RequireAuthorization("ManagerOnly");
         group.MapGet("/", GetSaleReport);
         group.MapPost("/create-sales-report", CreateSalesReport);
     }

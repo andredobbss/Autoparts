@@ -14,7 +14,8 @@ public static class PurchaseApi
     public static void MapPurchaseApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/purchase")
-            .WithTags("Purchases");
+            .WithTags("Purchases")
+            .RequireAuthorization("ManagerOnly");
         group.MapGet("/", GetAll);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);

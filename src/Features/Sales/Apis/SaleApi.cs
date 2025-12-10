@@ -14,7 +14,8 @@ public static class SaleApi
     public static void MapSaleApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/sale")
-            .WithTags("Sales");
+            .WithTags("Sales")
+            .RequireAuthorization("SellerOrManager");
         group.MapGet("/", GetAll);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);

@@ -5,6 +5,7 @@ using Autoparts.Api.Features.Products.GetByIdQuery;
 using Autoparts.Api.Features.Products.UpdateCommand;
 using Autoparts.Api.Shared.Resources;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autoparts.Api.Features.Products.Apis;
@@ -21,26 +22,35 @@ public static class ProductApi
         group.MapPut("/", Update);
         group.MapDelete("/{id}", Delete);
     }
+
+    [Authorize(Policy = "SellerOrManager")]
     private static async Task<IResult> GetAll(ISender mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllProductsQuery(pageNumber, pageSize));
         return Results.Ok(result);
     }
+
+    [Authorize(Policy = "SellerOrManager")]
     private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new GetProductByIdQuery(id));
         return Results.Ok(result);
     }
+
+    [Authorize(Policy = "ManagerOnly")]
     private static async Task<IResult> Create([FromBody] CreateProductCommand command, ISender mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Created($"/api/products/{result.ToDictionary()}", Resource.PRODUCT_CREATED) : Results.BadRequest(result.ToDictionary());
     }
+    [Authorize(Policy = "ManagerOnly")]
     private static async Task<IResult> Update([FromBody] UpdateProductCommand command, ISender mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Ok(result) : Results.BadRequest(result.ToDictionary());
     }
+
+    [Authorize(Policy = "ManagerOnly")]
     private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
     {
         var result = await mediator.Send(new DeleteProductCommand(id));

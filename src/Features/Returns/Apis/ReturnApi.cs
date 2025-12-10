@@ -14,7 +14,8 @@ public static class ReturnApi
     public static void MapReturnApi(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/return")
-             .WithTags("Returns");
+             .WithTags("Returns")
+             .RequireAuthorization("ManagerOnly");
         group.MapGet("/", GetAll);
         group.MapGet("/{id}", GetById);
         group.MapPost("/", Create);
