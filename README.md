@@ -32,14 +32,14 @@
 
 A arquitetura é organizada por features, não por camadas. Cada funcionalidade contém tudo o que é necessário para existir isoladamente.
 
-<img src="https://github.com/andredobbss/Autoparts/blob/master/img/Estrutura.png"/>
+![Estrutura](img/Estrutura.png)
 
 ---
 
 ## 🛢️ Diagrama Entidade-Relacionamento (Conceitual)
 
-<img src="https://github.com/andredobbss/Autoparts/blob/master/img/Autoparts_Conceptual.png"/>
-
+ ![MER](img/Autoparts_Conceptual.png)
+ 
 ---
 
 ## 🛡 Validações e Regras de Negócio
