@@ -12,19 +12,48 @@
 
 ## 🚀 Tecnologias Utilizadas
 
-- .NET 9 Web API
-- Vertical Slice Architecture
-- CQRS + MediatR
-- DDD (Domain-Driven Design)
-- FluentValidation (Validações no Domínio)
-- Entity Framework Core (SQL Server)
-- AspNetCore Identity
-- Temporal Tables (Controle automático de histórico)
-- Authentication JWT Bearer
-- Fast Report (Geração de relatório)
-- Z.PagedList
-- Minimals APIs
-- Swagger (Documentação da API)
+<!-- .NET 9 Web API -->
+![.NET 9](https://img.shields.io/badge/.NET%209-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Web API](https://img.shields.io/badge/Web%20API-178600?style=for-the-badge&logo=dotnet&logoColor=white)
+
+<!-- Vertical Slice Architecture -->
+![Vertical Slice Architecture](https://img.shields.io/badge/Vertical%20Slice%20Architecture-0A66C2?style=for-the-badge&logo=layers&logoColor=white)
+
+<!-- CQRS + MediatR -->
+![CQRS](https://img.shields.io/badge/CQRS-0088CC?style=for-the-badge&logo=data&logoColor=white)
+![MediatR](https://img.shields.io/badge/MediatR-E10098?style=for-the-badge&logo=messenger&logoColor=white)
+
+<!-- DDD -->
+![DDD](https://img.shields.io/badge/DDD%20(Domain--Driven%20Design)-02569B?style=for-the-badge&logo=domain&logoColor=white)
+
+<!-- FluentValidation -->
+![FluentValidation](https://img.shields.io/badge/FluentValidation-2D9CDB?style=for-the-badge&logo=checkmarx&logoColor=white)
+
+<!-- EF Core + SQL Server -->
+![EF Core](https://img.shields.io/badge/Entity%20Framework%20Core-512BD4?style=for-the-badge&logo=ef&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)
+
+<!-- ASP.NET Core Identity -->
+![AspNetCore Identity](https://img.shields.io/badge/ASP.NET%20Core%20Identity-512BD4?style=for-the-badge&logo=identityserver&logoColor=white)
+
+<!-- Temporal Tables -->
+![Temporal Tables](https://img.shields.io/badge/Temporal%20Tables-0066CC?style=for-the-badge&logo=clockify&logoColor=white)
+
+<!-- JWT Auth -->
+![JWT Bearer](https://img.shields.io/badge/JWT%20Bearer-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+
+<!-- FastReport -->
+![FastReport](https://img.shields.io/badge/FastReport-A50034?style=for-the-badge&logo=fastapi&logoColor=white)
+
+<!-- Z.PagedList -->
+![Z.PagedList](https://img.shields.io/badge/Z.PagedList-4CAF50?style=for-the-badge&logo=buffer&logoColor=white)
+
+<!-- Minimal APIs -->
+![Minimal APIs](https://img.shields.io/badge/Minimal%20APIs-512BD4?style=for-the-badge&logo=api&logoColor=white)
+
+<!-- Swagger -->
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
+
 
 ---
 
