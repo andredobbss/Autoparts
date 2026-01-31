@@ -1,19 +1,18 @@
 ﻿using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Features.Users.DTOs;
 using Autoparts.Api.Features.Users.Services;
+using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using NetDevPack.SimpleMediator;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Autoparts.Api.Features.Users.LoginCommand;
 
-public sealed class LoginUserCommandHandler(UserManager<User> userManager, ITokenService tokenRepository, IConfiguration configuration) : IRequestHandler<LoginUserCommand, Token>
+public sealed class LoginUserCommandHandler(UserManager<User> _userManager, AutopartsDbContext _context, ITokenService _tokenRepository, IConfiguration _configuration) : IRequestHandler<LoginUserCommand, Token>
 {
-    private readonly UserManager<User> _userManager = userManager;
-    private readonly ITokenService _tokenRepository = tokenRepository;
-    private readonly IConfiguration _configuration = configuration;
     public async Task<Token> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByNameAsync(request.UserName);
@@ -29,6 +28,29 @@ public sealed class LoginUserCommandHandler(UserManager<User> userManager, IToke
             new(ClaimTypes.Email, user.Email!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        // --------------------- Add Sales Ids as Claims -------------------------------------------
+        var userQuery = _context.Sales
+           .AsNoTracking()
+           .Where(u => u.UserId == user.Id);
+
+        //var userQuery = _context.Users
+        //   .AsNoTracking()
+        //   .Include(u => u.Sales)
+        //   .Where(u => u.UserName == request.UserName);
+
+        foreach (var users in userQuery)
+        {
+            //foreach (var sales in users.Sales)
+            //{
+            //    var saleId = sales.SaleId.ToString();
+            //    authClaims.Add(new Claim("SaleId", saleId));
+            //}
+
+            var saleId = users.SaleId.ToString();
+            authClaims.Add(new Claim("SaleId", saleId));
+        }
+        // --------------------------------------------------------------------------------------------
 
         foreach (var role in userRoles)
             authClaims.Add(new(ClaimTypes.Role, role));

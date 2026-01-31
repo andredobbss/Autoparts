@@ -1,13 +1,12 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Manufacturers.DeleteCommand;
 
-public sealed class DeleteManufacturerCommandHandler(AutopartsDbContext context) : IRequestHandler<DeleteManufacturerCommand, ValidationResult>
+public sealed class DeleteManufacturerCommandHandler(AutopartsDbContext _context) : IRequestHandler<DeleteManufacturerCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(DeleteManufacturerCommand request, CancellationToken cancellationToken)
     {
         var manufacturer = await _context.Manufacturers!.FindAsync(request.ManufacturerId, cancellationToken);

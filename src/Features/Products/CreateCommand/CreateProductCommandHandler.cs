@@ -3,16 +3,12 @@ using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Products.CreateCommand;
 
-public sealed class CreateProductCommandHandler(AutopartsDbContext context, ISkuGenerator skuGenerator) : IRequestHandler<CreateProductCommand, ValidationResult>
+public sealed class CreateProductCommandHandler(AutopartsDbContext _context, ISkuGenerator _skuGenerator) : IRequestHandler<CreateProductCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
-
-    private readonly ISkuGenerator _skuGenerator = skuGenerator;
-
     public async Task<ValidationResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         var sku = await _skuGenerator.GenerateSKUAsync(request.ManufacturerId, request.CategoryId, cancellationToken);

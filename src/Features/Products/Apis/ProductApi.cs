@@ -4,7 +4,7 @@ using Autoparts.Api.Features.Products.GetAllQuery;
 using Autoparts.Api.Features.Products.GetByIdQuery;
 using Autoparts.Api.Features.Products.UpdateCommand;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,34 +24,34 @@ public static class ProductApi
     }
 
     [Authorize(Policy = "SellerOrManager")]
-    private static async Task<IResult> GetAll(ISender mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    private static async Task<IResult> GetAll(IMediator mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllProductsQuery(pageNumber, pageSize));
         return Results.Ok(result);
     }
 
     [Authorize(Policy = "SellerOrManager")]
-    private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
+    private static async Task<IResult> GetById([FromRoute] Guid id, IMediator mediator)
     {
         var result = await mediator.Send(new GetProductByIdQuery(id));
         return Results.Ok(result);
     }
 
     [Authorize(Policy = "ManagerOnly")]
-    private static async Task<IResult> Create([FromBody] CreateProductCommand command, ISender mediator)
+    private static async Task<IResult> Create([FromBody] CreateProductCommand command, IMediator mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Created($"/api/products/{result.ToDictionary()}", Resource.PRODUCT_CREATED) : Results.BadRequest(result.ToDictionary());
     }
     [Authorize(Policy = "ManagerOnly")]
-    private static async Task<IResult> Update([FromBody] UpdateProductCommand command, ISender mediator)
+    private static async Task<IResult> Update([FromBody] UpdateProductCommand command, IMediator mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Ok(result) : Results.BadRequest(result.ToDictionary());
     }
 
     [Authorize(Policy = "ManagerOnly")]
-    private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
+    private static async Task<IResult> Delete([FromRoute] Guid id, IMediator mediator)
     {
         var result = await mediator.Send(new DeleteProductCommand(id));
         return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());

@@ -1,14 +1,13 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Paginate;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.EntityFrameworkCore;
 using Z.PagedList;
 
 namespace Autoparts.Api.Features.Clients.GetAllQuery;
 
-public sealed record GetAllClientsQueryHandler(AutopartsDbContext context) : IRequestHandler<GetAllClientsQuery, PagedResponse<GetAllClientsQueryResponse>>
+public sealed record GetAllClientsQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetAllClientsQuery, PagedResponse<GetAllClientsQueryResponse>>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<PagedResponse<GetAllClientsQueryResponse>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
     {
         var clients = await _context.Clients!.AsNoTracking()

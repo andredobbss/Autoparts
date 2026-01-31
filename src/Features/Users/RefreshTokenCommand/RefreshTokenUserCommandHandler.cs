@@ -2,17 +2,14 @@
 using Autoparts.Api.Features.Users.DTOs;
 using Autoparts.Api.Features.Users.Services;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Autoparts.Api.Features.Users.RefreshTokenCommand;
 
-public sealed class RefreshTokenUserCommandHandler(UserManager<User> userManager, ITokenService tokenRepository, IConfiguration configuration) : IRequestHandler<RefreshTokenUserCommand, Token>
+public sealed class RefreshTokenUserCommandHandler(UserManager<User> _userManager, ITokenService _tokenRepository, IConfiguration _configuration) : IRequestHandler<RefreshTokenUserCommand, Token>
 {
-    private readonly UserManager<User> _userManager = userManager;
-    private readonly ITokenService _tokenRepository = tokenRepository;
-    private readonly IConfiguration _configuration = configuration;
     public async Task<Token> Handle(RefreshTokenUserCommand request, CancellationToken cancellationToken)
     {
         if (request is null)
@@ -27,7 +24,7 @@ public sealed class RefreshTokenUserCommandHandler(UserManager<User> userManager
         if (principal is null)
             throw new UnauthorizedAccessException(Resource.INVALID_ACCESS_TOKEN);
 
-        string? username = principal.Identity?.Name ?? 
+        string? username = principal.Identity?.Name ??
             throw new UnauthorizedAccessException(Resource.INVALID_ACCESS_TOKEN);
 
         var user = await _userManager.FindByNameAsync(username);
@@ -46,7 +43,7 @@ public sealed class RefreshTokenUserCommandHandler(UserManager<User> userManager
         return new Token
         (
             AccessToken: new JwtSecurityTokenHandler().WriteToken(newJwtToken),
-            RefreshToken : newRefreshToken,
+            RefreshToken: newRefreshToken,
             null
         );
     }

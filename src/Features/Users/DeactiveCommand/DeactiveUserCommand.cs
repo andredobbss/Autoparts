@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.DeactiveCommand;

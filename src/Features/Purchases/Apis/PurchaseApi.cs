@@ -4,7 +4,7 @@ using Autoparts.Api.Features.Purchases.GetAllQuery;
 using Autoparts.Api.Features.Purchases.GetByIdQuery;
 using Autoparts.Api.Features.Purchases.UpdateCommand;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autoparts.Api.Features.Purchases.Apis;
@@ -23,31 +23,31 @@ public static class PurchaseApi
         group.MapDelete("/{id}", Delete);
     }
 
-    private static async Task<IResult> GetAll(ISender mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    private static async Task<IResult> GetAll(IMediator mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllPurchasesQuery(pageNumber, pageSize));
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
+    private static async Task<IResult> GetById([FromRoute] Guid id, IMediator mediator)
     {
         var result = await mediator.Send(new GetPurchaseByIdQuery(id));
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> Create([FromBody] CreatePurchaseCommand command, ISender mediator)
+    private static async Task<IResult> Create([FromBody] CreatePurchaseCommand command, IMediator mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Created($"/api/purchase/{result.ToDictionary()}", Resource.PURCHASE_CREATED) : Results.BadRequest(result.ToDictionary());
     }
 
-    private static async Task<IResult> Update([FromBody] UpdatePurchaseCommand command, ISender mediator)
+    private static async Task<IResult> Update([FromBody] UpdatePurchaseCommand command, IMediator mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Ok(result) : Results.BadRequest(result.ToDictionary());
     }
 
-    private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
+    private static async Task<IResult> Delete([FromRoute] Guid id, IMediator mediator)
     {
         var result = await mediator.Send(new DeletePurchaseCommand(id));
         return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());

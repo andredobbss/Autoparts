@@ -1,5 +1,5 @@
 using Autoparts.Api.Shared.Paginate;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.GetAllQuery;
 

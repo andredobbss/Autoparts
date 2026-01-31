@@ -4,7 +4,7 @@ using Autoparts.Api.Features.Clients.GetAllQuery;
 using Autoparts.Api.Features.Clients.GetByIdQuery;
 using Autoparts.Api.Features.Clients.UpdateCommand;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autoparts.Api.Features.Clients.Apis;
@@ -22,27 +22,27 @@ public static class ClientApi
         group.MapPut("/", Update);
         group.MapDelete("/{id}", Delete);
     }
-    private static async Task<IResult> GetAll(ISender mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    private static async Task<IResult> GetAll(IMediator mediator, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllClientsQuery(pageNumber, pageSize));
         return Results.Ok(result);
     }
-    private static async Task<IResult> GetById([FromRoute] Guid id, ISender mediator)
+    private static async Task<IResult> GetById([FromRoute] Guid id, IMediator mediator)
     {
         var result = await mediator.Send(new GetClientByIdQuery(id));
         return Results.Ok(result);
     }
-    private static async Task<IResult> Create([FromBody] CreateClientCommand command, ISender mediator)
+    private static async Task<IResult> Create([FromBody] CreateClientCommand command, IMediator mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Created($"/api/clients/{result.ToDictionary()}", Resource.CLIENT_CREATED) : Results.BadRequest(result.ToDictionary());
     }
-    private static async Task<IResult> Update([FromBody] UpdateClientCommand command, ISender mediator)
+    private static async Task<IResult> Update([FromBody] UpdateClientCommand command, IMediator mediator)
     {
         var result = await mediator.Send(command);
         return result.IsValid ? Results.Ok(result) : Results.BadRequest(result.ToDictionary());
     }
-    private static async Task<IResult> Delete([FromRoute] Guid id, ISender mediator)
+    private static async Task<IResult> Delete([FromRoute] Guid id, IMediator mediator)
     {
         var result = await mediator.Send(new DeleteClientCommand(id));
         return result.IsValid ? Results.NoContent() : Results.NotFound(result.ToDictionary());

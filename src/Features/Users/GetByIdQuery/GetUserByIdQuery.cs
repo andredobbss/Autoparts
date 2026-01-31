@@ -1,4 +1,4 @@
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Users.GetByIdQuery;
 

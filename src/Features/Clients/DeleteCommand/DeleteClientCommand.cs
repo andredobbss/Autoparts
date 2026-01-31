@@ -1,5 +1,5 @@
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.DeleteCommand;
 

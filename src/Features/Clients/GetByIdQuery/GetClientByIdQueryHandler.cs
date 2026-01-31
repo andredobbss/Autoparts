@@ -1,12 +1,11 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.GetByIdQuery;
 
-public sealed record GetClientByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetClientByIdQuery, GetClientByIdQueryResponse>
+public sealed record GetClientByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetClientByIdQuery, GetClientByIdQueryResponse>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<GetClientByIdQueryResponse> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
     {
         var client = await _context.Clients!.FindAsync(request.ClientId, cancellationToken);

@@ -1,11 +1,10 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 namespace Autoparts.Api.Features.Suppliers.UpdateCommand;
-public sealed class UpdateSupplierCommandHandler(AutopartsDbContext context) :IRequestHandler<UpdateSupplierCommand, ValidationResult >
+public sealed class UpdateSupplierCommandHandler(AutopartsDbContext _context) :IRequestHandler<UpdateSupplierCommand, ValidationResult >
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(UpdateSupplierCommand request, CancellationToken cancellationToken)
     {
         var supplier = await _context.Suppliers!.FindAsync(request.SupplierId, cancellationToken);

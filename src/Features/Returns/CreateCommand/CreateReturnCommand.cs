@@ -1,7 +1,7 @@
 using Autoparts.Api.Features.Returns.DTOs;
 using Autoparts.Api.Shared.Enums;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Returns.CreateCommand;
 

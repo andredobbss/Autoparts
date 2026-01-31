@@ -1,13 +1,12 @@
 ﻿using Autoparts.Api.Features.Users.Domain;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Users.GetAllQuery;
 
-public sealed class GetAllUserRolesQueryHandler(UserManager<User> userManager) : IRequestHandler<GetAllUserRolesQuery, IEnumerable<GetAllUserRolesQueryResponse>>
+public sealed class GetAllUserRolesQueryHandler(UserManager<User> _userManager) : IRequestHandler<GetAllUserRolesQuery, IEnumerable<GetAllUserRolesQueryResponse>>
 {
-    private readonly UserManager<User> _userManager = userManager;
     public async Task<IEnumerable<GetAllUserRolesQueryResponse>> Handle(GetAllUserRolesQuery request, CancellationToken cancellationToken)
     {
         var users = await _userManager.Users.ToListAsync(cancellationToken);

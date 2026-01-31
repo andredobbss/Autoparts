@@ -2,12 +2,11 @@ using Autoparts.Api.Features.Clients.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.CreateCommand;
-public sealed class CreateClientCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateClientCommand, ValidationResult>
+public sealed class CreateClientCommandHandler(AutopartsDbContext _context) : IRequestHandler<CreateClientCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(CreateClientCommand request, CancellationToken cancellationToken)
     {
         var client = new Client(request.ClientName, request.Address, request.Email, request.TaxIdType, request.TaxId);

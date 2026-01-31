@@ -1,6 +1,6 @@
 using Autoparts.Api.Shared.Enums;
 using Autoparts.Api.Shared.ValueObejct;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.UpdateCommand;

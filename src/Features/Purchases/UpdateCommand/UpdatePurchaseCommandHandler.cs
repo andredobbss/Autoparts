@@ -4,7 +4,7 @@ using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Purchases.UpdateCommand;
 

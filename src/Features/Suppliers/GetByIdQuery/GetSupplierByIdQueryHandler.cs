@@ -1,12 +1,11 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Suppliers.GetByIdQuery;
 
-public sealed record GetSupplierByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdQueryResponse>
+public sealed record GetSupplierByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdQueryResponse>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<GetSupplierByIdQueryResponse> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
     {
         var supplierEntity = await _context.Suppliers!.FindAsync(request.SupplierId, cancellationToken);

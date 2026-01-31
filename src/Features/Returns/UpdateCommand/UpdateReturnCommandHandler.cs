@@ -5,15 +5,12 @@ using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Returns.UpdateCommand;
 
-public sealed class UpdateReturnCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<UpdateReturnCommand, ValidationResult>
+public sealed class UpdateReturnCommandHandler(AutopartsDbContext _context, IProductList _productList, IStockCalculator _stockCalculator) : IRequestHandler<UpdateReturnCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
-    private readonly IProductList _productList = productList;
-    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<ValidationResult> Handle(UpdateReturnCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())

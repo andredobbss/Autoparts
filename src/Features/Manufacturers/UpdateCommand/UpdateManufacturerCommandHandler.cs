@@ -1,12 +1,11 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Manufacturers.UpdateCommand;
-public sealed class UpdateManufacturerCommandHandler(AutopartsDbContext context) : IRequestHandler<UpdateManufacturerCommand, ValidationResult>
+public sealed class UpdateManufacturerCommandHandler(AutopartsDbContext _context) : IRequestHandler<UpdateManufacturerCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(UpdateManufacturerCommand request, CancellationToken cancellationToken)
     {
         var manufacturer = await _context.Manufacturers!.FindAsync(request.ManufacturerId, cancellationToken);

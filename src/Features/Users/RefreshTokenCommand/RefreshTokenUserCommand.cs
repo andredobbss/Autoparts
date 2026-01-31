@@ -1,5 +1,5 @@
 ﻿using Autoparts.Api.Features.Users.DTOs;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Users.RefreshTokenCommand;
 

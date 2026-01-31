@@ -4,15 +4,12 @@ using Autoparts.Api.Shared.Products.Repository;
 using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Purchases.CreateCommand;
 
-public sealed class CreatePurchaseCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<CreatePurchaseCommand, ValidationResult>
+public sealed class CreatePurchaseCommandHandler(AutopartsDbContext _context, IProductList _productList, IStockCalculator _stockCalculator) : IRequestHandler<CreatePurchaseCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
-    private readonly IProductList _productList = productList;
-    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<ValidationResult> Handle(CreatePurchaseCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())

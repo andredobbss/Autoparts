@@ -1,7 +1,7 @@
 using Autoparts.Api.Shared.Enums;
 using Autoparts.Api.Shared.ValueObejct;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Suppliers.UpdateCommand;
 

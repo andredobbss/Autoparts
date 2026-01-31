@@ -1,12 +1,11 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.DeleteCommand;
-public sealed class DeleteClientCommandHandler(AutopartsDbContext context) : IRequestHandler<DeleteClientCommand, ValidationResult>
+public sealed class DeleteClientCommandHandler(AutopartsDbContext _context) : IRequestHandler<DeleteClientCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
     {
         var client = await _context.Clients!.FindAsync(request.ClientId, cancellationToken);

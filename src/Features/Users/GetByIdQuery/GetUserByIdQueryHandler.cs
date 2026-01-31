@@ -1,13 +1,12 @@
 using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.GetByIdQuery;
 
-public sealed record GetUserByIdQueryHandler(UserManager<User> userManager) :IRequestHandler<GetUserByIdQuery,GetUserByIdQueryResponse>
+public sealed record GetUserByIdQueryHandler(UserManager<User> _userManager) :IRequestHandler<GetUserByIdQuery,GetUserByIdQueryResponse>
 {
-    private readonly UserManager<User> _userManager = userManager;
     public async Task<GetUserByIdQueryResponse> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(request.Id.ToString());

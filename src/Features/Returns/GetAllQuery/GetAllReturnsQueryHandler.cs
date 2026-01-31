@@ -1,15 +1,14 @@
 using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Paginate;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.EntityFrameworkCore;
 using Z.PagedList;
 
 namespace Autoparts.Api.Features.Returns.GetAllQuery;
 
-public sealed record GetAllReturnsQueryHandler(AutopartsDbContext context) : IRequestHandler<GetAllReturnsQuery, PagedResponse<GetAllReturnsQueryResponse>>
+public sealed record GetAllReturnsQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetAllReturnsQuery, PagedResponse<GetAllReturnsQueryResponse>>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<PagedResponse<GetAllReturnsQueryResponse>> Handle(GetAllReturnsQuery request, CancellationToken cancellationToken)
     {
         var returns = await _context.Returns!.AsNoTracking()

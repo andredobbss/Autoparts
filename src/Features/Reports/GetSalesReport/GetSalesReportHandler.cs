@@ -3,7 +3,7 @@ using Autoparts.Api.Features.Reports.DTOs;
 using Autoparts.Api.Infraestructure.Persistence;
 using FastReport;
 using FastReport.Export.PdfSimple;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 

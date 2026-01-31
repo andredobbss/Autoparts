@@ -1,13 +1,12 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Products.DTOs;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Manufacturers.GetByIdQuery;
 
-public sealed record GetManufacturerByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetManufacturerByIdQuery, GetManufacturerByIdQueryResponse>
+public sealed record GetManufacturerByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetManufacturerByIdQuery, GetManufacturerByIdQueryResponse>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<GetManufacturerByIdQueryResponse> Handle(GetManufacturerByIdQuery request, CancellationToken cancellationToken)
     {
         var manufacturer = await _context.Manufacturers!.FindAsync(request.ManufacturerId, cancellationToken);

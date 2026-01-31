@@ -2,14 +2,12 @@ using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using Autoparts.Api.Shared.Services;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Sales.DeleteCommand;
 
-public sealed class DeleteSaleCommandHandler(AutopartsDbContext context, IStockCalculator stockCalculator) : IRequestHandler<DeleteSaleCommand, ValidationResult>
+public sealed class DeleteSaleCommandHandler(AutopartsDbContext _context, IStockCalculator _stockCalculator) : IRequestHandler<DeleteSaleCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
-    private readonly IStockCalculator _stockCalculator = stockCalculator;
     public async Task<ValidationResult> Handle(DeleteSaleCommand request, CancellationToken cancellationToken)
     {
         var sale = await _context.Sales!.FindAsync(request.SaleId, cancellationToken);

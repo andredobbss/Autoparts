@@ -3,7 +3,7 @@ using Autoparts.Api.Features.Reports.DTOs;
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FastReport;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Reports.CreateSalesReport;

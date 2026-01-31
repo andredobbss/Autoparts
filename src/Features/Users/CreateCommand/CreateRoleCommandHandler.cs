@@ -1,12 +1,11 @@
 ﻿using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.CreateCommand;
 
-public sealed class CreateRoleCommandHandler(RoleManager<IdentityRole<Guid>> roleManager) : IRequestHandler<CreateRoleCommand, IdentityResult>
+public sealed class CreateRoleCommandHandler(RoleManager<IdentityRole<Guid>> _roleManager) : IRequestHandler<CreateRoleCommand, IdentityResult>
 {
-    RoleManager<IdentityRole<Guid>> _roleManager = roleManager;
     public async Task<IdentityResult> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
         var roleExists = await _roleManager.RoleExistsAsync(request.RoleName);

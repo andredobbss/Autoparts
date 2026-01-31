@@ -1,22 +1,14 @@
 #region Using Directives
 
 using Autoparts.Api.Features.Categories.Apis;
-using Autoparts.Api.Features.Categories.Domain;
 using Autoparts.Api.Features.Clients.Apis;
-using Autoparts.Api.Features.Clients.Domain;
 using Autoparts.Api.Features.Manufacturers.Apis;
-using Autoparts.Api.Features.Manufacturers.Domain;
 using Autoparts.Api.Features.Products.Apis;
-using Autoparts.Api.Features.Products.Domain;
 using Autoparts.Api.Features.Purchases.Apis;
-using Autoparts.Api.Features.Purchases.Domain;
 using Autoparts.Api.Features.Reports.Apis;
 using Autoparts.Api.Features.Returns.Apis;
-using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Features.Sales.Apis;
-using Autoparts.Api.Features.Sales.Domain;
 using Autoparts.Api.Features.Suppliers.Apis;
-using Autoparts.Api.Features.Suppliers.Domain;
 using Autoparts.Api.Features.Users.Apis;
 using Autoparts.Api.Features.Users.Domain;
 using Autoparts.Api.Features.Users.Services;
@@ -33,6 +25,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NetDevPack.SimpleMediator;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -178,33 +172,33 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IStockCalculator, StockCalculator>();
 builder.Services.AddScoped<IProductList, ProductList>();
 
-builder.Services.AddSingleton<IEmailSender<User>, NoOpEmailSender>();
+//builder.Services.AddSingleton<IEmailSender<User>, NoOpEmailSender>();
 
 builder.Services.AddFastReport();
 
 # endregion
 
-#region Register MediatR
+#region Register Simple Mediator
 
-var myHandlers = AppDomain.CurrentDomain.Load("Autoparts.Api");
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssemblies(myHandlers);
-});
+//builder.Services.AddSimpleMediator("Autoparts.Api");
+builder.Services.AddSimpleMediator(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped<IMediator, Mediator>();
 
 #endregion
 
 #region Register Validators
 
-builder.Services.AddScoped<IValidator<Category>, CategoryValidator>();
-builder.Services.AddScoped<IValidator<Client>, ClientValidator>();
-builder.Services.AddScoped<IValidator<Manufacturer>, ManufacturerValidator>();
-builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
-builder.Services.AddScoped<IValidator<Purchase>, PurchaseValidator>();
-builder.Services.AddScoped<IValidator<Return>, ReturnValidator>();
-builder.Services.AddScoped<IValidator<Sale>, SaleValidator>();
-builder.Services.AddScoped<IValidator<Supplier>, SupplierValidator>();
-builder.Services.AddScoped<IValidator<User>, UserValidator>();
+//builder.Services.AddScoped<IValidator<Category>, CategoryValidator>();
+//builder.Services.AddScoped<IValidator<Client>, ClientValidator>();
+//builder.Services.AddScoped<IValidator<Manufacturer>, ManufacturerValidator>();
+//builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
+//builder.Services.AddScoped<IValidator<Purchase>, PurchaseValidator>();
+//builder.Services.AddScoped<IValidator<Return>, ReturnValidator>();
+//builder.Services.AddScoped<IValidator<Sale>, SaleValidator>();
+//builder.Services.AddScoped<IValidator<Supplier>, SupplierValidator>();
+//builder.Services.AddScoped<IValidator<User>, UserValidator>();
+
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 #endregion
 

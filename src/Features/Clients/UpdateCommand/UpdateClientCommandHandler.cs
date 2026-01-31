@@ -1,14 +1,12 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.UpdateCommand;
 
-public sealed class UpdateClientCommandHandler(AutopartsDbContext context) : IRequestHandler<UpdateClientCommand, ValidationResult>
+public sealed class UpdateClientCommandHandler(AutopartsDbContext _context) : IRequestHandler<UpdateClientCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
-
     public async Task<ValidationResult> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
     {
         var client = await _context.Clients!.FindAsync(request.ClientId, cancellationToken);

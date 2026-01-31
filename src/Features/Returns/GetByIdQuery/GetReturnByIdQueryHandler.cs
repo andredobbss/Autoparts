@@ -1,14 +1,13 @@
 using Autoparts.Api.Features.Returns.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Returns.GetByIdQuery;
 
-public sealed record GetReturnByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetReturnByIdQuery, GetReturnByIdQueryResponse>
+public sealed record GetReturnByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetReturnByIdQuery, GetReturnByIdQueryResponse>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<GetReturnByIdQueryResponse> Handle(GetReturnByIdQuery request, CancellationToken cancellationToken)
     {
         var returnEntity = await _context.Returns!.Include(r => r.User)

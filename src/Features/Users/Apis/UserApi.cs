@@ -9,7 +9,7 @@ using Autoparts.Api.Features.Users.RefreshTokenCommand;
 using Autoparts.Api.Features.Users.RevokeCommand;
 using Autoparts.Api.Features.Users.UpdateCommand;
 using Autoparts.Api.Shared.Resources;
-using MediatR;
+using NetDevPack.SimpleMediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,79 +24,79 @@ public static class UserApi
 
         //group.MapIdentityApi<User>();
 
-        group.MapGet("/get-all-users", [Authorize(Policy = "AdminOnly")] async (ISender mediator) =>
+        group.MapGet("/get-all-users", [Authorize(Policy = "AdminOnly")] async (IMediator mediator) =>
         {
             var result = await mediator.Send(new GetAllUsersQuery());
             return Results.Ok(result);
         });
 
-        group.MapGet("/get-user-by-id/{id:guid}", [Authorize(Policy = "AdminOnly")] async ([FromRoute] Guid id, ISender mediator) =>
+        group.MapGet("/get-user-by-id/{id:guid}", [Authorize(Policy = "AdminOnly")] async ([FromRoute] Guid id, IMediator mediator) =>
         {
             var result = await mediator.Send(new GetUserByIdQuery(id));
             return Results.Ok(result);
         });
 
-        group.MapGet("/get-user-roles", [Authorize(Policy = "AdminOnly")] async (ISender mediator) =>
+        group.MapGet("/get-user-roles", [Authorize(Policy = "AdminOnly")] async (IMediator mediator) =>
         {
             var result = await mediator.Send(new GetAllUserRolesQuery());
             return Results.Ok(result);
         });
 
-        group.MapPost("/login", async (LoginUserCommand command, ISender mediator) =>
+        group.MapPost("/login", async (LoginUserCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return Results.Ok(result);
         });
 
-        group.MapPost("/logout", async (LogoutUserCommand command, ISender mediator) =>
+        group.MapPost("/logout", async (LogoutUserCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return Results.Ok(result);
         });
 
-        group.MapPost("/refresh-token", async (RefreshTokenUserCommand command, ISender mediator) =>
+        group.MapPost("/refresh-token", async (RefreshTokenUserCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return Results.Ok(result);
         });
 
-        group.MapPost("/revoke-refresh-token", async (RevokeRefreshTokenUserCommand command, ISender mediator) =>
+        group.MapPost("/revoke-refresh-token", async (RevokeRefreshTokenUserCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return Results.Ok(result);
         });
 
-        group.MapPost("/create-user", [Authorize(Policy = "AdminOnly")] async ([FromBody] CreateUserCommand command, ISender mediator) =>
+        group.MapPost("/create-user", [Authorize(Policy = "AdminOnly")] async ([FromBody] CreateUserCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return result.Succeeded ? Results.Created($"/api/users/{result}", Resource.USER_CREATED) : Results.BadRequest(result.Errors);
         });
 
-        group.MapPost("/create-role", [Authorize(Policy = "AdminOnly")] async ([FromBody] CreateRoleCommand command, ISender mediator) =>
+        group.MapPost("/create-role", [Authorize(Policy = "AdminOnly")] async ([FromBody] CreateRoleCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return result.Succeeded ? Results.Created($"/api/users/{result}", Resource.ROLE_CREATED) : Results.BadRequest(result.Errors);
         });
 
-        group.MapPost("/add-user-to-role", [Authorize(Policy = "AdminOnly")] async (CreateUserToRoleCommand command, ISender mediator) =>
+        group.MapPost("/add-user-to-role", [Authorize(Policy = "AdminOnly")] async (CreateUserToRoleCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return result.Succeeded ? Results.Created($"/api/users/{result}", Resource.USER_TO_ROLE) : Results.BadRequest(result.Errors);
         });
 
-        group.MapPut("/update-user", [Authorize(Policy = "AdminOnly")] async ([FromBody] UpdateUserCommand command, ISender mediator) =>
+        group.MapPut("/update-user", [Authorize(Policy = "AdminOnly")] async ([FromBody] UpdateUserCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return result.Succeeded ? Results.Ok(result) : Results.BadRequest(result.Errors);
         });
 
-        group.MapDelete("/delete-user/{id:guid}", [Authorize(Policy = "AdminOnly")] async ([FromRoute] Guid id, ISender mediator) =>
+        group.MapDelete("/delete-user/{id:guid}", [Authorize(Policy = "AdminOnly")] async ([FromRoute] Guid id, IMediator mediator) =>
         {
             var result = await mediator.Send(new DeleteUserCommand(id));
             return result.Succeeded ? Results.NoContent() : Results.NotFound(result.Errors);
         });
 
-        group.MapPatch("/deactive-user/{id:guid}", [Authorize(Policy = "AdminOnly")] async ([FromRoute] Guid id, ISender mediator) =>
+        group.MapPatch("/deactive-user/{id:guid}", [Authorize(Policy = "AdminOnly")] async ([FromRoute] Guid id, IMediator mediator) =>
         {
             var result = await mediator.Send(new DeactiveUserCommand(id));
             return result.Succeeded ? Results.NoContent() : Results.NotFound(result.Errors);

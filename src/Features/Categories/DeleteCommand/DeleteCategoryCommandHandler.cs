@@ -1,13 +1,12 @@
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Categories.DeleteCommand;
 
-public sealed class DeleteCategoryCommandHandler(AutopartsDbContext context) : IRequestHandler<DeleteCategoryCommand, ValidationResult>
+public sealed class DeleteCategoryCommandHandler(AutopartsDbContext _context) : IRequestHandler<DeleteCategoryCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<ValidationResult> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = await _context.Categories!.FindAsync(request.CategoryId, cancellationToken);

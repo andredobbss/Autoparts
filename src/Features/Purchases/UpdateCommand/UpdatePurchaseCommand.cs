@@ -1,7 +1,7 @@
 using Autoparts.Api.Shared.Enums;
 using Autoparts.Api.Shared.Products.DTOs;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 namespace Autoparts.Api.Features.Purchases.UpdateCommand;
 
 public sealed record UpdatePurchaseCommand(Guid PurchaseId,

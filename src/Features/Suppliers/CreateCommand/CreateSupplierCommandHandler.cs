@@ -2,13 +2,11 @@ using Autoparts.Api.Features.Suppliers.Domain;
 using Autoparts.Api.Infraestructure.Persistence;
 using Autoparts.Api.Shared.Resources;
 using FluentValidation.Results;
-using MediatR;
+using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Suppliers.CreateCommand;
-public sealed class CreateSupplierCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateSupplierCommand, ValidationResult>
+public sealed class CreateSupplierCommandHandler(AutopartsDbContext _context) : IRequestHandler<CreateSupplierCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
-
     public async Task<ValidationResult> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
     {
         var supplier = new Supplier(request.CompanyName, request.Address, request.Email, request.TaxIdType, request.TaxId);
