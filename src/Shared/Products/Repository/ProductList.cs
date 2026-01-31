@@ -7,13 +7,11 @@ namespace Autoparts.Api.Shared.Products.Repository;
 
 public sealed class ProductList(AutopartsDbContext context) : IProductList
 {
-    private readonly AutopartsDbContext _context = context;
-
     public async Task<IEnumerable<Product>> GetProductsListAsync(IEnumerable<LineItemDto> products, CancellationToken cancellationToken)
     {
         var productIds = products.Select(p => p.ProductId).ToList();
 
-        var productsFromDb = await _context.Products!
+        var productsFromDb = await context.Products!
             .AsNoTracking()
             .Where(p => productIds.Contains(p.ProductId))
             .ToListAsync(cancellationToken);

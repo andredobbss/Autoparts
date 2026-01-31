@@ -9,18 +9,18 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Returns.UpdateCommand;
 
-public sealed class UpdateReturnCommandHandler(AutopartsDbContext _context, IProductList _productList, IStockCalculator _stockCalculator) : IRequestHandler<UpdateReturnCommand, ValidationResult>
+public sealed class UpdateReturnCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<UpdateReturnCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(UpdateReturnCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
             return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_REQUIRED)]);
 
-        var productsList = await _productList.GetProductsListAsync(request.Products.Select(p => new LineItemDto(p.ProductId, p.Quantity)), cancellationToken);
+        var productsList = await productList.GetProductsListAsync(request.Products.Select(p => new LineItemDto(p.ProductId, p.Quantity)), cancellationToken);
         if (productsList is null || !productsList.Any())
             return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_NOT_FOUND)]);
 
-        var returnEntity = await _context.Returns!.FindAsync(request.ReturnId, cancellationToken);
+        var returnEntity = await context.Returns!.FindAsync(request.ReturnId, cancellationToken);
         if (returnEntity is null)
             return new ValidationResult([new ValidationFailure(Resource.RETURN, string.Format(Resource.RETURN_NOT_FOUND, request.ReturnId))]);
 
@@ -33,17 +33,17 @@ public sealed class UpdateReturnCommandHandler(AutopartsDbContext _context, IPro
             request.ClientId,
             returnProducts);
 
-        _context.Returns!.Update(returnEntity);
+        context.Returns!.Update(returnEntity);
 
         #region Transaction and Commit
 
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
         try
         {
-            var commitResult = await _context.SaveChangesAsync(cancellationToken);
+            var commitResult = await context.SaveChangesAsync(cancellationToken);
 
-            bool stockUpdated = await _stockCalculator.StockCalculateAsync(cancellationToken);
+            bool stockUpdated = await stockCalculator.StockCalculateAsync(cancellationToken);
 
             if (commitResult > 0 && stockUpdated)
             {

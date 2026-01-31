@@ -4,11 +4,11 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Suppliers.GetByIdQuery;
 
-public sealed record GetSupplierByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdQueryResponse>
+public sealed record GetSupplierByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdQueryResponse>
 {
     public async Task<GetSupplierByIdQueryResponse> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
     {
-        var supplierEntity = await _context.Suppliers!.FindAsync(request.SupplierId, cancellationToken);
+        var supplierEntity = await context.Suppliers!.FindAsync(request.SupplierId, cancellationToken);
         if (supplierEntity is null)
             throw new KeyNotFoundException(string.Format(Resource.SUPPLIER_NOT_FOUND, request.SupplierId));
 

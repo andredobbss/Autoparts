@@ -5,11 +5,11 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Manufacturers.GetByIdQuery;
 
-public sealed record GetManufacturerByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetManufacturerByIdQuery, GetManufacturerByIdQueryResponse>
+public sealed record GetManufacturerByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetManufacturerByIdQuery, GetManufacturerByIdQueryResponse>
 {
     public async Task<GetManufacturerByIdQueryResponse> Handle(GetManufacturerByIdQuery request, CancellationToken cancellationToken)
     {
-        var manufacturer = await _context.Manufacturers!.FindAsync(request.ManufacturerId, cancellationToken);
+        var manufacturer = await context.Manufacturers!.FindAsync(request.ManufacturerId, cancellationToken);
         if (manufacturer is null)
             throw new KeyNotFoundException(string.Format(Resource.MANUFACTORER_NOT_FOUND, request.ManufacturerId));
 

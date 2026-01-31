@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.CreateCommand;
 
-public sealed class CreateUserCommandHandler(UserManager<User> _userManager) : IRequestHandler<CreateUserCommand, IdentityResult>
+public sealed class CreateUserCommandHandler(UserManager<User> userManager) : IRequestHandler<CreateUserCommand, IdentityResult>
 {
     public async Task<IdentityResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
@@ -18,6 +18,6 @@ public sealed class CreateUserCommandHandler(UserManager<User> _userManager) : I
            request.Address
         );
 
-        return await _userManager.CreateAsync(user, request.Password);
+        return await userManager.CreateAsync(user, request.Password);
     }
 }

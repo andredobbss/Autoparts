@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Sales.GetByIdQuery;
 
-public sealed record GetSaleByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetSaleByIdQuery, GetSaleByIdQueryResponse>
+public sealed record GetSaleByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetSaleByIdQuery, GetSaleByIdQueryResponse>
 {
     public async Task<GetSaleByIdQueryResponse> Handle(GetSaleByIdQuery request, CancellationToken cancellationToken)
     {
-        var sale = await _context.Sales!.Include(s => s.User)
+        var sale = await context.Sales!.Include(s => s.User)
                                     .Include(s => s.Client)
                                     .Include(s => s.SaleProducts)
                                     .ThenInclude(sp => sp.Product)

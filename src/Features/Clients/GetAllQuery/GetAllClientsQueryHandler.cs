@@ -6,11 +6,11 @@ using Z.PagedList;
 
 namespace Autoparts.Api.Features.Clients.GetAllQuery;
 
-public sealed record GetAllClientsQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetAllClientsQuery, PagedResponse<GetAllClientsQueryResponse>>
+public sealed record GetAllClientsQueryHandler(AutopartsDbContext context) : IRequestHandler<GetAllClientsQuery, PagedResponse<GetAllClientsQueryResponse>>
 {
     public async Task<PagedResponse<GetAllClientsQueryResponse>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
     {
-        var clients = await _context.Clients!.AsNoTracking()
+        var clients = await context.Clients!.AsNoTracking()
                                              .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
 
         var pagedResponse = clients.

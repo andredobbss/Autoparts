@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Autoparts.Api.Features.Users.RefreshTokenCommand;
 
-public sealed class RefreshTokenUserCommandHandler(UserManager<User> _userManager, ITokenService _tokenRepository, IConfiguration _configuration) : IRequestHandler<RefreshTokenUserCommand, Token>
+public sealed class RefreshTokenUserCommandHandler(UserManager<User> userManager, ITokenService tokenRepository, IConfiguration configuration) : IRequestHandler<RefreshTokenUserCommand, Token>
 {
     public async Task<Token> Handle(RefreshTokenUserCommand request, CancellationToken cancellationToken)
     {
@@ -19,7 +19,7 @@ public sealed class RefreshTokenUserCommandHandler(UserManager<User> _userManage
 
         string? refreshToken = request.RefreshToken ?? throw new ArgumentNullException(nameof(request.RefreshToken));
 
-        var principal = _tokenRepository.GetPrincipalFromExpiredToken(accessToken, _configuration);
+        var principal = tokenRepository.GetPrincipalFromExpiredToken(accessToken, configuration);
 
         if (principal is null)
             throw new UnauthorizedAccessException(Resource.INVALID_ACCESS_TOKEN);
@@ -27,18 +27,18 @@ public sealed class RefreshTokenUserCommandHandler(UserManager<User> _userManage
         string? username = principal.Identity?.Name ??
             throw new UnauthorizedAccessException(Resource.INVALID_ACCESS_TOKEN);
 
-        var user = await _userManager.FindByNameAsync(username);
+        var user = await userManager.FindByNameAsync(username);
 
         if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             throw new UnauthorizedAccessException(Resource.INVALID_ACCESS_TOKEN);
 
-        var newJwtToken = _tokenRepository.GenerateJwtToken(principal.Claims.ToList(), _configuration);
+        var newJwtToken = tokenRepository.GenerateJwtToken(principal.Claims.ToList(), configuration);
 
-        var newRefreshToken = _tokenRepository.GenerateRefreshToken();
+        var newRefreshToken = tokenRepository.GenerateRefreshToken();
 
         user.RefreshToken = newRefreshToken;
 
-        await _userManager.UpdateAsync(user);
+        await userManager.UpdateAsync(user);
 
         return new Token
         (

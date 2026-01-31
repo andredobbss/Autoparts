@@ -5,19 +5,19 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Categories.DeleteCommand;
 
-public sealed class DeleteCategoryCommandHandler(AutopartsDbContext _context) : IRequestHandler<DeleteCategoryCommand, ValidationResult>
+public sealed class DeleteCategoryCommandHandler(AutopartsDbContext context) : IRequestHandler<DeleteCategoryCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = await _context.Categories!.FindAsync(request.CategoryId, cancellationToken);
+        var category = await context.Categories!.FindAsync(request.CategoryId, cancellationToken);
         if (category is null)
             return new ValidationResult([new ValidationFailure(Resource.CATEGORY, string.Format(Resource.CATEGORY_NOT_FOUND, request.CategoryId))]);
 
         category.Delete();
 
-        _context.Categories!.Update(category);
+        context.Categories!.Update(category);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

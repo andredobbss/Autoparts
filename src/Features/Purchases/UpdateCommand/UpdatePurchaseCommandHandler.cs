@@ -10,19 +10,19 @@ namespace Autoparts.Api.Features.Purchases.UpdateCommand;
 
 public sealed class UpdatePurchaseCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<UpdatePurchaseCommand, ValidationResult>
 {
-    private readonly AutopartsDbContext _context = context;
-    private readonly IProductList _productList = productList;
-    private readonly IStockCalculator _stockCalculator = stockCalculator;
+    private readonly AutopartsDbContext context = context;
+    private readonly IProductList productList = productList;
+    private readonly IStockCalculator stockCalculator = stockCalculator;
     public async Task<ValidationResult> Handle(UpdatePurchaseCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
             return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_REQUIRED)]);
 
-        var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
+        var productsList = await productList.GetProductsListAsync(request.Products, cancellationToken);
         if (productsList is null || !productsList.Any())
             return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_NOT_FOUND)]);
 
-        var purchase = await _context.Purchases!.FindAsync(request.PurchaseId, cancellationToken);
+        var purchase = await context.Purchases!.FindAsync(request.PurchaseId, cancellationToken);
         if (purchase is null)
             return new ValidationResult([new ValidationFailure(Resource.PURCHASE, string.Format(Resource.PURCHASE_NOT_FOUND, request.PurchaseId))]);
 
@@ -38,17 +38,17 @@ public sealed class UpdatePurchaseCommandHandler(AutopartsDbContext context, IPr
 
         purchase.UpdateTotalPurchase(totalPurchase);
 
-        _context.Purchases!.Update(purchase);
+        context.Purchases!.Update(purchase);
 
         #region Transaction and Commit
 
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
         try
         {
-            var commitResult = await _context.SaveChangesAsync(cancellationToken);
+            var commitResult = await context.SaveChangesAsync(cancellationToken);
 
-            bool stockUpdated = await _stockCalculator.StockCalculateAsync(cancellationToken);
+            bool stockUpdated = await stockCalculator.StockCalculateAsync(cancellationToken);
 
             if (commitResult > 0 && stockUpdated)
             {

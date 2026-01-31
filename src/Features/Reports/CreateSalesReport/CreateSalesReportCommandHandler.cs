@@ -10,10 +10,9 @@ namespace Autoparts.Api.Features.Reports.CreateSalesReport;
 
 public sealed class CreateSalesReportCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateSalesReportCommand, string>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<string> Handle(CreateSalesReportCommand request, CancellationToken cancellationToken)
     {
-        var products = await _context.Database
+        var products = await context.Database
                                        .SqlQueryRaw<ProductsList>(ConstantSql.SalesReportSql)
                                        .ToListAsync(cancellationToken);
 

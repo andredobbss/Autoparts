@@ -5,19 +5,19 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.UpdateCommand;
 
-public sealed class UpdateClientCommandHandler(AutopartsDbContext _context) : IRequestHandler<UpdateClientCommand, ValidationResult>
+public sealed class UpdateClientCommandHandler(AutopartsDbContext context) : IRequestHandler<UpdateClientCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
     {
-        var client = await _context.Clients!.FindAsync(request.ClientId, cancellationToken);
+        var client = await context.Clients!.FindAsync(request.ClientId, cancellationToken);
         if (client is null)
             return new ValidationResult([new ValidationFailure(Resource.CLIENT, string.Format(Resource.CLIENT_NOT_FOUND, request.ClientId))]);
 
         client.Update(request.ClientName, request.Address, request.Email, request.TaxIdType, request.TaxId);
 
-        _context.Clients!.Update(client);
+        context.Clients!.Update(client);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

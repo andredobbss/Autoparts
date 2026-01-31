@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.LogoutCommand;
 
-public sealed class LogoutUserCommandHandler(SignInManager<User> _signin) : IRequestHandler<LogoutUserCommand, SignInResult>
+public sealed class LogoutUserCommandHandler(SignInManager<User> signin) : IRequestHandler<LogoutUserCommand, SignInResult>
 {
     public async Task<SignInResult> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
     {
-        await _signin.SignOutAsync();
+        await signin.SignOutAsync();
 
         return SignInResult.Success;
     }

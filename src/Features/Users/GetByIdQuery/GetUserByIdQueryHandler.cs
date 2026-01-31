@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Autoparts.Api.Features.Users.GetByIdQuery;
 
-public sealed record GetUserByIdQueryHandler(UserManager<User> _userManager) :IRequestHandler<GetUserByIdQuery,GetUserByIdQueryResponse>
+public sealed record GetUserByIdQueryHandler(UserManager<User> userManager) :IRequestHandler<GetUserByIdQuery,GetUserByIdQueryResponse>
 {
     public async Task<GetUserByIdQueryResponse> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByIdAsync(request.Id.ToString());
+        var user = await userManager.FindByIdAsync(request.Id.ToString());
         if (user is null)
             throw new KeyNotFoundException(string.Format(Resource.USER_NOT_FOUND, request.Id));
 

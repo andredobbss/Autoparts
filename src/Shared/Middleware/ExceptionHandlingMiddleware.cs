@@ -5,62 +5,53 @@ using System.Text.Json;
 
 namespace Autoparts.Api.Shared.Middleware;
 
-public class ExceptionHandlingMiddleware
+public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (KeyNotFoundException ex)
         {
-            _logger.LogWarning(ex, "Resource not found.");
+            logger.LogWarning(ex, "Resource not found.");
             await HandleExceptionAsync(context, ex.Message, "KeyNotFoundException", HttpStatusCode.NotFound);
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning(ex, "Invalid argument.");
+            logger.LogWarning(ex, "Invalid argument.");
             await HandleExceptionAsync(context, ex.Message, "ArgumentException", HttpStatusCode.BadRequest);
         }
         catch(InvalidOperationException ex)
         {
-            _logger.LogWarning(ex, "Invalid operation.");
+            logger.LogWarning(ex, "Invalid operation.");
             await HandleExceptionAsync(context, ex.Message, "InvalidOperationException", HttpStatusCode.BadRequest);
         }
         catch (ValidationException ex)
         {
-            _logger.LogWarning(ex, "FluentValidation error.");
+            logger.LogWarning(ex, "FluentValidation error.");
             var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
             await HandleExceptionAsync(context, errors, "FluentValidationException", HttpStatusCode.BadRequest);
         }
         catch (FileNotFoundException ex)
         {
-            _logger.LogWarning(ex, "File not found.");
+            logger.LogWarning(ex, "File not found.");
             await HandleExceptionAsync(context, ex.Message, "FileNotFoundException", HttpStatusCode.NotFound);
         }
         catch (UnauthorizedAccessException ex)
         {
-            _logger.LogWarning(ex, "Unauthorized access.");
+            logger.LogWarning(ex, "Unauthorized access.");
             await HandleExceptionAsync(context, ex.Message, "UnauthorizedAccessException", HttpStatusCode.Unauthorized);
         }
         catch (SqlException ex)
         {
-            _logger.LogError(ex, "Database error.");
+            logger.LogError(ex, "Database error.");
             await HandleExceptionAsync(context, ex.Message, "SqlException", HttpStatusCode.InternalServerError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected error.");
+            logger.LogError(ex, "Unexpected error.");
             await HandleExceptionAsync(context, ex.Message, "Exception", HttpStatusCode.InternalServerError);
         }
     }

@@ -7,7 +7,7 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Products.CreateCommand;
 
-public sealed class CreateProductCommandHandler(AutopartsDbContext _context, ISkuGenerator _skuGenerator) : IRequestHandler<CreateProductCommand, ValidationResult>
+public sealed class CreateProductCommandHandler(AutopartsDbContext context, ISkuGenerator _skuGenerator) : IRequestHandler<CreateProductCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
@@ -24,9 +24,9 @@ public sealed class CreateProductCommandHandler(AutopartsDbContext _context, ISk
             request.CategoryId,
             request.ManufacturerId);
 
-        await _context.AddAsync(product, cancellationToken);
+        await context.AddAsync(product, cancellationToken);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

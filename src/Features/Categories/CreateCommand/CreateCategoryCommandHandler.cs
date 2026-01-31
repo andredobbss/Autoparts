@@ -7,15 +7,15 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Categories.CreateCommand;
 
-public sealed class CreateCategoryCommandHandler(AutopartsDbContext _context) : IRequestHandler<CreateCategoryCommand, ValidationResult>
+public sealed class CreateCategoryCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateCategoryCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = new Category(request.Description);
 
-        await _context.Categories!.AddAsync(category, cancellationToken);
+        await context.Categories!.AddAsync(category, cancellationToken);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

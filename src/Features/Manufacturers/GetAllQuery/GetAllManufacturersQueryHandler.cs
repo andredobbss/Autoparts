@@ -7,11 +7,11 @@ using Z.PagedList;
 
 namespace Autoparts.Api.Features.Manufacturers.GetAllQuery;
 
-public sealed record GetAllManufacturersQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetAllManufacturersQuery, PagedResponse<GetAllManufacturersQueryResponse>>
+public sealed record GetAllManufacturersQueryHandler(AutopartsDbContext context) : IRequestHandler<GetAllManufacturersQuery, PagedResponse<GetAllManufacturersQueryResponse>>
 {
     public async Task<PagedResponse<GetAllManufacturersQueryResponse>> Handle(GetAllManufacturersQuery request, CancellationToken cancellationToken)
     {
-        var manufactures = await _context.Manufacturers!.AsNoTracking()
+        var manufactures = await context.Manufacturers!.AsNoTracking()
                                             .Include(m => m.Products)
                                             .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
 

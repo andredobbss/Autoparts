@@ -6,15 +6,15 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Manufacturers.CreateCommand;
 
-public sealed class CreateManufacturerCommandHandler(AutopartsDbContext _context) : IRequestHandler<CreateManufacturerCommand, ValidationResult>
+public sealed class CreateManufacturerCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateManufacturerCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(CreateManufacturerCommand request, CancellationToken cancellationToken)
     {
         var manufacturer = new Manufacturer(request.Description);
 
-        await _context.Manufacturers!.AddAsync(manufacturer, cancellationToken);
+        await context.Manufacturers!.AddAsync(manufacturer, cancellationToken);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

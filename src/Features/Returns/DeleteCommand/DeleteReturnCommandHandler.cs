@@ -5,27 +5,27 @@ using FluentValidation.Results;
 using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Returns.DeleteCommand;
-public sealed class DeleteReturnCommandHandler(AutopartsDbContext _context, IStockCalculator _stockCalculator) : IRequestHandler<DeleteReturnCommand, ValidationResult>
+public sealed class DeleteReturnCommandHandler(AutopartsDbContext context, IStockCalculator stockCalculator) : IRequestHandler<DeleteReturnCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(DeleteReturnCommand request, CancellationToken cancellationToken)
     {
-        var returnItem = await _context.Returns!.FindAsync(request.ReturnId, cancellationToken);
+        var returnItem = await context.Returns!.FindAsync(request.ReturnId, cancellationToken);
         if (returnItem is null)
             return new ValidationResult([new ValidationFailure(Resource.RETURN, string.Format(Resource.RETURN_NOT_FOUND, request.ReturnId))]);
 
         returnItem.Delete();
 
-        _context.Returns!.Update(returnItem);
+        context.Returns!.Update(returnItem);
 
         #region Transaction and Commit
 
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
         try
         {
-            var commitResult = await _context.SaveChangesAsync(cancellationToken);
+            var commitResult = await context.SaveChangesAsync(cancellationToken);
 
-            bool stockUpdated = await _stockCalculator.StockCalculateAsync(cancellationToken);
+            bool stockUpdated = await stockCalculator.StockCalculateAsync(cancellationToken);
 
             if (commitResult > 0 && stockUpdated)
             {

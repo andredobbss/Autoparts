@@ -5,15 +5,15 @@ using FluentValidation.Results;
 using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Suppliers.CreateCommand;
-public sealed class CreateSupplierCommandHandler(AutopartsDbContext _context) : IRequestHandler<CreateSupplierCommand, ValidationResult>
+public sealed class CreateSupplierCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateSupplierCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
     {
         var supplier = new Supplier(request.CompanyName, request.Address, request.Email, request.TaxIdType, request.TaxId);
 
-        _context.Suppliers!.Add(supplier);
+        context.Suppliers!.Add(supplier);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

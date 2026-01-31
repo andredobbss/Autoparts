@@ -11,16 +11,16 @@ using System.Security.Claims;
 
 namespace Autoparts.Api.Features.Users.LoginCommand;
 
-public sealed class LoginUserCommandHandler(UserManager<User> _userManager, AutopartsDbContext _context, ITokenService _tokenRepository, IConfiguration _configuration) : IRequestHandler<LoginUserCommand, Token>
+public sealed class LoginUserCommandHandler(UserManager<User> userManager, AutopartsDbContext context, ITokenService tokenRepository, IConfiguration configuration) : IRequestHandler<LoginUserCommand, Token>
 {
     public async Task<Token> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByNameAsync(request.UserName);
+        var user = await userManager.FindByNameAsync(request.UserName);
 
-        if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
+        if (user is null || !await userManager.CheckPasswordAsync(user, request.Password))
             throw new UnauthorizedAccessException(Resource.INVALID_LOGIN);
 
-        var userRoles = await _userManager.GetRolesAsync(user);
+        var userRoles = await userManager.GetRolesAsync(user);
 
         var authClaims = new List<Claim>
         {
@@ -30,11 +30,11 @@ public sealed class LoginUserCommandHandler(UserManager<User> _userManager, Auto
         };
 
         // --------------------- Add Sales Ids as Claims -------------------------------------------
-        var userQuery = _context.Sales
+        var userQuery = context.Sales
            .AsNoTracking()
            .Where(u => u.UserId == user.Id);
 
-        //var userQuery = _context.Users
+        //var userQuery = context.Users
         //   .AsNoTracking()
         //   .Include(u => u.Sales)
         //   .Where(u => u.UserName == request.UserName);
@@ -55,18 +55,18 @@ public sealed class LoginUserCommandHandler(UserManager<User> _userManager, Auto
         foreach (var role in userRoles)
             authClaims.Add(new(ClaimTypes.Role, role));
 
-        var token = _tokenRepository.GenerateJwtToken(authClaims, _configuration);
+        var token = tokenRepository.GenerateJwtToken(authClaims, configuration);
 
-        var refreshToken = _tokenRepository.GenerateRefreshToken();
+        var refreshToken = tokenRepository.GenerateRefreshToken();
 
         _ = int.TryParse(
-            _configuration["JWT:RefreshTokenValidityInMinutes"],
+            configuration["JWT:RefreshTokenValidityInMinutes"],
             out int refreshTokenValidityInMinutes);
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(refreshTokenValidityInMinutes);
 
-        await _userManager.UpdateAsync(user);
+        await userManager.UpdateAsync(user);
 
         return new Token(
             AccessToken: new JwtSecurityTokenHandler().WriteToken(token),

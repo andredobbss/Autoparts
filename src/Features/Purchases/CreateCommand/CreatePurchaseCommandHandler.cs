@@ -8,14 +8,14 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Purchases.CreateCommand;
 
-public sealed class CreatePurchaseCommandHandler(AutopartsDbContext _context, IProductList _productList, IStockCalculator _stockCalculator) : IRequestHandler<CreatePurchaseCommand, ValidationResult>
+public sealed class CreatePurchaseCommandHandler(AutopartsDbContext context, IProductList productList, IStockCalculator stockCalculator) : IRequestHandler<CreatePurchaseCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(CreatePurchaseCommand request, CancellationToken cancellationToken)
     {
         if (request.Products is null || !request.Products.Any())
             return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_REQUIRED)]);
 
-        var productsList = await _productList.GetProductsListAsync(request.Products, cancellationToken);
+        var productsList = await productList.GetProductsListAsync(request.Products, cancellationToken);
         if (productsList is null || !productsList.Any())
             return new ValidationResult([new ValidationFailure(Resource.PRODUCT, Resource.PRODUCTS_NOT_FOUND)]);
 
@@ -35,17 +35,17 @@ public sealed class CreatePurchaseCommandHandler(AutopartsDbContext _context, IP
             purchaseProducts
         );
 
-        await _context.AddAsync(purchase, cancellationToken);
+        await context.AddAsync(purchase, cancellationToken);
 
         #region Transaction and Commit
 
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
         try
         {
-            var commitResult = await _context.SaveChangesAsync(cancellationToken);
+            var commitResult = await context.SaveChangesAsync(cancellationToken);
 
-            bool stockUpdated = await _stockCalculator.StockCalculateAsync(cancellationToken);
+            bool stockUpdated = await stockCalculator.StockCalculateAsync(cancellationToken);
 
             if (commitResult > 0 && stockUpdated)
             {

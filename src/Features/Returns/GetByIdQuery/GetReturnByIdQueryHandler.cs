@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Returns.GetByIdQuery;
 
-public sealed record GetReturnByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetReturnByIdQuery, GetReturnByIdQueryResponse>
+public sealed record GetReturnByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetReturnByIdQuery, GetReturnByIdQueryResponse>
 {
     public async Task<GetReturnByIdQueryResponse> Handle(GetReturnByIdQuery request, CancellationToken cancellationToken)
     {
-        var returnEntity = await _context.Returns!.Include(r => r.User)
+        var returnEntity = await context.Returns!.Include(r => r.User)
                                       .Include(r => r.Client)
                                       .Include(r => r.ReturnProducts)
                                       .ThenInclude(rp => rp.Product)

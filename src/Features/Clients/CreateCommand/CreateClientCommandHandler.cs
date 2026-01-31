@@ -5,15 +5,15 @@ using FluentValidation.Results;
 using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Clients.CreateCommand;
-public sealed class CreateClientCommandHandler(AutopartsDbContext _context) : IRequestHandler<CreateClientCommand, ValidationResult>
+public sealed class CreateClientCommandHandler(AutopartsDbContext context) : IRequestHandler<CreateClientCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(CreateClientCommand request, CancellationToken cancellationToken)
     {
         var client = new Client(request.ClientName, request.Address, request.Email, request.TaxIdType, request.TaxId);
 
-        await _context.Clients!.AddAsync(client, cancellationToken);
+        await context.Clients!.AddAsync(client, cancellationToken);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

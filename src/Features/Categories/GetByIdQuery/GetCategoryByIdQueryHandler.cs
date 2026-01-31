@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Autoparts.Api.Features.Categories.GetByIdQuery;
 
-public sealed record GetCategoryByIdQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetCategoryByIdQuery, GetCategoryByIdQueryResponse>
+public sealed record GetCategoryByIdQueryHandler(AutopartsDbContext context) : IRequestHandler<GetCategoryByIdQuery, GetCategoryByIdQueryResponse>
 {
     public async Task<GetCategoryByIdQueryResponse> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var category = await _context.Categories!.Include(c => c.Products)
+        var category = await context.Categories!.Include(c => c.Products)
                                          .FirstOrDefaultAsync(c => c.CategoryId == request.CategoryId, cancellationToken);
         if (category is null)
             throw new KeyNotFoundException(string.Format(Resource.CATEGORY_NOT_FOUND, request.CategoryId));

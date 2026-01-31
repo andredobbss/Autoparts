@@ -11,13 +11,12 @@ namespace Autoparts.Api.Features.Reports.GetSalesReport;
 
 public sealed class GetSalesReportHandler(AutopartsDbContext context) : IRequestHandler<GetSalesReportQuery, byte[]>
 {
-    private readonly AutopartsDbContext _context = context;
     public async Task<byte[]> Handle(GetSalesReportQuery request, CancellationToken cancellationToken)
     {
         var startParam = new SqlParameter("@startDate", request.StartDate);
         var endParam = new SqlParameter("@endDate", request.EndDate);
 
-        var products = await _context.Database
+        var products = await context.Database
                                       .SqlQueryRaw<ProductsList>(ConstantSql.SalesReportSqlWithParameters, startParam, endParam)
                                       .ToListAsync(cancellationToken);
 

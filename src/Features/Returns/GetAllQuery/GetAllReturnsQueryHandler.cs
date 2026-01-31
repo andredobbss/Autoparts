@@ -7,11 +7,11 @@ using Z.PagedList;
 
 namespace Autoparts.Api.Features.Returns.GetAllQuery;
 
-public sealed record GetAllReturnsQueryHandler(AutopartsDbContext _context) : IRequestHandler<GetAllReturnsQuery, PagedResponse<GetAllReturnsQueryResponse>>
+public sealed record GetAllReturnsQueryHandler(AutopartsDbContext context) : IRequestHandler<GetAllReturnsQuery, PagedResponse<GetAllReturnsQueryResponse>>
 {
     public async Task<PagedResponse<GetAllReturnsQueryResponse>> Handle(GetAllReturnsQuery request, CancellationToken cancellationToken)
     {
-        var returns = await _context.Returns!.AsNoTracking()
+        var returns = await context.Returns!.AsNoTracking()
                                              .Include(r => r.User)
                                              .Include(r => r.Client)
                                              .Include(r => r.ReturnProducts)

@@ -5,8 +5,6 @@ namespace Autoparts.Api.Shared.Services;
 
 public sealed class StockCalculator(AutopartsDbContext context) : IStockCalculator
 {
-    private readonly AutopartsDbContext _context = context;
-
     public async Task<bool> StockCalculateAsync(CancellationToken cancellationToken)
     {
         const string sql = @"UPDATE Products
@@ -26,7 +24,7 @@ public sealed class StockCalculator(AutopartsDbContext context) : IStockCalculat
                              ) AS StockMovements
                              WHERE Products.ProductId = StockMovements.ProductId";
 
-        int result = await _context.Database.ExecuteSqlRawAsync(sql, cancellationToken);
+        int result = await context.Database.ExecuteSqlRawAsync(sql, cancellationToken);
 
         return result != 0;
     }

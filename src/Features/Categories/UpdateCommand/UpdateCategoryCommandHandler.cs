@@ -5,19 +5,19 @@ using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Categories.UpdateCommand;
 
-public sealed class UpdateCategoryCommandHandler(AutopartsDbContext _context) : IRequestHandler<UpdateCategoryCommand, ValidationResult>
+public sealed class UpdateCategoryCommandHandler(AutopartsDbContext context) : IRequestHandler<UpdateCategoryCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = await _context.Categories!.FindAsync(request.CategoryId, cancellationToken);
+        var category = await context.Categories!.FindAsync(request.CategoryId, cancellationToken);
         if (category is null)
             return new ValidationResult { Errors = { new ValidationFailure(Resource.CATEGORY, string.Format(Resource.CATEGORY_NOT_FOUND, request.CategoryId)) } };
 
         category.Update(request.Description);
 
-        _context.Categories!.Update(category);
+        context.Categories!.Update(category);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(

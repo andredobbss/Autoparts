@@ -4,11 +4,11 @@ using FluentValidation.Results;
 using NetDevPack.SimpleMediator;
 
 namespace Autoparts.Api.Features.Products.UpdateCommand;
-public sealed class UpdateProductCommandHandler(AutopartsDbContext _context) : IRequestHandler<UpdateProductCommand, ValidationResult>
+public sealed class UpdateProductCommandHandler(AutopartsDbContext context) : IRequestHandler<UpdateProductCommand, ValidationResult>
 {
     public async Task<ValidationResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _context.Products!.FindAsync(request.ProductId, cancellationToken);
+        var product = await context.Products!.FindAsync(request.ProductId, cancellationToken);
         if (product is null)
             return new ValidationResult { Errors = { new ValidationFailure(Resource.PRODUCT, string.Format(Resource.PRODUCTS_NOT_FOUND, request.ProductId)) } };
 
@@ -19,9 +19,9 @@ public sealed class UpdateProductCommandHandler(AutopartsDbContext _context) : I
                         request.CategoryId,
                         request.ManufacturerId);
 
-        _context.Products!.Update(product);
+        context.Products!.Update(product);
 
-        var commitResult = await _context.SaveChangesAsync(cancellationToken);
+        var commitResult = await context.SaveChangesAsync(cancellationToken);
         if (commitResult <= 0)
         {
             return new ValidationResult(
